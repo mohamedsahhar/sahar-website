@@ -1,7 +1,7 @@
 export default function Navbar() {
   return (
     <nav className="flex justify-between items-center px-10 py-4 bg-white shadow">
-
+<img src="/sahar-transparent-black.png" alt="Sa7ar Quick Care" width="160" />
       <div className="text-xl font-bold">
         Sa7ar Quick Care
       </div>
