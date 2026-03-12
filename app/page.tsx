@@ -1,4 +1,6 @@
 import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
+import { cases } from "../data/cases";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -188,7 +190,64 @@ export default function Home() {
 
       </section>
 
+{/* LATEST REPAIR CASES */}
+<section className="py-20 bg-gray-50 text-center">
 
+  <h2 className="text-3xl font-bold text-gray-900">
+    Latest Repair Cases
+  </h2>
+
+  <p className="text-gray-500 mt-3">
+    Real repair cases from our workshop
+  </p>
+
+  <div className="grid md:grid-cols-3 gap-8 mt-12 px-10 max-w-6xl mx-auto">
+
+    {cases.slice(0,3).map((c)=>(
+      <div key={c.slug} className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
+
+        {c.image && (
+          <img
+            src={c.image}
+            alt={c.title}
+            className="w-full h-56 object-cover"
+          />
+        )}
+
+        <div className="p-5">
+
+          <h3 className="font-semibold text-lg">
+            {c.title}
+          </h3>
+
+          <p className="text-gray-500 mt-1">
+            {c.brand} {c.model}
+          </p>
+
+          <Link
+            href={`/cases/${c.slug}`}
+            className="inline-block mt-3 text-blue-600 hover:underline"
+          >
+            View Repair →
+          </Link>
+
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+
+  <div className="mt-10">
+    <Link
+      href="/cases"
+      className="border px-6 py-3 rounded-lg hover:bg-gray-100"
+    >
+      View All Repair Cases
+    </Link>
+  </div>
+
+</section>
       {/* WHY CHOOSE US */}
       <section className="py-20 bg-gray-100 text-center">
 

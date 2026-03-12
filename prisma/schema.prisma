@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+model RepairCase {
+  id          Int      @id @default(autoincrement())
+  title       String
+  brand       String
+  device      String
+  slug        String   @unique
+  problem     String
+  solution    String
+
+  image       String?
+  beforeImage String?
+  afterImage  String?
+  videoUrl    String?
+  repairTime  String?
+
+  createdAt   DateTime @default(now())
+}
