@@ -1,7 +1,7 @@
 import WhatsAppButton from "./components/WhatsAppButton";
 import Navbar from "./components/Navbar";
 import type { Metadata } from "next";
-import Footer from "./components/Footer";
+
 import "./globals.css";
 export const metadata: Metadata = {
   title: "Sa7ar Quick Care | Professional Device Repair",
@@ -12,7 +12,17 @@ export const metadata: Metadata = {
     title: "Sa7ar Quick Care | Professional Device Repair",
     description:
       "Professional repair services for smartphones, headphones, speakers, and electronics.",
-    images: ["/sahar-black-bg.jpg"],
+    url: "https://sa7arrepair.com",
+    siteName: "Sa7ar Quick Care",
+    images: [
+      {
+        url: "/sahar-black-bg.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Sa7ar Quick Care Device Repair",
+      },
+    ],
+    type: "website",
   },
 };
 
