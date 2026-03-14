@@ -1,13 +1,18 @@
+import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { cases } from "@/data/cases"
+import { RepairCase } from "@prisma/client"
 
-export default function RepairsPage() {
+export default async function RepairsPage() {
+
+  const repairs: RepairCase[] = await prisma.repairCase.findMany({
+    orderBy: { id: "desc" }
+  })
 
   const brands = Array.from(
-    new Set(cases.map((repair) => repair.brand))
+    new Set(repairs.map((repair) => repair.brand))
   )
 
-  const recentRepairs = cases.slice(0, 4)
+  const recentRepairs = repairs.slice(0, 4)
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -42,7 +47,7 @@ export default function RepairsPage() {
         ))}
       </div>
 
-      {/* Popular Repair Cases */}
+      {/* Recent Repair Cases */}
       <h2 className="text-2xl font-semibold mb-6">
         Recent Repair Cases
       </h2>

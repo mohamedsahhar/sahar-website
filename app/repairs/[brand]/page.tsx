@@ -1,18 +1,24 @@
+import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
-import { cases } from "@/data/cases"
+import { RepairCase } from "@prisma/client"
 
 export default async function BrandPage({
   params,
 }: {
-  params: Promise<{ brand: string }>
+  params: { brand: string }
 }) {
 
-  const { brand } = await params
+  const brand = params.brand
 
-  const brandCases = cases.filter(
-    (repair) => repair.brand.toLowerCase() === brand.toLowerCase()
-  )
+  const filteredCases: RepairCase[] = await prisma.repairCase.findMany({
+    where: {
+      brand: brand,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  })
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -26,13 +32,13 @@ export default async function BrandPage({
         Explore real repair cases and expert solutions performed in our workshop.
       </p>
 
-      {brandCases.length === 0 && (
+      {filteredCases.length === 0 && (
         <p className="text-gray-500">No repairs found for this brand.</p>
       )}
 
       <div className="grid md:grid-cols-2 gap-6">
 
-        {brandCases.map((repair) => (
+        {filteredCases.map((repair) => (
 
           <Link
             key={repair.slug}
@@ -43,7 +49,7 @@ export default async function BrandPage({
             {repair.image && (
               <Image
                 src={repair.image}
-                alt={repair.title}
+                alt={`${repair.brand} ${repair.device} repair`}
                 width={600}
                 height={400}
                 className="w-full h-48 object-cover"
@@ -60,9 +66,11 @@ export default async function BrandPage({
                 Device: {repair.device}
               </p>
 
-              <p className="text-sm text-gray-500">
-                Repair time: {repair.repairTime}
-              </p>
+              {repair.repairTime && (
+                <p className="text-sm text-gray-500">
+                  Repair time: {repair.repairTime}
+                </p>
+              )}
 
             </div>
 

@@ -16,12 +16,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center">
           <Image
             src="/sahar-transparent-black.png"
             alt="Sa7ar Quick Care"
             width={160}
             height={40}
+            className="h-auto w-auto"
             priority
           />
         </Link>
@@ -65,6 +66,7 @@ export default function Navbar() {
 
         {/* Mobile Button */}
         <button
+          aria-label="Open menu"
           className="md:hidden text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
@@ -77,17 +79,29 @@ export default function Navbar() {
       {menuOpen && (
         <div className="md:hidden mt-6 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
 
-          <Link href="/" onClick={closeMenu}>Home</Link>
+          <Link href="/" onClick={closeMenu}>
+            Home
+          </Link>
 
-          <Link href="/repairs" onClick={closeMenu}>Repairs</Link>
+          <Link href="/repairs" onClick={closeMenu}>
+            Repairs
+          </Link>
 
-          <Link href="/devices" onClick={closeMenu}>Devices</Link>
+          <Link href="/devices" onClick={closeMenu}>
+            Devices
+          </Link>
 
-          <Link href="/cases" onClick={closeMenu}>Repair Cases</Link>
+          <Link href="/cases" onClick={closeMenu}>
+            Repair Cases
+          </Link>
 
-          <Link href="/services" onClick={closeMenu}>Services</Link>
+          <Link href="/services" onClick={closeMenu}>
+            Services
+          </Link>
 
-          <Link href="/contact" onClick={closeMenu}>Contact</Link>
+          <Link href="/contact" onClick={closeMenu}>
+            Contact
+          </Link>
 
           <Link
             href="/repair-request"

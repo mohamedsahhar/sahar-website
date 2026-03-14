@@ -1,6 +1,7 @@
+import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
-import { cases } from "@/data/cases"
+import { RepairCase } from "@prisma/client"
 
 export default async function DevicePage({
   params,
@@ -12,15 +13,17 @@ export default async function DevicePage({
 
   const deviceName = device.replace(/-/g, " ")
 
-  const deviceCases = cases.filter(
-    (repair) =>
-      repair.device.toLowerCase().replace(/\s+/g, "-") === device.toLowerCase()
-  )
+const filteredCases: RepairCase[] = await prisma.repairCase.findMany({
+  where: {
+    slug: {
+      contains: device,
+    },
+  },
+})
 
   return (
     <div className="max-w-5xl mx-auto">
 
-      {/* Header */}
       <h1 className="text-3xl font-bold mb-4">
         {deviceName.toUpperCase()} Repair Services
       </h1>
@@ -30,14 +33,13 @@ export default async function DevicePage({
         Browse real repair cases completed in our workshop.
       </p>
 
-      {deviceCases.length === 0 && (
+      {filteredCases.length === 0 && (
         <p className="text-gray-500">No repairs found for this device.</p>
       )}
 
-      {/* Repair Cards */}
       <div className="grid md:grid-cols-2 gap-6 mb-12">
 
-        {deviceCases.map((repair) => (
+        {filteredCases.map((repair) => (
 
           <Link
             key={repair.slug}
@@ -65,9 +67,11 @@ export default async function DevicePage({
                 Brand: {repair.brand}
               </p>
 
-              <p className="text-sm text-gray-500">
-                Repair time: {repair.repairTime}
-              </p>
+              {repair.repairTime && (
+                <p className="text-sm text-gray-500">
+                  Repair time: {repair.repairTime}
+                </p>
+              )}
 
             </div>
 
@@ -77,7 +81,6 @@ export default async function DevicePage({
 
       </div>
 
-      {/* CTA */}
       <div className="bg-gray-100 p-6 rounded-xl text-center">
 
         <h2 className="text-xl font-semibold mb-3">

@@ -23,7 +23,13 @@ export default function CasesPage() {
   )
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "40px 20px"
+      }}
+    >
 
       <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
         Repair Cases
@@ -48,79 +54,85 @@ export default function CasesPage() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
           gap: "24px",
         }}
       >
 
+        {filteredCases.length === 0 && (
+          <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "#777" }}>
+            No repair cases found.
+          </p>
+        )}
+
         {filteredCases.map((repair) => (
 
-  <Link
-    key={repair.slug}
-    href={`/cases/${repair.slug}`}
-    style={{
-  border: "1px solid #ddd",
-  borderRadius: "12px",
-  overflow: "hidden",
-  background: "#fff",
-  textDecoration: "none",
-  color: "inherit",
-  transition: "all 0.2s ease",
-  boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
-}}
-onMouseEnter={(e) => {
-  e.currentTarget.style.transform = "translateY(-4px)"
-  e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.15)"
-}}
-onMouseLeave={(e) => {
-  e.currentTarget.style.transform = "translateY(0)"
-  e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)"
-}}
-  >
+          <Link
+            key={repair.slug}
+            href={`/cases/${repair.slug}`}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "12px",
+              overflow: "hidden",
+              background: "#fff",
+              textDecoration: "none",
+              color: "inherit",
+              transition: "transform 0.25s ease, box-shadow 0.25s ease",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)"
+              e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.15)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)"
+              e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)"
+            }}
+          >
 
-    {repair.image && (
-      <Image
-        src={repair.image}
-        alt={repair.title}
-        width={400}
-        height={250}
-        style={{
-          width: "100%",
-          height: "200px",
-          objectFit: "cover",
-        }}
-      />
-    )}
+            {repair.image && (
+              <Image
+                src={repair.image}
+                alt={`${repair.brand} ${repair.device} repair - ${repair.problem}`}
+                width={400}
+                height={250}
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "cover",
+                }}
+              />
+            )}
 
-    <div style={{ padding: "16px" }}>
+            <div style={{ padding: "16px" }}>
 
-      <h2 style={{ fontSize: "18px", marginBottom: "8px" }}>
-        {repair.title}
-      </h2>
+              <h2 style={{ fontSize: "18px", marginBottom: "8px", lineHeight: "1.4" }}>
+                {repair.title}
+              </h2>
 
-      <p style={{ fontSize: "14px", color: "#666" }}>
-        {repair.brand} • {repair.device}
-      </p>
+              <p style={{ fontSize: "14px", color: "#666" }}>
+                {repair.brand} • {repair.device}
+              </p>
 
-      <p style={{ fontSize: "14px", marginTop: "6px" }}>
-        {repair.problem}
-      </p>
+              <p style={{ fontSize: "14px", marginTop: "6px" }}>
+                {repair.problem}
+              </p>
 
-      {repair.repairTime && (
-        <p style={{ fontSize: "13px", marginTop: "8px", color: "green" }}>
-          Repair Time: {repair.repairTime}
-        </p>
-      )}
+              {repair.repairTime && (
+                <p style={{ fontSize: "13px", marginTop: "8px", color: "green" }}>
+                  Repair Time: {repair.repairTime}
+                </p>
+              )}
 
-      <p style={{ marginTop: "12px", color: "blue", fontSize: "14px" }}>
-        View Repair →
-      </p>
+              <p style={{ marginTop: "12px", color: "blue", fontSize: "14px" }}>
+                View Repair →
+              </p>
 
-    </div>
+            </div>
 
-  </Link>
+          </Link>
 
-))}
+        ))}
 
       </div>
 
