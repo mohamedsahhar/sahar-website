@@ -221,7 +221,7 @@ export default function Home() {
           </h3>
 
           <p className="text-gray-500 mt-1">
-            {c.brand} {c.model}
+            {c.brand} {c.device}
           </p>
 
           <Link
