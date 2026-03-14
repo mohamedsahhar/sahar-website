@@ -1,6 +1,12 @@
+import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 
-export default function AdminCases() {
+export default async function AdminCases() {
+
+  const cases = await prisma.repairCase.findMany({
+    orderBy: { createdAt: "desc" }
+  })
+
   return (
     <div className="max-w-5xl mx-auto">
 
@@ -17,11 +23,39 @@ export default function AdminCases() {
         </Link>
       </div>
 
-      <div className="border rounded-lg p-6">
+      <div className="space-y-4">
 
-        <p className="text-gray-500">
-          Repair cases will appear here once they are added.
-        </p>
+        {cases.length === 0 && (
+          <p className="text-gray-500">
+            No repair cases yet.
+          </p>
+        )}
+
+        {cases.map((c: any)=>(
+          <div
+            key={c.id}
+            className="border rounded-lg p-4 flex justify-between items-center"
+          >
+
+            <div>
+              <p className="font-semibold">
+                {c.title}
+              </p>
+
+              <p className="text-gray-500 text-sm">
+                {c.brand} {c.device}
+              </p>
+            </div>
+
+            <Link
+              href={`/cases/${c.slug}`}
+              className="text-blue-600 hover:underline"
+            >
+              View
+            </Link>
+
+          </div>
+        ))}
 
       </div>
 
