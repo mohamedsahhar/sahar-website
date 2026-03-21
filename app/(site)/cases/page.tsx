@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import CasesClient from "./CasesClient"
-
+export const dynamic = "force-dynamic";
 export default async function CasesPage() {
 
   const cases = await prisma.repairCase.findMany({
