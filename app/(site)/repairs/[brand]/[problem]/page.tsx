@@ -6,6 +6,8 @@ function formatText(text: string) {
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 }
+
+// SEO
 export async function generateMetadata({ params }: any) {
 
   const { brand, problem } = await params;
@@ -22,14 +24,27 @@ export async function generateMetadata({ params }: any) {
   };
 }
 
+// PAGE
 export default async function BrandProblemPage({ params }: any) {
 
   const { brand, problem } = await params;
 
+  const formattedBrand = formatText(brand);
+
   const repairs = await prisma.repairCase.findMany({
     where: {
-      brand: brand,
-
+      device: {
+        brand: {
+          name: formattedBrand,
+        },
+      },
+    },
+    include: {
+      device: {
+        include: {
+          brand: true,
+        },
+      },
     },
   });
 
@@ -59,7 +74,9 @@ export default async function BrandProblemPage({ params }: any) {
             }}
           >
             <h3>{repair.title}</h3>
-            <p>{repair.device}</p>
+            <p>
+              {repair.device?.brand?.name} {repair.device?.name}
+            </p>
           </Link>
         ))}
       </div>
