@@ -32,14 +32,30 @@ export default function Contact() {
           <div>
             <h2 className="font-semibold text-lg">Phone</h2>
 
-            <a
-              href="tel:+201021024094"
-              className="text-gray-600 hover:text-black transition"
-            >
-              +20 102 102 4094
-              +20 121 000 5005
-              +20 120 859 0878
-            </a>
+            <div className="flex flex-col gap-1 text-gray-600">
+
+  <a
+    href="tel:+201021024094"
+    className="hover:text-black transition"
+  >
+    +20 102 102 4094
+  </a>
+
+  <a
+    href="tel:+201210005005"
+    className="hover:text-black transition"
+  >
+    +20 121 000 5005
+  </a>
+
+  <a
+    href="tel:+201208590878"
+    className="hover:text-black transition"
+  >
+    +20 120 859 0878
+  </a>
+
+</div>
 
           </div>
 
@@ -53,12 +69,14 @@ export default function Contact() {
             </p>
 
             <Link
-              href={`https://wa.me/${whatsappNumber}`}
-              target="_blank"
-              className="inline-block bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
-            >
-              Chat on WhatsApp
-            </Link>
+  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    "Hello, I need a repair service for my device."
+  )}`}
+  target="_blank"
+  className="inline-block bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
+>
+  Chat on WhatsApp
+</Link>
 
           </div>
 
@@ -118,8 +136,11 @@ export default function Contact() {
 ></iframe>
 
 </div>
-
+<p className="text-sm text-gray-500 mt-3">
+  ⭐ Rated on Google Maps — Trusted electronics repair center in New Cairo
+</p>
 <a
+
   href="https://www.google.com/maps/dir/?api=1&destination=30.0041637,31.4213138"
   target="_blank"
   className="inline-block mt-3 text-blue-600 hover:underline"
