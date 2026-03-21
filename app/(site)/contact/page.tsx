@@ -107,14 +107,15 @@ export default function Contact() {
         {/* Google Map */}
        <div className="w-full h-[380px] rounded-xl overflow-hidden border">
 
-  <iframe
-    src="https://maps.google.com/maps?q=30.0041637,31.4213138&z=17&output=embed"
-    width="100%"
-    height="100%"
-    loading="lazy"
-    title="Sa7ar Quick Care Location Map"
-    style={{ border: 0 }}
-  ></iframe>
+ <iframe
+  src="https://www.google.com/maps?pb=!1m18!1m12!1m3!1d3454.595713979445!2d31.4187335!3d30.0041637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583d534282499b%3A0x71738e9db973f674!2sSa7ar%20Quick%20Care!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg"
+  width="100%"
+  height="100%"
+  loading="lazy"
+  title="Sa7ar Quick Care Location Map"
+  style={{ border: 0 }}
+  referrerPolicy="no-referrer-when-downgrade"
+></iframe>
 
 </div>
 
