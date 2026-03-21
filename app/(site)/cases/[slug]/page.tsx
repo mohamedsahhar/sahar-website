@@ -39,7 +39,7 @@ export async function generateMetadata({
 
   const description =
     repair.problem ||
-    `Professional ${deviceName} repair service by Sa7ar Quick Care.`
+    `Professional ${deviceName} repair service in New Cairo by Sa7ar Quick Care.`
 
   return {
     title,
@@ -104,10 +104,10 @@ export default async function RepairPage({
       </h1>
 
       <p className="text-gray-600 mb-3">
-        Repair service for {deviceName} at Sa7ar Quick Care.
+        Professional repair service for {deviceName} in New Cairo at Sa7ar Quick Care.
       </p>
 
-      {/* ✅ NEW: INTERNAL LINKS (SEO BOOST) */}
+      {/* ✅ INTERNAL LINKS */}
       <div className="mb-6 text-sm text-gray-500 flex flex-wrap gap-3">
 
         {deviceSlug && (
@@ -141,7 +141,7 @@ export default async function RepairPage({
         />
       )}
 
-      {/* ✅ BEFORE & AFTER (RESTORED FIX) */}
+      {/* BEFORE & AFTER */}
       {(repair.beforeImage || repair.afterImage) && (
         <div className="mb-6">
 
@@ -227,6 +227,23 @@ export default async function RepairPage({
           </div>
         )}
 
+      </div>
+
+      {/* ✅ NEW: CALL TO ACTION (VERY IMPORTANT) */}
+      <div className="mt-10 p-6 bg-gray-100 rounded-xl text-center">
+        <h3 className="text-lg font-semibold mb-2">
+          Need a similar repair?
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Contact Sa7ar Quick Care for fast and professional repair service in New Cairo.
+        </p>
+        <a
+          href="https://wa.me/201021024094"
+          target="_blank"
+          className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium"
+        >
+          Contact us on WhatsApp
+        </a>
       </div>
 
     </div>

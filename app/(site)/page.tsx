@@ -24,7 +24,6 @@ export default async function Home() {
       {/* HERO SECTION */}
       <section className="text-center py-20 md:py-28 bg-gradient-to-b from-white to-gray-100 px-4">
 
-        {/* ✅ UPDATED H1 (SEO) */}
         <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
           Phone & Electronics Repair in Cairo, Egypt
         </h1>
@@ -35,12 +34,12 @@ export default async function Home() {
 
         {/* ✅ IMPROVED SEO PARAGRAPH */}
         <p className="text-gray-500 max-w-2xl mx-auto mb-6">
-          Sa7ar Quick Care is a professional repair center in Cairo specializing in phone repair,
-          AirPods repair, speaker repair, Apple devices, and electronics maintenance.
-          We provide fast, reliable, and affordable repair services across Egypt.
+          Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, Apple devices, and advanced electronics maintenance.
+
+          We provide fast, reliable, and affordable repair services including charging port repair, battery replacement, motherboard repair, and water damage repair for all types of devices.
         </p>
 
-        {/* ✅ NEW INTERNAL LINKS (SEO BOOST) */}
+        {/* INTERNAL LINKS */}
         <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600">
 
           <Link href="/devices" className="underline hover:text-blue-800">
@@ -55,6 +54,17 @@ export default async function Home() {
             View Repair Cases
           </Link>
 
+        </div>
+
+        {/* ✅ WHATSAPP CTA */}
+        <div className="mt-6">
+          <a
+            href="https://wa.me/201021024094"
+            target="_blank"
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition"
+          >
+            Contact us on WhatsApp
+          </a>
         </div>
 
       </section>
@@ -146,7 +156,7 @@ export default async function Home() {
         </h2>
 
         <p className="text-gray-500 mt-3">
-          Real repair cases from our workshop
+          Real repair cases from our workshop in New Cairo including phone repair, AirPods repair, and speaker repair services
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-6xl mx-auto">
@@ -195,7 +205,7 @@ export default async function Home() {
         </h2>
 
         <p className="text-gray-500 mt-3">
-          Professional service trusted by customers across Egypt
+          Professional repair service in New Cairo trusted by customers across Egypt
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 max-w-6xl mx-auto">
