@@ -1,19 +1,22 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const handler = NextAuth({
+export const dynamic = "force-dynamic"
+
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Admin Login",
       credentials: {
-        username: {},
-        password: {},
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        if (!credentials) return null
 
         if (
-          credentials?.username === "admin" &&
-          credentials?.password === "sa7ar123"
+          credentials.username === "admin" &&
+          credentials.password === "sa7ar123"
         ) {
           return {
             id: "1",
@@ -33,6 +36,26 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-})
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.name = user.name
+      }
+      return token
+    },
+
+    async session({ session, token }) {
+  if (session.user) {
+    ;(session.user as any).id = token.id
+    session.user.name = token.name as string
+  }
+  return session
+},
+  },
+}
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

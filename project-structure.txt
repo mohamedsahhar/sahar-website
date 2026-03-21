@@ -1,7 +1,6 @@
 Folder PATH listing
 Volume serial number is EEB9-D0B6
 C:.
-+---.env.local
 +---.next
 |   \---dev
 |       +---build
@@ -21,52 +20,21 @@ C:.
 |       +---server
 |       |   +---app
 |       |   |   +---(site)
-|       |   |   |   +---cases
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[slug]
-|       |   |   |   |       \---page
-|       |   |   |   +---devices
-|       |   |   |   |   \---page
 |       |   |   |   \---page
 |       |   |   +---admin
-|       |   |   |   +---brands
-|       |   |   |   |   +---new
-|       |   |   |   |   |   \---page
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[id]
-|       |   |   |   |       \---edit
-|       |   |   |   |           \---page
-|       |   |   |   +---devices
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[id]
-|       |   |   |   |       \---edit
-|       |   |   |   |           \---page
-|       |   |   |   +---page
-|       |   |   |   \---repairs
-|       |   |   |       +---new
-|       |   |   |       |   \---page
-|       |   |   |       +---page
-|       |   |   |       \---[id]
-|       |   |   |           \---edit
-|       |   |   |               \---page
-|       |   |   +---api
-|       |   |   |   +---brands
-|       |   |   |   |   \---route
-|       |   |   |   +---devices
-|       |   |   |   |   \---route
-|       |   |   |   \---repairs
-|       |   |   |       \---route
-|       |   |   \---_not-found
-|       |   |       \---page
+|       |   |   |   \---login
+|       |   |   |       \---page
+|       |   |   \---api
+|       |   |       \---auth
+|       |   |           \---[...nextauth]
+|       |   |               \---route
 |       |   +---chunks
 |       |   |   \---ssr
-|       |   \---pages
-|       |       +---_app
-|       |       +---_document
-|       |       \---_error
+|       |   +---edge
+|       |   |   \---chunks
+|       |   \---middleware
 |       +---static
 |       |   +---chunks
-|       |   |   \---pages
 |       |   +---development
 |       |   \---media
 |       \---types
@@ -78,7 +46,6 @@ C:.
 |   |   +---contact
 |   |   +---devices
 |   |   |   \---[device]
-|   |   |       \---[problem]
 |   |   +---gallery
 |   |   +---repair-request
 |   |   +---repairs
@@ -113,9 +80,7 @@ C:.
 |   |   +---cases
 |   |   +---devices
 |   |   \---repairs
-|   +---components
-|   \---problems
-|       \---[problem]
+|   \---components
 +---data
 +---lib
 +---node_modules
@@ -2848,65 +2813,8 @@ C:.
 |   +---migrations
 |   |   \---20260312022201_init
 |   \---prisma
-+---public
-|   +---repairs
-|   \---uploads
-|       +---photos
-|       \---videos
-\---sahar-website-snapshot
-    +---app
-    |   +---(site)
-    |   |   +---cases
-    |   |   |   +---new
-    |   |   |   \---[slug]
-    |   |   +---contact
-    |   |   +---devices
-    |   |   |   \---[device]
-    |   |   |       \---[problem]
-    |   |   +---gallery
-    |   |   +---repair-request
-    |   |   +---repairs
-    |   |   |   \---[brand]
-    |   |   |       \---[problem]
-    |   |   \---services
-    |   +---admin
-    |   |   +---brands
-    |   |   |   +---new
-    |   |   |   \---[id]
-    |   |   |       \---edit
-    |   |   +---cases
-    |   |   |   \---new
-    |   |   +---dashboard
-    |   |   +---devices
-    |   |   |   \---[id]
-    |   |   |       \---edit
-    |   |   +---login
-    |   |   \---repairs
-    |   |       +---new
-    |   |       \---[id]
-    |   |           \---edit
-    |   +---api
-    |   |   +---admin
-    |   |   |   +---brands
-    |   |   |   |   \---[id]
-    |   |   |   |       \---edit
-    |   |   |   \---devices
-    |   |   +---auth
-    |   |   |   \---[...nextauth]
-    |   |   +---brands
-    |   |   +---cases
-    |   |   +---devices
-    |   |   \---repairs
-    |   +---components
-    |   \---problems
-    |       \---[problem]
-    +---lib
-    +---prisma
-    |   +---migrations
-    |   |   \---20260312022201_init
-    |   \---prisma
-    \---public
-        +---repairs
-        \---uploads
-            +---photos
-            \---videos
+\---public
+    +---repairs
+    \---uploads
+        +---photos
+        \---videos

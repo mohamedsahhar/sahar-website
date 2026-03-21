@@ -5,21 +5,33 @@ import { useState } from "react"
 
 export default function AdminLogin() {
 
-  const [username,setUsername] = useState("")
-  const [password,setPassword] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
-  async function handleLogin(e:any){
+  async function handleLogin(e: any) {
     e.preventDefault()
 
-    await signIn("credentials",{
+    const res = await signIn("credentials", {
       username,
       password,
-      callbackUrl:"/admin/dashboard"
+      redirect: false,
     })
+
+    console.log("LOGIN RESPONSE:", res) // 👈 DEBUG LINE
+
+    // ❌ login failed
+    if (res?.error) {
+      setError("Invalid username or password")
+      return
+    }
+
+    // ✅ login success
+    window.location.href = "/admin/dashboard"
   }
 
   return (
-
+    
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
       <form
@@ -31,11 +43,17 @@ export default function AdminLogin() {
           Admin Login
         </h1>
 
+        {error && (
+          <p className="text-red-500 mb-4 text-center">
+            {error}
+          </p>
+        )}
+
         <input
           placeholder="Username"
           className="border p-2 w-full mb-4"
           value={username}
-          onChange={(e)=>setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
@@ -43,10 +61,11 @@ export default function AdminLogin() {
           type="password"
           className="border p-2 w-full mb-6"
           value={password}
-          onChange={(e)=>setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
+          type="submit"
           className="bg-black text-white w-full py-2 rounded"
         >
           Login
