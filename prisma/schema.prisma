@@ -3,23 +3,38 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+model Brand {
+  id      Int      @id @default(autoincrement())
+  name    String
+  devices Device[]
+}
+
+model Device {
+  id      Int          @id @default(autoincrement())
+  name    String
+  slug    String       @unique
+  brandId Int
+  brand   Brand        @relation(fields: [brandId], references: [id])
+  repairs RepairCase[]
+}
+
 model RepairCase {
   id          Int      @id @default(autoincrement())
   title       String
-  brand       String
-  device      String
   slug        String   @unique
   problem     String
   solution    String
-
+  repairTime  String?
   image       String?
   beforeImage String?
   afterImage  String?
   videoUrl    String?
-  repairTime  String?
-
+  deviceId    Int?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  device      Device?  @relation(fields: [deviceId], references: [id])
 }

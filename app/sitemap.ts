@@ -1,24 +1,11 @@
-import { cases } from "@/data/cases"
+import { prisma } from "@/lib/prisma";
 
-export default function sitemap() {
-  const baseUrl = "https://sa7arrepair.com"
+export default async function sitemap() {
 
-  const caseUrls = cases.map((repair) => ({
-    url: `${baseUrl}/cases/${repair.slug}`,
-    lastModified: new Date(),
-  }))
+  const baseUrl = "https://sa7arrepair.com";
 
-  const deviceUrls = cases.map((repair) => ({
-    url: `${baseUrl}/devices/${repair.device.toLowerCase().replace(/\s+/g, "-")}`,
-    lastModified: new Date(),
-  }))
-
-  const brandUrls = cases.map((repair) => ({
-    url: `${baseUrl}/repairs/${repair.brand.toLowerCase()}`,
-    lastModified: new Date(),
-  }))
-
-  return [
+  // Static pages
+  const staticPages = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -31,12 +18,20 @@ export default function sitemap() {
       url: `${baseUrl}/devices`,
       lastModified: new Date(),
     },
-    {
-      url: `${baseUrl}/repairs`,
-      lastModified: new Date(),
+  ];
+
+  // Dynamic repair pages (FROM DATABASE ✅)
+  const repairs = await prisma.repairCase.findMany({
+    select: {
+      slug: true,
+      updatedAt: true,
     },
-    ...caseUrls,
-    ...deviceUrls,
-    ...brandUrls,
-  ]
+  });
+
+  const repairPages = repairs.map((repair) => ({
+    url: `${baseUrl}/cases/${repair.slug}`,
+    lastModified: repair.updatedAt,
+  }));
+
+  return [...staticPages, ...repairPages];
 }

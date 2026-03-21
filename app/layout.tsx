@@ -1,49 +1,67 @@
-import WhatsAppButton from "./components/WhatsAppButton";
-import Navbar from "./components/Navbar";
-import type { Metadata } from "next";
+import "./globals.css"
+import type { Metadata } from "next"
 
-import "./globals.css";
 export const metadata: Metadata = {
-  title: "Sa7ar Quick Care | Professional Device Repair",
+  metadataBase: new URL("https://sa7arrepair.com"),
+
+  title: {
+    default: "Sa7ar Quick Care | Electronics Repair in Egypt",
+    template: "%s | Sa7ar Quick Care",
+  },
+
   description:
-    "Sa7ar Quick Care provides professional repair services for smartphones, headphones, speakers, and electronics. Explore real repair cases and expert fixes.",
+    "Professional electronics repair service in Egypt. We repair smartphones, AirPods, speakers, Apple devices, robot vacuums, and more. Fast and reliable service.",
+
+  keywords: [
+    "phone repair Egypt",
+    "AirPods repair",
+    "JBL speaker repair",
+    "electronics repair Cairo",
+    "robot vacuum repair",
+    "Apple device repair",
+  ],
+
+  authors: [{ name: "Sa7ar Quick Care" }],
+  creator: "Sa7ar Quick Care",
 
   openGraph: {
-    title: "Sa7ar Quick Care | Professional Device Repair",
+    title: "Sa7ar Quick Care | Electronics Repair",
     description:
-      "Professional repair services for smartphones, headphones, speakers, and electronics.",
+      "Professional repair service for phones, speakers, AirPods, and electronics in Egypt.",
     url: "https://sa7arrepair.com",
     siteName: "Sa7ar Quick Care",
+    locale: "en_US",
+    type: "website",
     images: [
       {
-        url: "/sahar-black-bg.jpg",
+        url: "/og-image.jpg", // you can add this later
         width: 1200,
         height: 630,
-        alt: "Sa7ar Quick Care Device Repair",
+        alt: "Sa7ar Quick Care",
       },
     ],
-    type: "website",
   },
-};
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 min-h-screen antialiased">
-        <Navbar />
-
-<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-  {children}
-</main>
-
-
-
-<WhatsAppButton />
+      <body className="bg-gray-50 min-h-screen flex flex-col antialiased">
+        {children}
       </body>
     </html>
-  );
+  )
 }
