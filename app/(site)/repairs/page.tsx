@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 
+export const dynamic = "force-dynamic"
+
 export default async function RepairsPage() {
 
   const repairs = await prisma.repairCase.findMany({
@@ -17,8 +19,11 @@ export default async function RepairsPage() {
   const brandMap: Record<string, number> = {}
 
   repairs.forEach((repair) => {
-    const brandName = repair.device?.brand?.name || "Unknown"
-    brandMap[brandName] = (brandMap[brandName] || 0) + 1
+    // ✅ ONLY count valid brand relations
+    if (repair.device?.brand?.name) {
+      const brandName = repair.device.brand.name
+      brandMap[brandName] = (brandMap[brandName] || 0) + 1
+    }
   })
 
   const brands = Object.keys(brandMap).sort()
@@ -88,7 +93,7 @@ export default async function RepairsPage() {
             </h3>
 
             <p className="text-sm text-gray-500">
-              {repair.device?.brand?.name} • {repair.device?.name}
+              {repair.device?.brand?.name || "Unknown"} • {repair.device?.name || "Unknown Device"}
             </p>
 
           </Link>
