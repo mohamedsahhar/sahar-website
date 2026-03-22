@@ -29,31 +29,31 @@ export default async function AdminDashboard() {
         Welcome to Sa7ar Quick Care Admin Panel
       </p>
 
-      {/* 📊 Stats (CLICKABLE NOW) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      {/* 📊 Stats (POLISHED) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
 
         <a
           href="/admin/repairs"
-          className="bg-white p-4 rounded-lg border hover:bg-gray-50 transition block"
+          className="bg-white p-6 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition block"
         >
           <p className="text-sm text-gray-500">Total Repairs</p>
-          <p className="text-2xl font-bold">{totalRepairs}</p>
+          <p className="text-3xl font-bold mt-2">{totalRepairs}</p>
         </a>
 
         <a
           href="/admin/devices"
-          className="bg-white p-4 rounded-lg border hover:bg-gray-50 transition block"
+          className="bg-white p-6 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition block"
         >
           <p className="text-sm text-gray-500">Total Devices</p>
-          <p className="text-2xl font-bold">{totalDevices}</p>
+          <p className="text-3xl font-bold mt-2">{totalDevices}</p>
         </a>
 
         <a
           href="/admin/brands"
-          className="bg-white p-4 rounded-lg border hover:bg-gray-50 transition block"
+          className="bg-white p-6 rounded-2xl shadow-sm border hover:shadow-md hover:-translate-y-1 transition block"
         >
           <p className="text-sm text-gray-500">Total Brands</p>
-          <p className="text-2xl font-bold">{totalBrands}</p>
+          <p className="text-3xl font-bold mt-2">{totalBrands}</p>
         </a>
 
       </div>
@@ -100,36 +100,47 @@ export default async function AdminDashboard() {
       </div>
 
       {/* 🆕 Latest Repairs */}
-      <div className="mt-10">
+      <div className="mt-12">
 
-        <h3 className="text-xl font-semibold mb-4">
-          Latest Repairs
-        </h3>
+        {/* Header + View All */}
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">
+            Latest Repairs
+          </h3>
+
+          <a
+            href="/admin/repairs"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            View All
+          </a>
+        </div>
 
         <div className="space-y-3">
 
           {latestRepairs.length === 0 ? (
 
-  <p className="text-gray-500 text-sm">
-    No repairs yet. Start by adding your first repair case.
-  </p>
+            <p className="text-gray-500 text-sm">
+              No repairs yet. Start by adding your first repair case.
+            </p>
 
-) : (
+          ) : (
 
-  latestRepairs.map((repair) => (
-    <a
-      key={repair.id}
-      href={`/admin/repairs/${repair.id}/edit`}
-      className="block border-b pb-2 hover:bg-gray-50 transition"
-    >
-      <p className="font-medium">{repair.title}</p>
-      <p className="text-sm text-gray-500">
-        {repair.device?.brand?.name} — {repair.device?.name}
-      </p>
-    </a>
-  ))
+            latestRepairs.map((repair) => (
+              <a
+                key={repair.id}
+                href={`/admin/repairs/${repair.id}/edit`}
+                className="block border-b pb-2 hover:bg-gray-50 transition"
+              >
+                <p className="font-medium">{repair.title}</p>
+                <p className="text-sm text-gray-500">
+                  {repair.device?.brand?.name} — {repair.device?.name}
+                </p>
+              </a>
+            ))
 
-)}
+          )}
+
         </div>
 
       </div>
