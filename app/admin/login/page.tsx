@@ -27,7 +27,7 @@ export default function AdminLogin() {
     }
 
     // ✅ login success
-    window.location.href = "/admin/dashboard"
+    window.location.href = "/admin"
   }
 
   return (
