@@ -1,15 +1,14 @@
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 async function getBrands() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/brands`, {
-    cache: "no-store",
+  const brands = await prisma.brand.findMany({
+    orderBy: { name: "asc" },
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch brands");
-  }
-
-  return res.json();
+  return brands;
 }
 
 export default async function BrandsPage() {
@@ -50,12 +49,10 @@ export default async function BrandsPage() {
                 action={async () => {
                   "use server";
 
-                  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/brands`, {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json",
+                  await prisma.brand.delete({
+                    where: {
+                      id: brand.id,
                     },
-                    body: JSON.stringify({ id: brand.id }),
                   });
                 }}
               >
