@@ -1,12 +1,20 @@
-import Link from "next/link"
+"use client";
+
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return (
 
+  const handleViewWebsite = async () => {
+    await signOut({ redirect: false });
+    window.location.href = "/";
+  };
+
+  return (
     <div className="min-h-screen bg-gray-100">
 
       <div className="max-w-6xl mx-auto py-10 px-6">
@@ -17,17 +25,17 @@ export default function AdminLayout({
             Sa7ar Quick Care Admin
           </h1>
 
-          <Link
-            href="/"
+          {/* ✅ View Website = Logout + Redirect */}
+          <button
+            onClick={handleViewWebsite}
             className="text-sm text-gray-600 hover:underline"
           >
             View Website
-          </Link>
+          </button>
 
         </div>
 
         {/* Admin Navigation */}
-
         <nav className="flex gap-6 mb-8 text-sm">
 
           <Link
@@ -38,10 +46,10 @@ export default function AdminLayout({
           </Link>
 
           <Link
-          href="/admin/repairs"
-          className="text-gray-700 hover:underline"
+            href="/admin/repairs"
+            className="text-gray-700 hover:underline"
           >
-          Repair Cases
+            Repair Cases
           </Link>
 
           <Link
@@ -65,5 +73,5 @@ export default function AdminLayout({
       </div>
 
     </div>
-  )
+  );
 }
