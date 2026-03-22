@@ -1,7 +1,8 @@
 import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function Home() {
 
   const latestCases = await prisma.repairCase.findMany({
