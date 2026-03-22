@@ -1,9 +1,13 @@
 import Link from "next/link";
 
 async function getBrands() {
-  const res = await fetch("http://localhost:3000/api/brands", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/brands`, {
     cache: "no-store",
   });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch brands");
+  }
 
   return res.json();
 }
@@ -36,19 +40,17 @@ export default async function BrandsPage() {
 
             <div className="flex gap-2">
 
-              {/* ✅ EDIT (Link — NOT form) */}
               <Link href={`/admin/brands/${brand.id}/edit`}>
                 <button className="bg-blue-500 text-white px-3 py-1 rounded">
                   Edit
                 </button>
               </Link>
 
-              {/* ✅ DELETE (Form submit only) */}
               <form
                 action={async () => {
                   "use server";
 
-                  await fetch("http://localhost:3000/api/brands", {
+                  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/brands`, {
                     method: "DELETE",
                     headers: {
                       "Content-Type": "application/json",
