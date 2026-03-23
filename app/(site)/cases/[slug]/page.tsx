@@ -39,7 +39,16 @@ export async function generateMetadata({
 
   const description = `We fixed ${deviceName} issue: ${repair.problem}. Professional ${deviceName} repair service in Cairo, Egypt. Fast and reliable service at Sa7ar Quick Care.`;
  const brandName = repair.device?.brand?.name || ""
-  return {
+  const relatedRepairs = await prisma.repairCase.findMany({
+  where: {
+    deviceId: repair.deviceId,
+    NOT: {
+      id: repair.id,
+    },
+  },
+  take: 3,
+});
+ return {
   title,
   description,
 
@@ -74,6 +83,7 @@ export async function generateMetadata({
 
 // PAGE
 export default async function RepairPage({
+  
   params,
 }: {
   params: Promise<{ slug: string }>
@@ -99,8 +109,17 @@ export default async function RepairPage({
   const deviceName =
     repair.device
       ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
+      
       : "Device"
-
+const relatedRepairs = await prisma.repairCase.findMany({
+  where: {
+    deviceId: repair.deviceId,
+    NOT: {
+      id: repair.id,
+    },
+  },
+  take: 3,
+});
   const deviceSlug = repair.device?.slug
   const brandName = repair.device?.brand?.name
 
@@ -253,6 +272,28 @@ export default async function RepairPage({
           Contact us on WhatsApp
         </a>
       </div>
+      {/* 🔥 RELATED REPAIRS */}
+{relatedRepairs.length > 0 && (
+  <div className="mt-12">
+    <h2 className="text-xl font-semibold mb-4">
+      Related Repairs
+    </h2>
+
+    <div className="grid gap-4">
+      {relatedRepairs.map((item: any) => (
+        <Link
+          key={item.id}
+          href={`/cases/${item.slug}`}
+          className="block p-4 border rounded-lg hover:bg-gray-50"
+        >
+          <p className="font-medium">
+            {item.title}
+          </p>
+        </Link>
+      ))}
+    </div>
+  </div>
+)}
 
     </div>
   )

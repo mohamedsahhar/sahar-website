@@ -39,11 +39,15 @@ export default async function Home() {
         </p>
 
         {/* ✅ IMPROVED SEO PARAGRAPH */}
-        <p className="text-gray-500 max-w-2xl mx-auto mb-6">
-          Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, Apple devices, and advanced electronics maintenance.
+        <p className="text-gray-500 max-w-2xl mx-auto mb-3">
+  Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, Apple devices, and advanced electronics maintenance.
 
-          We provide fast, reliable, and affordable repair services including charging port repair, battery replacement, motherboard repair, and water damage repair for all types of devices.
-        </p>
+  We provide fast, reliable, and affordable repair services including charging port repair, battery replacement, motherboard repair, and water damage repair for all types of devices.
+</p>
+
+<p className="text-gray-400 text-sm">
+  Located in New Cairo, 5th Settlement – Serving all areas of Cairo and Egypt.
+</p>
 
         {/* INTERNAL LINKS */}
         <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600">
@@ -202,7 +206,15 @@ export default async function Home() {
 
       </section>
 
+<section className="py-16 text-center px-4">
+  <h2 className="text-2xl font-semibold mb-4">
+    Electronics Repair Services in Cairo, Egypt
+  </h2>
 
+  <p className="text-gray-600 max-w-3xl mx-auto">
+    Sa7ar Quick Care provides expert repair services for phones, AirPods, JBL speakers, Apple devices, and electronics in Cairo. Whether you need battery replacement, charging port repair, or advanced motherboard repair, our technicians deliver fast and reliable solutions.
+  </p>
+</section>
       {/* WHY CHOOSE US */}
       <section className="py-20 bg-gray-100 text-center px-4 md:px-10">
 
