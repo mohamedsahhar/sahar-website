@@ -3,6 +3,11 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const metadata = {
+  title: "Phone & Electronics Repair in Cairo | Sa7ar Quick Care",
+  description:
+    "Professional electronics repair in Cairo, Egypt. We repair iPhones, AirPods, JBL speakers, Apple Pencil, and more. Fast and reliable service at Sa7ar Quick Care.",
+};
 export default async function Home() {
 
   const latestCases = await prisma.repairCase.findMany({
