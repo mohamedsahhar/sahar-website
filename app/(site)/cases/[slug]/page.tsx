@@ -35,33 +35,41 @@ export async function generateMetadata({
       ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
       : "Device"
 
-  const title = `${repair.title} | ${deviceName} Repair | Sa7ar Quick Care`
+  const title = `${deviceName} Repair in Cairo | ${repair.problem} Fix - Sa7ar Quick Care`
 
-  const description =
-    repair.problem ||
-    `Professional ${deviceName} repair service in New Cairo by Sa7ar Quick Care.`
-
+  const description = `We fixed ${deviceName} issue: ${repair.problem}. Professional ${deviceName} repair service in Cairo, Egypt. Fast and reliable service at Sa7ar Quick Care.`;
+ const brandName = repair.device?.brand?.name || ""
   return {
+  title,
+  description,
+
+  alternates: {
+    canonical: `/cases/${slug}`,
+  },
+
+  keywords: [
+    `${deviceName} repair Cairo`,
+    `${deviceName} repair Egypt`,
+    `${brandName || ""} repair`,
+  ],
+
+  openGraph: {
     title,
     description,
-
-    openGraph: {
-      title,
-      description,
-      url: `/cases/${slug}`,
-      type: "article",
-      images: repair.image
-        ? [
-            {
-              url: repair.image,
-              width: 1200,
-              height: 630,
-              alt: repair.title,
-            },
-          ]
-        : [],
-    },
-  }
+    url: `/cases/${slug}`,
+    type: "article",
+    images: repair.image
+      ? [
+          {
+            url: repair.image,
+            width: 1200,
+            height: 630,
+            alt: repair.title,
+          },
+        ]
+      : [],
+  },
+}
 }
 
 // PAGE
