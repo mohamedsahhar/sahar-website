@@ -62,6 +62,12 @@ export default function Navbar() {
             Request Repair
           </Link>
 
+          {/* 🌍 Language Switch */}
+<div className="flex items-center gap-2 ml-4 text-sm">
+  <Link href="/" className="hover:text-black">EN</Link>
+  <span>|</span>
+  <Link href="/ar" className="hover:text-black">عربي</Link>
+</div>
         </div>
 
         {/* Mobile Button */}
@@ -110,7 +116,11 @@ export default function Navbar() {
           >
             Request Repair
           </Link>
-
+{/* 🌍 Language Switch */}
+<div className="flex gap-3 pt-4 border-t">
+  <Link href="/" onClick={closeMenu}>EN</Link>
+  <Link href="/ar" onClick={closeMenu}>عربي</Link>
+</div>
         </div>
       )}
 
