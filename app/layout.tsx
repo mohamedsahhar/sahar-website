@@ -2,8 +2,10 @@ import "./globals.css"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sa7arrepair.com"),
-
+  metadataBase: new URL("https://www.sa7arrepair.com"),
+alternates: {
+  canonical: "/",
+},
   title: {
     default: "Sa7ar Quick Care | Electronics Repair in Egypt",
     template: "%s | Sa7ar Quick Care",
