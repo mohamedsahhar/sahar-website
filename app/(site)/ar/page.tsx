@@ -4,6 +4,14 @@ export const metadata = {
   title: "صيانة الموبايل والإلكترونيات في القاهرة | سحار كويك كير",
   description:
     "مركز سحار كويك كير يقدم خدمات صيانة احترافية للموبايلات وسماعات AirPods وJBL وأجهزة Apple في القاهرة.",
+
+  alternates: {
+    canonical: "/ar",
+    languages: {
+      en: "/",
+      ar: "/ar",
+    },
+  },
 };
 
 export default function ArabicHome() {
