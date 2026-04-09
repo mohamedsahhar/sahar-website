@@ -5,11 +5,11 @@ import Image from "next/image"
 export default async function GalleryPage() {
 
   const repairs = await prisma.repairCase.findMany({
-    where: {
-      beforeImage: {
-        not: null,
-      },
-    },
+   where: {
+  images: {
+    isEmpty: false,
+  },
+},
     orderBy: {
       createdAt: "desc",
     },
