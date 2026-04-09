@@ -6,9 +6,7 @@ type RepairInput = {
   deviceId: number
   problem: string
   solution: string
-  image?: string
-  beforeImage?: string
-  afterImage?: string
+  images?: string[]
   videoUrl?: string
   repairTime?: string
 };
@@ -36,9 +34,7 @@ export async function POST(req: Request) {
     problem: data.problem,
     solution: data.solution,
 
-    image: data.image ?? null,
-    beforeImage: data.beforeImage ?? null,
-    afterImage: data.afterImage ?? null,
+    images: data.images ?? [],
     videoUrl: data.videoUrl ?? null,
     repairTime: data.repairTime ?? null,
   },
