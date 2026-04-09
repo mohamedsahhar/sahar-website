@@ -129,15 +129,15 @@ export default async function DevicePage({
             className="border rounded-xl overflow-hidden hover:shadow-lg transition bg-white"
           >
 
-            {repair.image && (
-              <Image
-                src={repair.image}
-                alt={repair.title}
-                width={600}
-                height={400}
-                className="w-full h-48 object-cover"
-              />
-            )}
+            {repair.images?.[0] && (
+  <Image
+    src={repair.images[0]}
+    alt={repair.title}
+    width={600}
+    height={400}
+    className="w-full h-48 object-cover"
+  />
+)}
 
             <div className="p-4">
 
