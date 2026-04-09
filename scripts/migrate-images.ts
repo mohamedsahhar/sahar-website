@@ -11,11 +11,7 @@ async function main() {
       continue;
     }
 
-    const images = [
-      repair.image,
-      repair.beforeImage,
-      repair.afterImage,
-    ].filter((img): img is string => Boolean(img));
+   const images = repair.images ?? [];
 
     if (images.length === 0) continue;
 
