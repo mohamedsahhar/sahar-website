@@ -8,15 +8,15 @@ type RepairInput = {
   solution: string;
   repairTime?: string;
 
-  // ✅ NEW
+  // ✅ NEW SYSTEM ONLY
   images?: string[];
 
-  // OLD (kept)
+  videoUrl?: string;
+
+  // 👇 optional fallback input (not stored in DB directly)
   image?: string;
   beforeImage?: string;
   afterImage?: string;
-
-  videoUrl?: string;
 };
 
 export async function GET() {
@@ -40,7 +40,6 @@ export async function POST(req: Request) {
   try {
     const data: RepairInput = await req.json();
 
-    // ✅ Validation
     if (!data.title || !data.problem) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -48,7 +47,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Slug
     const slug = data.title
       .toLowerCase()
       .trim()
@@ -66,7 +64,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ SAFE IMAGE HANDLING
+    // ✅ SAFE IMAGE BUILDING (supports old inputs)
     const images =
       data.images && data.images.length > 0
         ? data.images
@@ -82,16 +80,10 @@ export async function POST(req: Request) {
         slug,
         problem: data.problem,
         solution: data.solution,
-
         repairTime: data.repairTime ?? null,
 
-        // ✅ NEW SYSTEM
+        // ✅ ONLY FIELD IN DB
         images,
-
-        // OLD (still saved for safety)
-        image: data.image ?? null,
-        beforeImage: data.beforeImage ?? null,
-        afterImage: data.afterImage ?? null,
 
         videoUrl: data.videoUrl ?? null,
 
@@ -144,7 +136,6 @@ export async function PUT(req: Request) {
       );
     }
 
-    // ✅ SAME SAFE LOGIC
     const images =
       data.images && data.images.length > 0
         ? data.images
@@ -162,16 +153,10 @@ export async function PUT(req: Request) {
         title: data.title,
         problem: data.problem,
         solution: data.solution,
-
         repairTime: data.repairTime ?? null,
 
-        // ✅ NEW
+        // ✅ ONLY FIELD
         images,
-
-        // OLD
-        image: data.image ?? null,
-        beforeImage: data.beforeImage ?? null,
-        afterImage: data.afterImage ?? null,
 
         videoUrl: data.videoUrl ?? null,
 
