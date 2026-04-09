@@ -1,90 +1,99 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import ImageUpload from "@/app/components/ImageUpload"; // ✅ ADDED
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import ImageUpload from "@/app/components/ImageUpload";
 
 export default function EditRepairPage() {
 
-  const params = useParams()
-  const router = useRouter()
-  const id = params.id
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id;
 
-  const [brands,setBrands] = useState([])
-  const [devices,setDevices] = useState([])
+  const [brands,setBrands] = useState([]);
+  const [devices,setDevices] = useState([]);
 
-  const [title,setTitle] = useState("")
-  const [problem,setProblem] = useState("")
-  const [solution,setSolution] = useState("")
-  const [repairTime,setRepairTime] = useState("")
+  const [title,setTitle] = useState("");
+  const [problem,setProblem] = useState("");
+  const [solution,setSolution] = useState("");
+  const [repairTime,setRepairTime] = useState("");
 
-  const [brandId,setBrandId] = useState("")
-  const [deviceId,setDeviceId] = useState("")
+  const [brandId,setBrandId] = useState("");
+  const [deviceId,setDeviceId] = useState("");
 
-  const [image,setImage] = useState("")
-  const [beforeImage,setBeforeImage] = useState("")
-  const [afterImage,setAfterImage] = useState("")
-  const [videoUrl,setVideoUrl] = useState("")
+  const [images,setImages] = useState<string[]>([]);
+  const [dragIndex,setDragIndex] = useState<number | null>(null);
 
-  const [loading,setLoading] = useState(false)
+  const [videoUrl,setVideoUrl] = useState("");
+  const [loading,setLoading] = useState(false);
 
   async function loadBrands(){
-    const res = await fetch("/api/brands")
-    const data = await res.json()
-    setBrands(data)
+    const res = await fetch("/api/brands");
+    const data = await res.json();
+    setBrands(data);
   }
 
   async function loadDevices(){
-    const res = await fetch("/api/devices")
-    const data = await res.json()
-    setDevices(data)
+    const res = await fetch("/api/devices");
+    const data = await res.json();
+    setDevices(data);
   }
 
   async function loadRepair() {
-    try {
-      const res = await fetch("/api/repairs");
-      const data = await res.json();
+    const res = await fetch("/api/repairs");
+    const data = await res.json();
 
-      const repair = data.find((r: any) => String(r.id) === String(id));
-      if (!repair) return;
+    const repair = data.find((r: any) => String(r.id) === String(id));
+    if (!repair) return;
 
-      setTitle(repair.title || "");
-      setProblem(repair.problem || "");
-      setSolution(repair.solution || "");
-      setRepairTime(repair.repairTime ? String(repair.repairTime) : "");
+    setTitle(repair.title || "");
+    setProblem(repair.problem || "");
+    setSolution(repair.solution || "");
+    setRepairTime(repair.repairTime || "");
 
-      setDeviceId(repair.deviceId?.toString() || "");
-      setBrandId(repair.device?.brandId?.toString() || "");
+    setDeviceId(repair.deviceId?.toString() || "");
+    setBrandId(repair.device?.brandId?.toString() || "");
 
-      setImage(repair.image || "");
-      setBeforeImage(repair.beforeImage || "");
-      setAfterImage(repair.afterImage || "");
-      setVideoUrl(repair.videoUrl || "");
-
-    } catch (err) {
-      console.error("Error loading repair:", err);
-    }
+    setImages(repair.images || []);
+    setVideoUrl(repair.videoUrl || "");
   }
 
   useEffect(()=>{
-    loadBrands()
-    loadDevices()
-    loadRepair()
-  },[])
+    loadBrands();
+    loadDevices();
+    loadRepair();
+  },[]);
 
   const filteredDevices = devices.filter(
     (d:any)=> d.brandId == brandId
-  )
+  );
+
+  // ✅ DRAG START
+  function handleDragStart(index:number){
+    setDragIndex(index);
+  }
+
+  // ✅ DROP
+  function handleDrop(index:number){
+    if (dragIndex === null) return;
+
+    const newImages = [...images];
+    const draggedItem = newImages[dragIndex];
+
+    newImages.splice(dragIndex,1);
+    newImages.splice(index,0,draggedItem);
+
+    setImages(newImages);
+    setDragIndex(null);
+  }
 
   async function updateRepair(e:any){
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     await fetch("/api/repairs",{
       method:"PUT",
-      headers:{
-        "Content-Type":"application/json"
-      },
+      headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({
         id,
         title,
@@ -92,15 +101,13 @@ export default function EditRepairPage() {
         solution,
         repairTime,
         deviceId:Number(deviceId),
-        image,
-        beforeImage,
-        afterImage,
+        images,
         videoUrl
       })
-    })
+    });
 
-    alert("Repair updated")
-    router.push("/admin/repairs")
+    alert("Repair updated");
+    router.push("/admin/repairs");
   }
 
   return(
@@ -113,8 +120,8 @@ export default function EditRepairPage() {
 
       <form onSubmit={updateRepair} className="space-y-6">
 
-        {/* Basic Info */}
-        <div className="border p-4 rounded-xl space-y-4">
+        {/* BASIC */}
+        <div className="border p-4 rounded-xl space-y-5">
           <h2 className="font-semibold text-lg">Basic Information</h2>
 
           <input className="border p-2 w-full" value={title} onChange={(e)=>setTitle(e.target.value)} />
@@ -123,36 +130,45 @@ export default function EditRepairPage() {
           <input className="border p-2 w-full" value={repairTime} onChange={(e)=>setRepairTime(e.target.value)} />
         </div>
 
-        {/* Media */}
+        {/* GALLERY (DRAG & DROP) */}
         <div className="border p-4 rounded-xl space-y-4">
-          <h2 className="font-semibold text-lg">Media</h2>
+          <h2 className="font-semibold text-lg">Gallery (Drag to reorder)</h2>
 
-          {/* 🔥 MAIN IMAGE */}
-          <label>Main Image</label>
-          <ImageUpload onUpload={(url)=>setImage(url)} />
-          <input
-            className="border p-2 w-full"
-            value={image}
-            onChange={(e)=>setImage(e.target.value)}
+          <ImageUpload
+            onUpload={(url:string)=>
+              setImages((prev)=>[...prev,url])
+            }
           />
 
-          {/* 🔥 BEFORE IMAGE */}
-          <label>Before Image</label>
-          <ImageUpload onUpload={(url)=>setBeforeImage(url)} />
-          <input
-            className="border p-2 w-full"
-            value={beforeImage}
-            onChange={(e)=>setBeforeImage(e.target.value)}
-          />
+          {images.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {images.map((img,i)=>(
+                <div
+                  key={i}
+                  draggable
+                  onDragStart={()=>handleDragStart(i)}
+                  onDragOver={(e)=>e.preventDefault()}
+                  onDrop={()=>handleDrop(i)}
+                  className="relative border rounded p-1 cursor-move hover:opacity-80"
+                >
 
-          {/* 🔥 AFTER IMAGE */}
-          <label>After Image</label>
-          <ImageUpload onUpload={(url)=>setAfterImage(url)} />
-          <input
-            className="border p-2 w-full"
-            value={afterImage}
-            onChange={(e)=>setAfterImage(e.target.value)}
-          />
+                  <img src={img} className="rounded"/>
+
+                  {/* REMOVE */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setImages(images.filter((_,index)=>index !== i))
+                    }
+                    className="absolute top-1 right-1 bg-black text-white text-xs px-1 rounded"
+                  >
+                    ✕
+                  </button>
+
+                </div>
+              ))}
+            </div>
+          )}
 
           <label>Video URL</label>
           <input
@@ -163,11 +179,11 @@ export default function EditRepairPage() {
         </div>
 
         <button className="bg-black text-white px-5 py-2 rounded">
-          Save Changes
+          {loading ? "Saving..." : "Save Changes"}
         </button>
 
       </form>
 
     </div>
-  )
+  );
 }

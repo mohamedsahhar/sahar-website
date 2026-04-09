@@ -1,224 +1,131 @@
-import { prisma } from "@/lib/prisma"
-import Image from "next/image"
-import { notFound } from "next/navigation"
-import Link from "next/link"
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import LightboxImage from "@/app/components/LightboxImage";
+
 export const dynamic = "force-dynamic";
-// SEO
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
 
-  const { slug } = await params
-
-  const repair = await prisma.repairCase.findFirst({
-    where: { slug },
-    include: {
-      device: {
-        include: {
-          brand: true
-        }
-      }
-    }
-  })
-
-  if (!repair) {
-    return {
-      title: "Repair Not Found | Sa7ar Quick Care",
-      description: "The requested repair case could not be found.",
-    }
-  }
-
-  const deviceName =
-    repair.device
-      ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
-      : "Device"
-
-  const title = `${deviceName} Repair in Cairo | ${repair.problem} Fix - Sa7ar Quick Care`
-
-  const description = `We fixed ${deviceName} issue: ${repair.problem}. Professional ${deviceName} repair service in Cairo, Egypt. Fast and reliable service at Sa7ar Quick Care.`;
- const brandName = repair.device?.brand?.name || ""
-  const relatedRepairs = await prisma.repairCase.findMany({
-  where: {
-    deviceId: repair.deviceId,
-    NOT: {
-      id: repair.id,
-    },
-  },
-  take: 3,
-});
- return {
-  title,
-  description,
-
-  alternates: {
-    canonical: `/cases/${slug}`,
-  },
-
-  keywords: [
-    `${deviceName} repair Cairo`,
-    `${deviceName} repair Egypt`,
-    `${brandName || ""} repair`,
-  ],
-
-  openGraph: {
-    title,
-    description,
-    url: `/cases/${slug}`,
-    type: "article",
-    images: repair.image
-      ? [
-          {
-            url: repair.image,
-            width: 1200,
-            height: 630,
-            alt: repair.title,
-          },
-        ]
-      : [],
-  },
-}
-}
-
-// PAGE
 export default async function RepairPage({
-  
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
-
-  const { slug } = await params
+  const { slug } = await params;
 
   const repair = await prisma.repairCase.findFirst({
     where: { slug },
     include: {
       device: {
-        include: {
-          brand: true
-        }
-      }
-    }
-  })
+        include: { brand: true },
+      },
+    },
+  });
 
-  if (!repair) {
-    notFound()
-  }
+  if (!repair) notFound();
+
+  const relatedRepairs = await prisma.repairCase.findMany({
+    where: {
+      deviceId: repair.deviceId,
+      NOT: { id: repair.id },
+    },
+    take: 3,
+  });
 
   const deviceName =
     repair.device
       ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
-      
-      : "Device"
-const relatedRepairs = await prisma.repairCase.findMany({
-  where: {
-    deviceId: repair.deviceId,
-    NOT: {
-      id: repair.id,
-    },
-  },
-  take: 3,
-});
-  const deviceSlug = repair.device?.slug
-  const brandName = repair.device?.brand?.name
+      : "Device";
+
+  const deviceSlug = repair.device?.slug;
+  const brandName = repair.device?.brand?.name;
+
+  const galleryImages = repair.images || [];
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 md:px-8 py-8">
 
-      <h1 className="text-3xl font-bold mb-4">
+      <h1 className="text-3xl font-bold mb-4 text-gray-900">
         {repair.title}
       </h1>
 
-      <p className="text-gray-600 mb-3">
-        Professional repair service for {deviceName} in New Cairo at Sa7ar Quick Care.
+      <p className="text-gray-700 mb-3">
+        Professional repair service for {deviceName} in New Cairo.
       </p>
 
-      {/* ✅ INTERNAL LINKS */}
-      <div className="mb-6 text-sm text-gray-500 flex flex-wrap gap-3">
+      {/* LINKS */}
+      <div className="mb-6 text-sm text-gray-600 flex flex-wrap gap-3">
 
         {deviceSlug && (
-          <Link
-            href={`/devices/${deviceSlug}`}
-            className="underline hover:text-blue-600"
-          >
+          <Link href={`/devices/${deviceSlug}`} className="underline hover:text-blue-600">
             View all {deviceName} repairs
           </Link>
         )}
 
         {brandName && (
-          <Link
-            href={`/repairs/${brandName.toLowerCase()}`}
-            className="underline hover:text-blue-600"
-          >
+          <Link href={`/repairs/${brandName.toLowerCase()}`} className="underline hover:text-blue-600">
             View all {brandName} repairs
           </Link>
         )}
 
       </div>
 
-      {/* ✅ MAIN IMAGE */}
-      {repair.image && (
-        <Image
-          src={repair.image}
-          alt={repair.title}
-          width={800}
-          height={500}
-          className="rounded-lg mb-6"
-        />
-      )}
-
-      {/* BEFORE & AFTER */}
-      {(repair.beforeImage || repair.afterImage) && (
-        <div className="mb-6">
-
-          <h2 className="text-xl font-semibold mb-4">
-            Before & After Repair
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            {repair.beforeImage && (
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Before</p>
-                <img
-                  src={repair.beforeImage}
-                  alt="Before repair"
-                  className="rounded-lg w-full"
-                />
-              </div>
-            )}
-
-            {repair.afterImage && (
-              <div>
-                <p className="text-sm text-gray-500 mb-1">After</p>
-                <img
-                  src={repair.afterImage}
-                  alt="After repair"
-                  className="rounded-lg w-full"
-                />
-              </div>
-            )}
-
-          </div>
-
+      {/* GALLERY */}
+      {galleryImages.length > 0 && (
+        <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {galleryImages.map((img: string, index: number) => (
+            <LightboxImage
+              key={index}
+              src={img}
+              alt={`${repair.title} image ${index + 1}`}
+            />
+          ))}
         </div>
       )}
 
-      {/* VIDEO */}
+      {/* VIDEO (SMALL + USE FIRST IMAGE) */}
       {repair.videoUrl && (
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">
+        <div className="mb-8">
+
+          <h2 className="text-lg font-semibold mb-3 text-gray-900">
             Repair Video
           </h2>
 
           <a
             href={repair.videoUrl}
             target="_blank"
-            className="text-blue-600 underline"
+            className="inline-block group"
           >
-            Watch Video
+            <div className="w-64 sm:w-72 aspect-video rounded-xl overflow-hidden border bg-gray-100 relative">
+
+              {/* THUMBNAIL FROM FIRST IMAGE */}
+              {galleryImages[0] && (
+                <img
+                  src={galleryImages[0]}
+                  className="w-full h-full object-cover group-hover:scale-105 transition"
+                />
+              )}
+
+              {/* PLAY BUTTON */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 bg-black/70 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+
+            <p className="text-sm text-gray-500 mt-2">
+              Watch on Instagram
+            </p>
           </a>
+
         </div>
       )}
 
@@ -226,43 +133,31 @@ const relatedRepairs = await prisma.repairCase.findMany({
       <div className="space-y-6">
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            Problem
-          </h2>
-          <p className="text-gray-700">
-            {repair.problem}
-          </p>
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">Problem</h2>
+          <p className="text-gray-700">{repair.problem}</p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            Solution
-          </h2>
-          <p className="text-gray-700">
-            {repair.solution}
-          </p>
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">Solution</h2>
+          <p className="text-gray-700">{repair.solution}</p>
         </div>
 
         {repair.repairTime && (
           <div>
-            <h2 className="text-xl font-semibold mb-2">
-              Repair Time
-            </h2>
-            <p className="text-gray-700">
-              {repair.repairTime}
-            </p>
+            <h2 className="text-xl font-semibold mb-2 text-gray-900">Repair Time</h2>
+            <p className="text-gray-700">{repair.repairTime}</p>
           </div>
         )}
 
       </div>
 
-      {/* ✅ NEW: CALL TO ACTION (VERY IMPORTANT) */}
+      {/* CTA */}
       <div className="mt-10 p-6 bg-gray-100 rounded-xl text-center">
-        <h3 className="text-lg font-semibold mb-2">
+        <h3 className="text-lg font-semibold mb-2 text-gray-900">
           Need a similar repair?
         </h3>
         <p className="text-gray-600 mb-4">
-          Contact Sa7ar Quick Care for fast and professional repair service in New Cairo.
+          Contact us for fast and professional repair service.
         </p>
         <a
           href="https://wa.me/201021024094"
@@ -272,29 +167,30 @@ const relatedRepairs = await prisma.repairCase.findMany({
           Contact us on WhatsApp
         </a>
       </div>
-      {/* 🔥 RELATED REPAIRS */}
-{relatedRepairs.length > 0 && (
-  <div className="mt-12">
-    <h2 className="text-xl font-semibold mb-4">
-      Related Repairs
-    </h2>
 
-    <div className="grid gap-4">
-      {relatedRepairs.map((item: any) => (
-        <Link
-          key={item.id}
-          href={`/cases/${item.slug}`}
-          className="block p-4 border rounded-lg hover:bg-gray-50"
-        >
-          <p className="font-medium">
-            {item.title}
-          </p>
-        </Link>
-      ))}
-    </div>
-  </div>
-)}
+      {/* RELATED */}
+      {relatedRepairs.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+            Related Repairs
+          </h2>
+
+          <div className="grid gap-4">
+            {relatedRepairs.map((item: any) => (
+              <Link
+                key={item.id}
+                href={`/cases/${item.slug}`}
+                className="block p-4 border rounded-lg hover:bg-gray-50"
+              >
+                <p className="font-medium text-gray-800">
+                  {item.title}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
-  )
+  );
 }

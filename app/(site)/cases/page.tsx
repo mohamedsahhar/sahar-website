@@ -1,9 +1,11 @@
-import { prisma } from "@/lib/prisma"
-import CasesClient from "./CasesClient"
+import { prisma } from "@/lib/prisma";
+import CasesClient from "./CasesClient";
+
 export const dynamic = "force-dynamic";
+
 export default async function CasesPage() {
 
-  const cases = await prisma.repairCase.findMany({
+  const rawCases = await prisma.repairCase.findMany({
     orderBy: { createdAt: "desc" },
     include: {
       device: {
@@ -12,7 +14,13 @@ export default async function CasesPage() {
         }
       }
     }
-  })
+  });
+
+  // ✅ ADD THUMBNAIL FROM images[]
+  const cases = rawCases.map((repair) => ({
+    ...repair,
+    thumbnail: repair.images?.[0] || null,
+  }));
 
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
@@ -46,9 +54,9 @@ export default async function CasesPage() {
         </p>
       )}
 
-      {/* ✅ ONLY pass cases */}
+      {/* ✅ PASS UPDATED DATA WITH THUMBNAIL */}
       <CasesClient cases={cases} />
 
     </main>
-  )
+  );
 }

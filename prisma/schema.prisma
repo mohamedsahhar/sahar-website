@@ -29,9 +29,7 @@ model RepairCase {
   problem     String
   solution    String
   repairTime  String?
-  image       String?
-  beforeImage String?
-  afterImage  String?
+  images String[] @default([])
   videoUrl    String?
   deviceId    Int?
   createdAt   DateTime @default(now())

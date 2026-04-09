@@ -47,7 +47,6 @@ export default function CasesClient({ cases }: { cases: any[] }) {
 
     return matchesSearch && matchesBrand && matchesDevice;
   });
-console.log(cases.map(c => c.slug))
 
   return (
     <>
@@ -120,16 +119,19 @@ console.log(cases.map(c => c.slug))
 
         {filteredCases.map((c: any) => (
           <div
-            key={c.slug} // ✅ FIXED HERE
+            key={c.slug}
             className="border rounded-2xl overflow-hidden bg-white hover:shadow-lg transition duration-300"
           >
 
-            {c.image && (
-              <img
-                src={c.image}
-                alt={c.title}
-                className="w-full h-48 object-cover"
-              />
+            {/* ✅ FIXED IMAGE */}
+            {c.thumbnail && (
+              <div className="w-full h-48 overflow-hidden">
+                <img
+                  src={c.thumbnail}
+                  alt={c.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             )}
 
             <div className="p-5">

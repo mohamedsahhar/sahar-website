@@ -7,9 +7,15 @@ type RepairInput = {
   problem: string;
   solution: string;
   repairTime?: string;
+
+  // ✅ NEW
+  images?: string[];
+
+  // OLD (kept)
   image?: string;
   beforeImage?: string;
   afterImage?: string;
+
   videoUrl?: string;
 };
 
@@ -42,14 +48,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Better slug
+    // ✅ Slug
     const slug = data.title
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
 
-    // ✅ Slug duplicate protection
     const existing = await prisma.repairCase.findUnique({
       where: { slug },
     });
@@ -61,6 +66,16 @@ export async function POST(req: Request) {
       );
     }
 
+    // ✅ SAFE IMAGE HANDLING
+    const images =
+      data.images && data.images.length > 0
+        ? data.images
+        : [
+            data.image,
+            data.beforeImage,
+            data.afterImage,
+          ].filter((img): img is string => Boolean(img));
+
     const repair = await prisma.repairCase.create({
       data: {
         title: data.title,
@@ -69,9 +84,15 @@ export async function POST(req: Request) {
         solution: data.solution,
 
         repairTime: data.repairTime ?? null,
+
+        // ✅ NEW SYSTEM
+        images,
+
+        // OLD (still saved for safety)
         image: data.image ?? null,
         beforeImage: data.beforeImage ?? null,
         afterImage: data.afterImage ?? null,
+
         videoUrl: data.videoUrl ?? null,
 
         device: data.deviceId
@@ -123,6 +144,16 @@ export async function PUT(req: Request) {
       );
     }
 
+    // ✅ SAME SAFE LOGIC
+    const images =
+      data.images && data.images.length > 0
+        ? data.images
+        : [
+            data.image,
+            data.beforeImage,
+            data.afterImage,
+          ].filter((img): img is string => Boolean(img));
+
     const updated = await prisma.repairCase.update({
       where: {
         id: Number(data.id),
@@ -133,9 +164,15 @@ export async function PUT(req: Request) {
         solution: data.solution,
 
         repairTime: data.repairTime ?? null,
+
+        // ✅ NEW
+        images,
+
+        // OLD
         image: data.image ?? null,
         beforeImage: data.beforeImage ?? null,
         afterImage: data.afterImage ?? null,
+
         videoUrl: data.videoUrl ?? null,
 
         device: data.deviceId

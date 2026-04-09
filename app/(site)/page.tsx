@@ -1,79 +1,60 @@
 import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
 export const metadata = {
   alternates: {
-  canonical: "/",
-  languages: {
-    en: "/",
-    ar: "/ar",
+    canonical: "/",
+    languages: {
+      en: "/",
+      ar: "/ar",
+    },
   },
-},
   title: "Phone & Electronics Repair in Cairo | Sa7ar Quick Care",
   description:
-    "Professional electronics repair in Cairo, Egypt. We repair iPhones, AirPods, JBL speakers, Apple Pencil, and more. Fast and reliable service at Sa7ar Quick Care.",
+    "Professional electronics repair in Cairo, Egypt. We repair iPhones, AirPods, JBL speakers, Apple Pencil, and more.",
 };
-export default async function Home() {
 
+export default async function Home() {
   const latestCases = await prisma.repairCase.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: { createdAt: "desc" },
     take: 3,
     include: {
-      device: {
-        include: {
-          brand: true,
-        },
-      },
+      device: { include: { brand: true } },
     },
   });
 
   return (
     <main className="min-h-screen bg-white">
 
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section className="text-center py-20 md:py-28 bg-gradient-to-b from-white to-gray-100 px-4">
 
         <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
           Phone & Electronics Repair in Cairo, Egypt
         </h1>
 
-        <p className="text-base md:text-xl text-gray-600 mb-6">
+        <p className="text-base md:text-xl text-gray-700 mb-6">
           Phones • Speakers • Robot Vacuums • DJ Mixers • AirPods
         </p>
 
-        {/* ✅ IMPROVED SEO PARAGRAPH */}
-        <p className="text-gray-500 max-w-2xl mx-auto mb-3">
-  Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, Apple devices, and advanced electronics maintenance.
+        <p className="text-gray-600 max-w-2xl mx-auto mb-3">
+          Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, and advanced electronics maintenance.
+        </p>
 
-  We provide fast, reliable, and affordable repair services including charging port repair, battery replacement, motherboard repair, and water damage repair for all types of devices.
-</p>
+        <p className="text-gray-500 text-sm">
+          Located in New Cairo – Serving all areas of Cairo and Egypt.
+        </p>
 
-<p className="text-gray-400 text-sm">
-  Located in New Cairo, 5th Settlement – Serving all areas of Cairo and Egypt.
-</p>
-
-        {/* INTERNAL LINKS */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600">
-
-          <Link href="/devices" className="underline hover:text-blue-800">
-            Browse Devices
-          </Link>
-
-          <Link href="/repairs" className="underline hover:text-blue-800">
-            Browse Brands
-          </Link>
-
-          <Link href="/cases" className="underline hover:text-blue-800">
-            View Repair Cases
-          </Link>
-
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600 mt-4">
+          <Link href="/devices" className="underline hover:text-blue-800">Browse Devices</Link>
+          <Link href="/repairs" className="underline hover:text-blue-800">Browse Brands</Link>
+          <Link href="/cases" className="underline hover:text-blue-800">View Repair Cases</Link>
         </div>
 
-        {/* ✅ WHATSAPP CTA */}
         <div className="mt-6">
           <a
             href="https://wa.me/201021024094"
@@ -94,31 +75,31 @@ export default async function Home() {
           What Our Customers Say
         </h2>
 
-        <p className="text-gray-500 mt-3">
+        <p className="text-gray-600 mt-3">
           Trusted by customers across Egypt for professional electronics repair
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-6xl mx-auto">
 
           <div className="border p-6 rounded-xl bg-white shadow-sm">
-            <p className="text-gray-600">
+            <p className="text-gray-700">
               “Excellent service! My JBL speaker was repaired quickly and now works perfectly.”
             </p>
-            <p className="mt-4 font-semibold">Google Review</p>
+            <p className="mt-4 font-semibold text-gray-900">Google Review</p>
           </div>
 
           <div className="border p-6 rounded-xl bg-white shadow-sm">
-            <p className="text-gray-600">
-              “Very professional repair center. They fixed my robot vacuum cleaner battery issue.”
+            <p className="text-gray-700">
+              “Very professional repair center. They fixed my robot vacuum battery issue.”
             </p>
-            <p className="mt-4 font-semibold">Customer Feedback</p>
+            <p className="mt-4 font-semibold text-gray-900">Customer Feedback</p>
           </div>
 
           <div className="border p-6 rounded-xl bg-white shadow-sm">
-            <p className="text-gray-600">
+            <p className="text-gray-700">
               “Fast and reliable service. Highly recommended for AirPods and electronics repair.”
             </p>
-            <p className="mt-4 font-semibold">Facebook Review</p>
+            <p className="mt-4 font-semibold text-gray-900">Facebook Review</p>
           </div>
 
         </div>
@@ -126,54 +107,15 @@ export default async function Home() {
       </section>
 
 
-      {/* REPAIR GALLERY */}
-      <section className="py-20 bg-white text-center px-4 md:px-10">
-
-        <h2 className="text-3xl font-bold text-gray-900">
-          Recent Repairs
-        </h2>
-
-        <p className="text-gray-500 mt-3">
-          A glimpse of some devices we repaired at Sa7ar Quick Care
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto">
-
-          <div className="border rounded-xl overflow-hidden">
-            <img src="/repair1.jpg" alt="Robot Vacuum Repair" className="w-full h-56 object-cover"/>
-            <div className="p-4">
-              <p className="font-semibold">Robot Vacuum Repair</p>
-            </div>
-          </div>
-
-          <div className="border rounded-xl overflow-hidden">
-            <img src="/repair2.jpg" alt="AirPods Repair" className="w-full h-56 object-cover"/>
-            <div className="p-4">
-              <p className="font-semibold">AirPods Battery Replacement</p>
-            </div>
-          </div>
-
-          <div className="border rounded-xl overflow-hidden">
-            <img src="/repair3.jpg" alt="Speaker Repair" className="w-full h-56 object-cover"/>
-            <div className="p-4">
-              <p className="font-semibold">Bluetooth Speaker Repair</p>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* LATEST REPAIR CASES */}
+      {/* LATEST CASES (KEEP) */}
       <section className="py-20 bg-gray-50 text-center px-4 md:px-10">
 
         <h2 className="text-3xl font-bold text-gray-900">
           Latest Repair Cases
         </h2>
 
-        <p className="text-gray-500 mt-3">
-          Real repair cases from our workshop in New Cairo including phone repair, AirPods repair, and speaker repair services
+        <p className="text-gray-600 mt-3">
+          Real repair cases from our workshop in New Cairo
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-6xl mx-auto">
@@ -186,9 +128,9 @@ export default async function Home() {
               )}
 
               <div className="p-5">
-                <h3 className="font-semibold text-lg">{c.title}</h3>
+                <h3 className="font-semibold text-lg text-gray-900">{c.title}</h3>
 
-                <p className="text-gray-500 mt-1">
+                <p className="text-gray-600 mt-1">
                   {c.device?.brand?.name} {c.device?.name}
                 </p>
 
@@ -213,15 +155,7 @@ export default async function Home() {
 
       </section>
 
-<section className="py-16 text-center px-4">
-  <h2 className="text-2xl font-semibold mb-4">
-    Electronics Repair Services in Cairo, Egypt
-  </h2>
 
-  <p className="text-gray-600 max-w-3xl mx-auto">
-    Sa7ar Quick Care provides expert repair services for phones, AirPods, JBL speakers, Apple devices, and electronics in Cairo. Whether you need battery replacement, charging port repair, or advanced motherboard repair, our technicians deliver fast and reliable solutions.
-  </p>
-</section>
       {/* WHY CHOOSE US */}
       <section className="py-20 bg-gray-100 text-center px-4 md:px-10">
 
@@ -229,64 +163,30 @@ export default async function Home() {
           Why Choose Sa7ar Quick Care
         </h2>
 
-        <p className="text-gray-500 mt-3">
-          Professional repair service in New Cairo trusted by customers across Egypt
+        <p className="text-gray-600 mt-3">
+          Professional repair service trusted across Egypt
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 max-w-6xl mx-auto">
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg">Professional Diagnostics</h3>
-            <p className="text-gray-500 mt-2">Accurate troubleshooting before every repair.</p>
+            <h3 className="font-semibold text-lg text-gray-900">Professional Diagnostics</h3>
+            <p className="text-gray-600 mt-2">Accurate troubleshooting before every repair.</p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg">Specialized Electronics Repair</h3>
-            <p className="text-gray-500 mt-2">From robot vacuums to DJ mixers and speakers.</p>
+            <h3 className="font-semibold text-lg text-gray-900">Specialized Electronics Repair</h3>
+            <p className="text-gray-600 mt-2">From robot vacuums to DJ mixers and speakers.</p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg">Nationwide Shipping</h3>
-            <p className="text-gray-500 mt-2">Customers from all over Egypt can send devices for repair.</p>
+            <h3 className="font-semibold text-lg text-gray-900">Nationwide Shipping</h3>
+            <p className="text-gray-600 mt-2">Customers from all over Egypt can send devices.</p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg">Trusted by Many Customers</h3>
-            <p className="text-gray-500 mt-2">Excellent feedback from Google and Facebook reviews.</p>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* POPULAR REPAIRS */}
-      <section className="max-w-6xl mx-auto px-4 md:px-6 py-16">
-
-        <h2 className="text-2xl font-semibold mb-8 text-center">
-          Popular Repairs
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-          <div className="border rounded-xl p-6 hover:shadow transition">
-            <h3 className="font-semibold mb-2">JBL Speaker Charging Port Repair</h3>
-            <p className="text-gray-600 text-sm">Fix charging problems for JBL PartyBox, Flip, and other speakers.</p>
-          </div>
-
-          <div className="border rounded-xl p-6 hover:shadow transition">
-            <h3 className="font-semibold mb-2">AirPods Battery Replacement</h3>
-            <p className="text-gray-600 text-sm">Replace weak AirPods batteries and restore listening time.</p>
-          </div>
-
-          <div className="border rounded-xl p-6 hover:shadow transition">
-            <h3 className="font-semibold mb-2">iPhone Charging Port Repair</h3>
-            <p className="text-gray-600 text-sm">Fix iPhone charging issues caused by damaged charging ports.</p>
-          </div>
-
-          <div className="border rounded-xl p-6 hover:shadow transition">
-            <h3 className="font-semibold mb-2">Apple Pencil Not Charging</h3>
-            <p className="text-gray-600 text-sm">Repair Apple Pencil charging and connection problems.</p>
+            <h3 className="font-semibold text-lg text-gray-900">Trusted by Many Customers</h3>
+            <p className="text-gray-600 mt-2">Excellent feedback from Google and Facebook.</p>
           </div>
 
         </div>

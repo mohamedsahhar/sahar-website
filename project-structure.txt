@@ -7,7 +7,11 @@ C:.
 |       |   \---chunks
 |       +---cache
 |       |   +---images
-|       |   |   \---J4SYwKGc41Mx03h7hHaUxcD6CCeR_6y_7ADYyuSOYi0
+|       |   |   +----0rgXXHmTRCut5AefYvOZhVxW8I5FBMX5gdQnaWvs4c
+|       |   |   +---DBd4XpFz8tRxPzo-LxRtO1C5gpX77L4dzDZ8e9kzQAU
+|       |   |   +---J4SYwKGc41Mx03h7hHaUxcD6CCeR_6y_7ADYyuSOYi0
+|       |   |   +---nd1kP5szeULYXKQNf83imo0GDnrIFlm-F1S1lR7hzRA
+|       |   |   \---SROdlnPFHx6CPZhkSXeGIaXmZl0hGlnYUfoP3-eWHwQ
 |       |   \---turbopack
 |       |       \---23c46498
 |       +---logs
@@ -20,42 +24,10 @@ C:.
 |       +---server
 |       |   +---app
 |       |   |   +---(site)
-|       |   |   |   +---cases
-|       |   |   |   |   \---page
-|       |   |   |   \---page
-|       |   |   +---admin
-|       |   |   |   +---brands
-|       |   |   |   |   \---page
-|       |   |   |   +---cases
-|       |   |   |   |   \---new
-|       |   |   |   |       \---page
-|       |   |   |   +---dashboard
-|       |   |   |   |   \---page
-|       |   |   |   +---devices
-|       |   |   |   |   \---page
-|       |   |   |   +---login
-|       |   |   |   |   \---page
-|       |   |   |   +---page
-|       |   |   |   \---repairs
-|       |   |   |       +---new
-|       |   |   |       |   \---page
+|       |   |   |   \---cases
 |       |   |   |       +---page
-|       |   |   |       \---[id]
-|       |   |   |           \---edit
-|       |   |   |               \---page
-|       |   |   +---api
-|       |   |   |   +---admin
-|       |   |   |   |   \---logout
-|       |   |   |   |       \---route
-|       |   |   |   +---auth
-|       |   |   |   |   \---[...nextauth]
-|       |   |   |   |       \---route
-|       |   |   |   +---brands
-|       |   |   |   |   \---route
-|       |   |   |   +---devices
-|       |   |   |   |   \---route
-|       |   |   |   \---repairs
-|       |   |   |       \---route
+|       |   |   |       \---[slug]
+|       |   |   |           \---page
 |       |   |   \---_not-found
 |       |   |       \---page
 |       |   +---chunks
@@ -70,6 +42,7 @@ C:.
 |       \---types
 +---app
 |   +---(site)
+|   |   +---ar
 |   |   +---cases
 |   |   |   +---new
 |   |   |   \---[slug]
@@ -100,8 +73,6 @@ C:.
 |   +---api
 |   |   +---admin
 |   |   |   +---brands
-|   |   |   |   \---[id]
-|   |   |   |       \---edit
 |   |   |   +---devices
 |   |   |   \---logout
 |   |   +---auth
@@ -111,6 +82,7 @@ C:.
 |   |   +---devices
 |   |   \---repairs
 |   \---components
++---components
 +---data
 +---lib
 +---node_modules
@@ -119,8 +91,6 @@ C:.
 |   |   +---jiti
 |   |   \---prisma
 |   |       \---master
-|   |           +---280c870be64f457428992c43c1f6d557fab6e29e
-|   |           |   \---windows
 |   |           \---c2990dca591cba766e3b7ef5d9e8a84796e47ab7
 |   |               \---windows
 |   +---.prisma
@@ -215,8 +185,6 @@ C:.
 |   |           \---validators
 |   |               +---generated
 |   |               \---react
-|   +---@chevrotain
-|   +---@electric-sql
 |   +---@emnapi
 |   |   +---core
 |   |   |   \---dist
@@ -265,7 +233,6 @@ C:.
 |   |   |           +---dist
 |   |   |           \---lib
 |   |   \---regexpp
-|   +---@hono
 |   +---@humanfs
 |   |   +---core
 |   |   |   +---dist
@@ -304,7 +271,6 @@ C:.
 |   |       +---dist
 |   |       +---src
 |   |       \---types
-|   +---@mrleebo
 |   +---@napi-rs
 |   |   \---wasm-runtime
 |   |       \---dist
@@ -870,6 +836,7 @@ C:.
 |   |   +---GroupBy
 |   |   +---Hash
 |   |   +---HashMap
+|   |   +---HashRing
 |   |   +---HashSet
 |   |   +---HKT
 |   |   +---index
@@ -912,6 +879,7 @@ C:.
 |   |   +---Order
 |   |   +---Ordering
 |   |   +---ParseResult
+|   |   +---PartitionedSemaphore
 |   |   +---Pipeable
 |   |   +---Pool
 |   |   +---Predicate
@@ -1083,6 +1051,7 @@ C:.
 |   |   +---Iterator.prototype.find
 |   |   +---Iterator.prototype.flatMap
 |   |   +---Iterator.prototype.forEach
+|   |   +---Iterator.prototype.includes
 |   |   +---Iterator.prototype.map
 |   |   +---Iterator.prototype.reduce
 |   |   +---Iterator.prototype.some
@@ -1177,72 +1146,9 @@ C:.
 |   |           \---helpers
 |   +---eslint-plugin-react
 |   |   +---configs
-|   |   +---lib
-|   |   |   +---rules
-|   |   |   \---util
-|   |   \---node_modules
-|   |       +---.bin
-|   |       \---resolve
-|   |           +---.claude
-|   |           +---.github
-|   |           +---bin
-|   |           +---example
-|   |           +---lib
-|   |           \---test
-|   |               +---dotdot
-|   |               |   \---abc
-|   |               +---module_dir
-|   |               |   +---xmodules
-|   |               |   |   \---aaa
-|   |               |   +---ymodules
-|   |               |   |   \---aaa
-|   |               |   \---zmodules
-|   |               |       \---bbb
-|   |               +---node_path
-|   |               |   +---x
-|   |               |   |   +---aaa
-|   |               |   |   \---ccc
-|   |               |   \---y
-|   |               |       +---bbb
-|   |               |       \---ccc
-|   |               +---pathfilter
-|   |               |   \---deep_ref
-|   |               +---precedence
-|   |               |   +---aaa
-|   |               |   \---bbb
-|   |               +---resolver
-|   |               |   +---baz
-|   |               |   +---browser_field
-|   |               |   +---dot_main
-|   |               |   +---dot_slash_main
-|   |               |   +---empty_main
-|   |               |   +---false_main
-|   |               |   +---incorrect_main
-|   |               |   +---invalid_main
-|   |               |   +---missing_index
-|   |               |   +---missing_main
-|   |               |   +---multirepo
-|   |               |   |   \---packages
-|   |               |   |       +---package-a
-|   |               |   |       \---package-b
-|   |               |   +---nested_symlinks
-|   |               |   |   \---mylib
-|   |               |   +---null_main
-|   |               |   +---other_path
-|   |               |   |   \---lib
-|   |               |   +---quux
-|   |               |   |   \---foo
-|   |               |   +---same_names
-|   |               |   |   \---foo
-|   |               |   +---symlinked
-|   |               |   |   +---package
-|   |               |   |   \---_
-|   |               |   |       +---node_modules
-|   |               |   |       \---symlink_target
-|   |               |   \---without_basedir
-|   |               \---shadowed_core
-|   |                   \---node_modules
-|   |                       \---util
+|   |   \---lib
+|   |       +---rules
+|   |       \---util
 |   +---eslint-plugin-react-hooks
 |   |   \---cjs
 |   +---eslint-scope
@@ -2568,6 +2474,7 @@ C:.
 |   +---regexp.prototype.flags
 |   |   \---test
 |   +---resolve
+|   |   +---.claude
 |   |   +---.github
 |   |   +---bin
 |   |   +---example
@@ -2599,15 +2506,19 @@ C:.
 |   |       |   +---browser_field
 |   |       |   +---dot_main
 |   |       |   +---dot_slash_main
+|   |       |   +---empty_main
 |   |       |   +---false_main
 |   |       |   +---incorrect_main
 |   |       |   +---invalid_main
+|   |       |   +---missing_index
+|   |       |   +---missing_main
 |   |       |   +---multirepo
 |   |       |   |   \---packages
 |   |       |   |       +---package-a
 |   |       |   |       \---package-b
 |   |       |   +---nested_symlinks
 |   |       |   |   \---mylib
+|   |       |   +---null_main
 |   |       |   +---other_path
 |   |       |   |   \---lib
 |   |       |   +---quux
@@ -2805,6 +2716,19 @@ C:.
 |   |   \---test
 |   +---word-wrap
 |   +---yallist
+|   +---yet-another-react-lightbox
+|   |   \---dist
+|   |       \---plugins
+|   |           +---captions
+|   |           +---counter
+|   |           +---download
+|   |           +---fullscreen
+|   |           +---inline
+|   |           +---share
+|   |           +---slideshow
+|   |           +---thumbnails
+|   |           +---video
+|   |           \---zoom
 |   +---yocto-queue
 |   +---zod
 |   |   +---locales
@@ -2840,12 +2764,7 @@ C:.
 |       +---v3
 |       \---v4
 +---prisma
-|   +---migrations
-|   |   \---20260312022201_init
 |   \---prisma
 +---public
-|   +---repairs
-|   \---uploads
-|       +---photos
-|       \---videos
-\---types
+|   \---repairs
+\---scripts
