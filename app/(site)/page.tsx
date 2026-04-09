@@ -123,9 +123,9 @@ export default async function Home() {
           {latestCases.map((c) => (
             <div key={c.id} className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
 
-              {c.image && (
-                <img src={c.image} alt={c.title} className="w-full h-56 object-cover"/>
-              )}
+              {c.images?.[0] && (
+  <img src={c.images[0]} alt={c.title} className="w-full h-56 object-cover"/>
+)}
 
               <div className="p-5">
                 <h3 className="font-semibold text-lg text-gray-900">{c.title}</h3>
