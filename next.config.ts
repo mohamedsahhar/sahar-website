@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // ✅ Force non-www → www
       {
         source: "/:path*",
         has: [
@@ -16,6 +17,13 @@ const nextConfig: NextConfig = {
           },
         ],
         destination: "https://www.sa7arrepair.com/:path*",
+        permanent: true,
+      },
+
+      // ✅ Redirect /services → homepage
+      {
+        source: "/services",
+        destination: "/",
         permanent: true,
       },
     ];
