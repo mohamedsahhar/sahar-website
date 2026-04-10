@@ -46,9 +46,7 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
-          <Link href="/services" className="hover:text-black transition">
-            Services
-          </Link>
+          
 
           <Link href="/contact" className="hover:text-black transition">
             Contact
@@ -101,9 +99,7 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
-          <Link href="/services" onClick={closeMenu}>
-            Services
-          </Link>
+          
 
           <Link href="/contact" onClick={closeMenu}>
             Contact
