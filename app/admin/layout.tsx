@@ -66,6 +66,14 @@ export default function AdminLayout({
             Devices
           </Link>
 
+          {/* 🔥 NEW SETTINGS LINK */}
+          <Link
+            href="/admin/settings"
+            className="text-gray-700 hover:underline"
+          >
+            Settings
+          </Link>
+
         </nav>
 
         {children}

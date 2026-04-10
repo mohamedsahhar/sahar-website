@@ -96,6 +96,23 @@ export default function Contact() {
 
           </div>
 
+          {/* 🆕 WORKING HOURS (NEW) */}
+          <div>
+
+            <h2 className="font-semibold text-lg">
+              Working Hours
+            </h2>
+
+            <p className="text-gray-600">
+              Daily: 10:00 AM – 10:00 PM
+            </p>
+
+            <p className="text-gray-600">
+              Day Off: Friday
+            </p>
+
+          </div>
+
           {/* Shipping */}
           <div>
 
@@ -113,32 +130,33 @@ export default function Contact() {
         </div>
 
         {/* Google Map */}
-        <div className="w-full h-[380px] rounded-xl overflow-hidden border">
+        <div>
+          <div className="w-full h-[380px] rounded-xl overflow-hidden border">
 
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.595713979445!2d31.4187335!3d30.0041637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583d534282499b%3A0x71738e9db973f674!2sSa7ar%20Quick%20Care!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg"
-            width="100%"
-            height="100%"
-            loading="lazy"
-            title="Sa7ar Quick Care Location Map"
-            style={{ border: 0 }}
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.595713979445!2d31.4187335!3d30.0041637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583d534282499b%3A0x71738e9db973f674!2sSa7ar%20Quick%20Care!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg"
+              width="100%"
+              height="100%"
+              loading="lazy"
+              title="Sa7ar Quick Care Location Map"
+              style={{ border: 0 }}
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
 
+          </div>
+
+          <p className="text-sm text-gray-500 mt-3">
+            ⭐ Rated on Google Maps — Trusted electronics repair center in New Cairo
+          </p>
+
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=30.0041637,31.4213138"
+            target="_blank"
+            className="inline-block mt-3 text-blue-600 hover:underline"
+          >
+            Get Directions
+          </a>
         </div>
-
-        <p className="text-sm text-gray-500 mt-3">
-          ⭐ Rated on Google Maps — Trusted electronics repair center in New Cairo
-        </p>
-
-        <a
-          href="https://www.google.com/maps/dir/?api=1&destination=30.0041637,31.4213138"
-          target="_blank"
-          className="inline-block mt-3 text-blue-600 hover:underline"
-        >
-          Get Directions
-        </a>
-
 
       </div>
 

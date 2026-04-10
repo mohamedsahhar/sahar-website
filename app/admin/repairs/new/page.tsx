@@ -19,10 +19,8 @@ export default function NewRepairPage() {
   const [brandId, setBrandId] = useState("");
   const [deviceId, setDeviceId] = useState("");
 
-  // ✅ NEW SYSTEM
   const [images, setImages] = useState<string[]>([]);
 
-  // OLD (kept safe)
   const [image, setImage] = useState("");
   const [beforeImage, setBeforeImage] = useState("");
   const [afterImage, setAfterImage] = useState("");
@@ -93,15 +91,10 @@ export default function NewRepairPage() {
           solution,
           repairTime: repairTime || null,
           deviceId: Number(deviceId),
-
-          // ✅ NEW FIELD
           images,
-
-          // OLD (still supported)
           image: image || null,
           beforeImage: beforeImage || null,
           afterImage: afterImage || null,
-
           videoUrl: videoUrl || null
         })
       });
@@ -166,71 +159,73 @@ export default function NewRepairPage() {
 
         {/* BRAND */}
         <label>Brand *</label>
-        <select
-          className="border p-2 w-full"
-          value={brandId}
-          onChange={(e) => {
-            setBrandId(e.target.value);
-            setDeviceId("");
-          }}
-        >
-          <option value="">Select Brand</option>
-          {brands.map((b: any) => (
-            <option key={b.id} value={b.id}>{b.name}</option>
-          ))}
-        </select>
+        <div className="flex gap-2">
+          <select
+            className="border p-2 w-full"
+            value={brandId}
+            onChange={(e) => {
+              setBrandId(e.target.value);
+              setDeviceId("");
+            }}
+          >
+            <option value="">Select Brand</option>
+            {brands.map((b: any) => (
+              <option key={b.id} value={b.id}>{b.name}</option>
+            ))}
+          </select>
+
+          <button type="button" onClick={() => setShowBrandPopup(true)} className="bg-black text-white px-3">
+            +
+          </button>
+        </div>
 
         {/* DEVICE */}
         <label>Device *</label>
-        <select
-          className="border p-2 w-full"
-          value={deviceId}
-          onChange={(e) => setDeviceId(e.target.value)}
-        >
-          <option value="">Select Device</option>
-          {filteredDevices.map((d: any) => (
-            <option key={d.id} value={d.id}>{d.name}</option>
-          ))}
-        </select>
+        <div className="flex gap-2">
+          <select
+            className="border p-2 w-full"
+            value={deviceId}
+            onChange={(e) => setDeviceId(e.target.value)}
+          >
+            <option value="">Select Device</option>
+            {filteredDevices.map((d: any) => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
 
-        {/* ✅ NEW MULTI IMAGE UPLOAD */}
+          <button type="button" onClick={() => setShowDevicePopup(true)} className="bg-black text-white px-3">
+            +
+          </button>
+        </div>
+
+        {/* IMAGE */}
         <label>Gallery Images</label>
 
         <ImageUpload
-  onUpload={(url: string) =>
-    setImages((prev) => [...prev, url])
-  }
-/>
-        
+          onUpload={(url: string) =>
+            setImages((prev) => [...prev, url])
+          }
+        />
 
-        {/* PREVIEW */}
         {images.length > 0 && (
           <div className="grid grid-cols-3 gap-2">
             {images.map((img, i) => (
-              <img key={i} src={img} className="rounded border" />
+              <div key={i} className="relative">
+                <img src={img} className="rounded border" />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setImages(images.filter((_, index) => index !== i))
+                  }
+                  className="absolute top-1 right-1 bg-black text-white text-xs px-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
             ))}
           </div>
         )}
-{images.length > 0 && (
-  <div className="grid grid-cols-3 gap-2">
-    {images.map((img, i) => (
-      <div key={i} className="relative">
-        <img src={img} className="rounded border" />
 
-        <button
-          type="button"
-          onClick={() =>
-            setImages(images.filter((_, index) => index !== i))
-          }
-          className="absolute top-1 right-1 bg-black text-white text-xs px-1 rounded"
-        >
-          ✕
-        </button>
-      </div>
-    ))}
-  </div>
-)}
-        {/* VIDEO */}
         <label>Video URL</label>
         <input
           className="border p-2 w-full"
@@ -243,6 +238,76 @@ export default function NewRepairPage() {
         </button>
 
       </form>
+
+      {/* BRAND POPUP */}
+      {showBrandPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded w-80">
+            <h2 className="font-bold mb-2">Add Brand</h2>
+            <input
+              className="border p-2 w-full mb-2"
+              value={newBrandName}
+              onChange={(e) => setNewBrandName(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowBrandPopup(false)}>Cancel</button>
+              <button
+                onClick={async () => {
+                  const res = await fetch("/api/brands", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: newBrandName }),
+                  });
+                  const newBrand = await res.json();
+                  await loadBrands();
+                  setBrandId(newBrand.id);
+                  setShowBrandPopup(false);
+                }}
+                className="bg-black text-white px-3 py-1"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DEVICE POPUP */}
+      {showDevicePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded w-80">
+            <h2 className="font-bold mb-2">Add Device</h2>
+            <input
+              className="border p-2 w-full mb-2"
+              value={newDeviceName}
+              onChange={(e) => setNewDeviceName(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowDevicePopup(false)}>Cancel</button>
+              <button
+                onClick={async () => {
+                  const res = await fetch("/api/devices", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: newDeviceName,
+                      brandId: Number(brandId),
+                    }),
+                  });
+                  const newDevice = await res.json();
+                  await loadDevices();
+                  setDeviceId(newDevice.id);
+                  setShowDevicePopup(false);
+                }}
+                className="bg-black text-white px-3 py-1"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
