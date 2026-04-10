@@ -22,9 +22,9 @@ export async function generateMetadata({
   const formattedBrand =
     brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase()
 
-  const title = `${formattedBrand} Repair Services | Sa7ar Quick Care`
+  const title = `${formattedBrand} Repair in New Cairo | Sa7ar Quick Care`
 
-  const description = `Professional ${formattedBrand} repair services in Egypt. We fix phones, speakers, AirPods, and more with fast turnaround and trusted quality at Sa7ar Quick Care.`
+  const description = `Professional ${formattedBrand} repair in New Cairo, Egypt. We fix speakers, headphones, phones, and electronic devices with fast and reliable service at Sa7ar Quick Care.`
 
   return {
     title,
@@ -119,9 +119,9 @@ export default async function BrandPage({
             className="border rounded-xl overflow-hidden hover:shadow-lg transition bg-white"
           >
 
-            {repair.image && (
-              <Image
-                src={repair.image}
+            {repair.images?.[0] && (
+  <Image
+    src={repair.images[0]}
                 alt={`${repair.device?.brand?.name} ${repair.device?.name} repair`}
                 width={600}
                 height={400}

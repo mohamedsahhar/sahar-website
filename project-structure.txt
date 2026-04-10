@@ -6,12 +6,6 @@ C:.
 |       +---build
 |       |   \---chunks
 |       +---cache
-|       |   +---images
-|       |   |   +----0rgXXHmTRCut5AefYvOZhVxW8I5FBMX5gdQnaWvs4c
-|       |   |   +---DBd4XpFz8tRxPzo-LxRtO1C5gpX77L4dzDZ8e9kzQAU
-|       |   |   +---J4SYwKGc41Mx03h7hHaUxcD6CCeR_6y_7ADYyuSOYi0
-|       |   |   +---nd1kP5szeULYXKQNf83imo0GDnrIFlm-F1S1lR7hzRA
-|       |   |   \---SROdlnPFHx6CPZhkSXeGIaXmZl0hGlnYUfoP3-eWHwQ
 |       |   \---turbopack
 |       |       \---23c46498
 |       +---logs
@@ -23,11 +17,15 @@ C:.
 |       |           \---scripts
 |       +---server
 |       |   +---app
-|       |   |   +---(site)
-|       |   |   |   \---cases
-|       |   |   |       +---page
-|       |   |   |       \---[slug]
+|       |   |   +---admin
+|       |   |   |   \---repairs
+|       |   |   |       \---new
 |       |   |   |           \---page
+|       |   |   +---api
+|       |   |   |   +---brands
+|       |   |   |   |   \---route
+|       |   |   |   \---devices
+|       |   |   |       \---route
 |       |   |   \---_not-found
 |       |   |       \---page
 |       |   +---chunks
@@ -82,7 +80,6 @@ C:.
 |   |   +---devices
 |   |   \---repairs
 |   \---components
-+---components
 +---data
 +---lib
 +---node_modules

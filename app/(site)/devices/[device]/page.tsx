@@ -34,9 +34,9 @@ export async function generateMetadata({
 
   const deviceName = `${deviceData.brand.name} ${deviceData.name}`
 
-  const title = `${deviceName} Repair Services | Sa7ar Quick Care`
+  const title = `${deviceName} Repair in New Cairo | Sa7ar Quick Care`
 
-  const description = `Professional repair services for ${deviceName} in Egypt. We fix common issues, provide fast turnaround, and ensure high-quality results at Sa7ar Quick Care.`
+  const description = `Professional ${deviceName} repair in New Cairo, Egypt. We fix charging issues, battery problems, motherboard faults, and more with fast and reliable service at Sa7ar Quick Care.`
 
   return {
     title,

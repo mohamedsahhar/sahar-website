@@ -4,7 +4,40 @@ import Link from "next/link";
 import LightboxImage from "@/app/components/LightboxImage";
 
 export const dynamic = "force-dynamic";
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const repair = await prisma.repairCase.findFirst({
+    where: { slug: params.slug },
+    include: {
+      device: {
+        include: { brand: true },
+      },
+    },
+  });
 
+  if (!repair) {
+    return {
+      title: "Repair | Sa7ar Quick Care",
+    };
+  }
+
+  const deviceName = repair.device
+    ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
+    : "Device";
+
+  const title = `${repair.title} | Sa7ar Quick Care`;
+
+  const description = `Professional repair service for ${deviceName}. ${repair.problem?.slice(0, 120) ?? ""}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: repair.images?.length ? [repair.images[0]] : [],
+    },
+  };
+}
 export default async function RepairPage({
   params,
 }: {

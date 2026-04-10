@@ -13,9 +13,9 @@ export const metadata = {
       ar: "/ar",
     },
   },
-  title: "Phone & Electronics Repair in Cairo | Sa7ar Quick Care",
-  description:
-    "Professional electronics repair in Cairo, Egypt. We repair iPhones, AirPods, JBL speakers, Apple Pencil, and more.",
+  title: "Phone Repair in New Cairo | iPhone, AirPods & Electronics Repair Egypt",
+description:
+  "Sa7ar Quick Care is a professional repair center in New Cairo, Egypt. We fix iPhones, AirPods, JBL speakers, Apple devices, and advanced electronics with fast and reliable service.",
 };
 
 export default async function Home() {
