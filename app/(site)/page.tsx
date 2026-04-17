@@ -2,6 +2,7 @@ import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import RelatedNews from "@/app/components/RelatedNews"
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -14,8 +15,8 @@ export const metadata = {
     },
   },
   title: "Phone Repair in New Cairo | iPhone, AirPods & Electronics Repair Egypt",
-description:
-  "Sa7ar Quick Care is a professional repair center in New Cairo, Egypt. We fix iPhones, AirPods, JBL speakers, Apple devices, and advanced electronics with fast and reliable service.",
+  description:
+    "Sa7ar Quick Care is a professional repair center in New Cairo, Egypt. We fix iPhones, AirPods, JBL speakers, Apple devices, and advanced electronics with fast and reliable service.",
 };
 
 export default async function Home() {
@@ -31,7 +32,7 @@ export default async function Home() {
     <main className="min-h-screen bg-white">
 
       {/* HERO */}
-      <section className="text-center py-20 md:py-28 bg-gradient-to-b from-white to-gray-100 px-4">
+      <section className="text-center py-12 md:py-28 bg-gradient-to-b from-white to-gray-100 px-4">
 
         <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
           Phone & Electronics Repair in Cairo, Egypt
@@ -50,51 +51,65 @@ export default async function Home() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600 mt-4">
-          <Link href="/devices" className="underline hover:text-blue-800">Browse Devices</Link>
-          <Link href="/repairs" className="underline hover:text-blue-800">Browse Brands</Link>
-          <Link href="/cases" className="underline hover:text-blue-800">View Repair Cases</Link>
+          <Link href="/devices" className="underline hover:text-blue-800">
+            Browse Devices
+          </Link>
+
+          <Link href="/repairs" className="underline hover:text-blue-800">
+            Browse Brands
+          </Link>
+
+          <Link href="/cases" className="underline hover:text-blue-800">
+            View Repair Cases
+          </Link>
         </div>
 
+        {/* CTA Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
 
-  <a
-    href="https://wa.me/201021024094"
-    target="_blank"
-    className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition"
-  >
-    Contact us on WhatsApp
-  </a>
+          <a
+            href="https://wa.me/201021024094"
+            target="_blank"
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition"
+          >
+            Contact us on WhatsApp
+          </a>
 
-  <Link
-    href="/repair-request"
-    className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition"
-  >
-    Book Repair Appointment
-  </Link>
+          <Link
+            href="/repair-request"
+            className="inline-block bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition"
+          >
+            Book Repair Appointment
+          </Link>
 
-</div>
-            <div className="mt-5 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
-  <span className="border px-3 py-1 rounded-full bg-white">
-    Same Day Service Available
-  </span>
+        </div>
 
-  <span className="border px-3 py-1 rounded-full bg-white">
-    Genuine Parts When Available
-  </span>
+        {/* Trust Strip */}
+        <div className="mt-5 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
 
-  <span className="border px-3 py-1 rounded-full bg-white">
-    Fast WhatsApp Response
-  </span>
+          <span className="border px-3 py-1 rounded-full bg-white">
+            Same Day Service Available
+          </span>
 
-  <span className="border px-3 py-1 rounded-full bg-white">
-    New Cairo Location
-  </span>
-</div>
+          <span className="border px-3 py-1 rounded-full bg-white">
+            Genuine Parts When Available
+          </span>
+
+          <span className="border px-3 py-1 rounded-full bg-white">
+            Fast WhatsApp Response
+          </span>
+
+          <span className="border px-3 py-1 rounded-full bg-white">
+            New Cairo Location
+          </span>
+
+        </div>
+
       </section>
 
-<div className="bg-white">
-  <RelatedNews />
-</div>
+      <div className="bg-white">
+        <RelatedNews />
+      </div>
 
       {/* CUSTOMER REVIEWS */}
       <section className="py-20 bg-gray-50 text-center px-4 md:px-10">
@@ -113,29 +128,34 @@ export default async function Home() {
             <p className="text-gray-700">
               “Excellent service! My JBL speaker was repaired quickly and now works perfectly.”
             </p>
-            <p className="mt-4 font-semibold text-gray-900">Google Review</p>
+            <p className="mt-4 font-semibold text-gray-900">
+              Google Review
+            </p>
           </div>
 
           <div className="border p-6 rounded-xl bg-white shadow-sm">
             <p className="text-gray-700">
               “Very professional repair center. They fixed my robot vacuum battery issue.”
             </p>
-            <p className="mt-4 font-semibold text-gray-900">Customer Feedback</p>
+            <p className="mt-4 font-semibold text-gray-900">
+              Customer Feedback
+            </p>
           </div>
 
           <div className="border p-6 rounded-xl bg-white shadow-sm">
             <p className="text-gray-700">
               “Fast and reliable service. Highly recommended for AirPods and electronics repair.”
             </p>
-            <p className="mt-4 font-semibold text-gray-900">Facebook Review</p>
+            <p className="mt-4 font-semibold text-gray-900">
+              Facebook Review
+            </p>
           </div>
 
         </div>
 
       </section>
 
-
-      {/* LATEST CASES (KEEP) */}
+      {/* LATEST CASES */}
       <section className="py-20 bg-gray-50 text-center px-4 md:px-10">
 
         <h2 className="text-3xl font-bold text-gray-900">
@@ -149,14 +169,24 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-6xl mx-auto">
 
           {latestCases.map((c) => (
-            <div key={c.id} className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
+            <div
+              key={c.id}
+              className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition"
+            >
 
               {c.images?.[0] && (
-  <img src={c.images[0]} alt={c.title} className="w-full h-56 object-cover"/>
-)}
+                <img
+                  src={c.images[0]}
+                  alt={c.title}
+                  className="w-full h-44 md:h-56 object-cover"
+                />
+              )}
 
               <div className="p-5">
-                <h3 className="font-semibold text-lg text-gray-900">{c.title}</h3>
+
+                <h3 className="font-semibold text-lg text-gray-900">
+                  {c.title}
+                </h3>
 
                 <p className="text-gray-600 mt-1">
                   {c.device?.brand?.name} {c.device?.name}
@@ -168,6 +198,7 @@ export default async function Home() {
                 >
                   View Repair →
                 </Link>
+
               </div>
 
             </div>
@@ -176,13 +207,15 @@ export default async function Home() {
         </div>
 
         <div className="mt-10">
-          <Link href="/cases" className="border px-6 py-3 rounded-lg hover:bg-gray-100">
+          <Link
+            href="/cases"
+            className="border px-6 py-3 rounded-lg hover:bg-gray-100"
+          >
             View All Repair Cases
           </Link>
         </div>
 
       </section>
-
 
       {/* WHY CHOOSE US */}
       <section className="py-20 bg-gray-100 text-center px-4 md:px-10">
@@ -198,23 +231,39 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 max-w-6xl mx-auto">
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg text-gray-900">Professional Diagnostics</h3>
-            <p className="text-gray-600 mt-2">Accurate troubleshooting before every repair.</p>
+            <h3 className="font-semibold text-lg text-gray-900">
+              Professional Diagnostics
+            </h3>
+            <p className="text-gray-600 mt-2">
+              Accurate troubleshooting before every repair.
+            </p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg text-gray-900">Specialized Electronics Repair</h3>
-            <p className="text-gray-600 mt-2">From robot vacuums to DJ mixers and speakers.</p>
+            <h3 className="font-semibold text-lg text-gray-900">
+              Specialized Electronics Repair
+            </h3>
+            <p className="text-gray-600 mt-2">
+              From robot vacuums to DJ mixers and speakers.
+            </p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg text-gray-900">Nationwide Shipping</h3>
-            <p className="text-gray-600 mt-2">Customers from all over Egypt can send devices.</p>
+            <h3 className="font-semibold text-lg text-gray-900">
+              Nationwide Shipping
+            </h3>
+            <p className="text-gray-600 mt-2">
+              Customers from all over Egypt can send devices.
+            </p>
           </div>
 
           <div className="p-6 bg-white border rounded-xl">
-            <h3 className="font-semibold text-lg text-gray-900">Trusted by Many Customers</h3>
-            <p className="text-gray-600 mt-2">Excellent feedback from Google and Facebook.</p>
+            <h3 className="font-semibold text-lg text-gray-900">
+              Trusted by Many Customers
+            </h3>
+            <p className="text-gray-600 mt-2">
+              Excellent feedback from Google and Facebook.
+            </p>
           </div>
 
         </div>

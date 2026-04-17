@@ -19,18 +19,22 @@ export default async function Contact() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-4">
         Contact Sa7ar Quick Care
       </h1>
 
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-4">
         Need help with a repair? Contact Sa7ar Quick Care for professional
         electronics repair services including smartphones, headphones,
         Bluetooth speakers, Apple Pencil, and more.
       </p>
 
-      {/* ✅ QUICK ACTION BUTTONS */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-10">
+      <p className="text-sm text-gray-500 mb-6">
+        Trusted repair center in New Cairo • Fast WhatsApp response
+      </p>
+
+      {/* QUICK ACTION BUTTONS */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-8">
 
         <Link
           href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
@@ -49,13 +53,6 @@ export default async function Contact() {
           Call Now
         </a>
 
-        <Link
-          href="/repair-request"
-          className="border px-5 py-3 rounded-lg text-center hover:bg-gray-100 transition"
-        >
-          Book Repair
-        </Link>
-
       </div>
 
       <div className="grid md:grid-cols-2 gap-10 mb-12">
@@ -65,9 +62,11 @@ export default async function Contact() {
 
           {/* Phone */}
           <div>
-            <h2 className="font-semibold text-lg">Phone</h2>
+            <h2 className="font-semibold text-lg">
+              Phone
+            </h2>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mt-1">
 
               <a
                 href="tel:+201021024094"
@@ -93,9 +92,21 @@ export default async function Contact() {
             </div>
           </div>
 
+          {/* Book Repair */}
+          <div>
+            <Link
+              href="/repair-request"
+              className="inline-block border px-5 py-3 rounded-lg text-center hover:bg-gray-100 transition"
+            >
+              Book Repair
+            </Link>
+          </div>
+
           {/* WhatsApp */}
           <div>
-            <h2 className="font-semibold text-lg">WhatsApp</h2>
+            <h2 className="font-semibold text-lg">
+              WhatsApp
+            </h2>
 
             <p className="text-gray-600 mb-3">
               Contact us directly on WhatsApp for quick repair support.
@@ -173,7 +184,8 @@ export default async function Contact() {
 
         {/* Google Map */}
         <div>
-          <div className="w-full h-[380px] rounded-xl overflow-hidden border">
+
+          <div className="w-full h-[300px] md:h-[380px] rounded-xl overflow-hidden border">
 
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.595713979445!2d31.4187335!3d30.0041637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583d534282499b%3A0x71738e9db973f674!2sSa7ar%20Quick%20Care!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg"
@@ -198,6 +210,7 @@ export default async function Contact() {
           >
             Get Directions
           </a>
+
         </div>
 
       </div>
