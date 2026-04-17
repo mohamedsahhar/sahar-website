@@ -14,7 +14,7 @@ export default function Footer() {
 
           <p className="text-gray-400 mt-3">
             Professional electronics repair service specializing in phones,
-            speakers, robot vacuums, DJ mixers and modern devices.
+            speakers, robot vacuums, DJ mixers, and modern devices.
           </p>
         </div>
 
@@ -27,20 +27,32 @@ export default function Footer() {
           <ul className="mt-3 space-y-2 text-gray-400">
 
             <li>
-              <Link href="/#services" className="hover:text-white">
-                Services
+              <Link href="/" className="hover:text-white">
+                Home
               </Link>
             </li>
 
             <li>
-              <Link href="/#reviews" className="hover:text-white">
-                Customer Reviews
+              <Link href="/cases" className="hover:text-white">
+                Repair Cases
               </Link>
             </li>
 
             <li>
-              <Link href="/#shipping" className="hover:text-white">
-                Shipping Repair
+              <Link href="/devices" className="hover:text-white">
+                Devices
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/contact" className="hover:text-white">
+                Contact Us
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/request-repair" className="hover:text-white">
+                Book Repair
               </Link>
             </li>
 
@@ -54,12 +66,18 @@ export default function Footer() {
             Contact Us
           </h3>
 
-          <p className="text-gray-400 mt-3">
-            New Cairo, 5th Settlement
-First District, Life Mall
-Cairo, Egypt
-        +20 102 102 4094
+          <p className="text-gray-400 mt-3 leading-7">
+            New Cairo, 5th Settlement <br />
+            First District, Life Mall <br />
+            Cairo, Egypt
           </p>
+
+          <a
+            href="tel:+201021024094"
+            className="text-blue-400 hover:underline mt-2 inline-block"
+          >
+            +20 102 102 4094
+          </a>
 
           <div className="flex gap-4 mt-4">
 

@@ -76,9 +76,14 @@ export default async function RepairPage({
 
   const galleryImages = repair.images || [];
 
-  // ✅ UNIFIED WHATSAPP MESSAGE
   const whatsappMessage = encodeURIComponent(
-    `Hi, I saw your repair case "${repair.title}" and I want similar repair.`
+    `Hello Sa7ar Quick Care,
+
+I saw your repair case "${repair.title}" and I would like a similar repair.
+
+Device: ${deviceName}
+
+Please let me know availability and estimated cost.`
   );
 
   return (
@@ -180,22 +185,36 @@ export default async function RepairPage({
 
       </div>
 
-      {/* ✅ UPDATED CTA */}
-      <div className="mt-10 p-6 bg-gray-100 rounded-xl text-center">
-        <h3 className="text-lg font-semibold mb-2 text-gray-900">
+      {/* ✅ HIGHER CONVERTING CTA */}
+      <div className="mt-10 p-6 bg-gray-100 rounded-xl text-center border">
+        <h3 className="text-xl font-semibold mb-2 text-gray-900">
           Need a similar repair?
         </h3>
-        <p className="text-gray-600 mb-4">
-          Contact us for fast and professional repair service.
+
+        <p className="text-gray-600 mb-5">
+          Fast diagnostics, professional service, and quick WhatsApp response.
         </p>
 
-        <a
-          href={`https://wa.me/201021024094?text=${whatsappMessage}`}
-          target="_blank"
-          className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
-        >
-          Request Similar Repair
-        </a>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href={`https://wa.me/201021024094?text=${whatsappMessage}`}
+            target="_blank"
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
+          >
+            Get Fast Quote on WhatsApp
+          </a>
+
+          <a
+            href="/request-repair"
+            className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
+          >
+            Book Repair Appointment
+          </a>
+        </div>
+
+        <p className="text-sm text-gray-500 mt-4">
+          No obligation consultation • Located in New Cairo
+        </p>
       </div>
 
       {/* RELATED */}

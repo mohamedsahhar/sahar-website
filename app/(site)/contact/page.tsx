@@ -11,24 +11,52 @@ export const metadata = {
 }
 
 export default async function Contact() {
-
   const whatsappNumber = "201021024094"
 
   // ✅ Get data directly from database
   const business = await prisma.businessInfo.findFirst()
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
+    <div className="max-w-5xl mx-auto px-4 py-8">
 
       <h1 className="text-3xl font-bold mb-6">
         Contact Sa7ar Quick Care
       </h1>
 
-      <p className="text-gray-600 mb-10">
+      <p className="text-gray-600 mb-6">
         Need help with a repair? Contact Sa7ar Quick Care for professional
         electronics repair services including smartphones, headphones,
         Bluetooth speakers, Apple Pencil, and more.
       </p>
+
+      {/* ✅ QUICK ACTION BUTTONS */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-10">
+
+        <Link
+          href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+            "Hello, I need a repair service for my device."
+          )}`}
+          target="_blank"
+          className="bg-green-600 text-white px-5 py-3 rounded-lg text-center hover:bg-green-700 transition"
+        >
+          WhatsApp Now
+        </Link>
+
+        <a
+          href="tel:+201021024094"
+          className="bg-black text-white px-5 py-3 rounded-lg text-center hover:bg-gray-800 transition"
+        >
+          Call Now
+        </a>
+
+        <Link
+          href="/repair-request"
+          className="border px-5 py-3 rounded-lg text-center hover:bg-gray-100 transition"
+        >
+          Book Repair
+        </Link>
+
+      </div>
 
       <div className="grid md:grid-cols-2 gap-10 mb-12">
 
@@ -39,17 +67,26 @@ export default async function Contact() {
           <div>
             <h2 className="font-semibold text-lg">Phone</h2>
 
-            <div className="flex flex-col gap-1 text-gray-600">
+            <div className="flex flex-col gap-2">
 
-              <a href="tel:+201021024094" className="hover:text-black transition">
+              <a
+                href="tel:+201021024094"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 102 102 4094
               </a>
 
-              <a href="tel:+201210005005" className="hover:text-black transition">
+              <a
+                href="tel:+201210005005"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 121 000 5005
               </a>
 
-              <a href="tel:+201208590878" className="hover:text-black transition">
+              <a
+                href="tel:+201208590878"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 120 859 0878
               </a>
 
@@ -82,12 +119,12 @@ export default async function Contact() {
             </h2>
 
             <p className="text-gray-600">
-              Cairo, Egypt , New Cairo , 5th Settlements, First Distric, Life Mall .
+              Cairo, Egypt, New Cairo, 5th Settlement, First District, Life Mall.
             </p>
 
             <p className="text-gray-600">
-              مصر- القاهرة- التجمع الخامس الحى الاول 
-              لايف مول بجوار سعودى مسجد الحمد
+              مصر - القاهرة - التجمع الخامس - الحي الأول
+              لايف مول بجوار سعودي مسجد الحمد
             </p>
 
             <Link
@@ -99,7 +136,7 @@ export default async function Contact() {
             </Link>
           </div>
 
-          {/* ✅ WORKING HOURS (DYNAMIC) */}
+          {/* Working Hours */}
           <div>
             <h2 className="font-semibold text-lg">
               Working Hours

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import DevicesClient from "./DevicesClient"
 
 export default async function DevicesPage() {
 
@@ -44,29 +45,7 @@ export default async function DevicesPage() {
         Repairable Devices
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-
-        {devices.map((device) => (
-
-          <Link
-            key={device.id}
-            href={`/devices/${device.slug}`}
-            className="border rounded-xl p-5 hover:shadow-md transition bg-white"
-          >
-
-            <h3 className="font-semibold text-lg">
-              {device.brand?.name} {device.name}
-            </h3>
-
-            <p className="text-gray-500 text-sm mt-1">
-              View repair cases →
-            </p>
-
-          </Link>
-
-        ))}
-
-      </div>
+      <DevicesClient devices={devices} />
 
       {/* Recent Repairs */}
       <h2 className="text-2xl font-semibold mb-6">

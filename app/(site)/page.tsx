@@ -55,16 +55,41 @@ export default async function Home() {
           <Link href="/cases" className="underline hover:text-blue-800">View Repair Cases</Link>
         </div>
 
-        <div className="mt-6">
-          <a
-            href="https://wa.me/201021024094"
-            target="_blank"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition"
-          >
-            Contact us on WhatsApp
-          </a>
-        </div>
+        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
 
+  <a
+    href="https://wa.me/201021024094"
+    target="_blank"
+    className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition"
+  >
+    Contact us on WhatsApp
+  </a>
+
+  <Link
+    href="/repair-request"
+    className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition"
+  >
+    Book Repair Appointment
+  </Link>
+
+</div>
+            <div className="mt-5 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
+  <span className="border px-3 py-1 rounded-full bg-white">
+    Same Day Service Available
+  </span>
+
+  <span className="border px-3 py-1 rounded-full bg-white">
+    Genuine Parts When Available
+  </span>
+
+  <span className="border px-3 py-1 rounded-full bg-white">
+    Fast WhatsApp Response
+  </span>
+
+  <span className="border px-3 py-1 rounded-full bg-white">
+    New Cairo Location
+  </span>
+</div>
       </section>
 
 <div className="bg-white">
