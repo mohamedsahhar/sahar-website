@@ -16,9 +16,15 @@ export default function AdminLayout({
     return <>{children}</>;
   }
 
+  // ✅ Secure logout before viewing website
   const handleViewWebsite = async () => {
-    await signOut({ redirect: false });
-    window.location.href = "/";
+    await signOut({
+      redirect: false,
+      callbackUrl: "/admin/login",
+    });
+
+    // force clean navigation after logout
+    window.location.replace("/");
   };
 
   return (

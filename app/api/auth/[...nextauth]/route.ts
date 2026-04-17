@@ -1,7 +1,7 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -13,21 +13,29 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        if (!credentials) return null
+        if (!credentials) return null;
 
-        // ✅ SIMPLE WORKING LOGIN
+        // ✅ Secure credentials from .env
+        const adminUser = process.env.ADMIN_USER;
+        const adminPass = process.env.ADMIN_PASS;
+
+        if (!adminUser || !adminPass) {
+          console.error("Missing ADMIN_USER or ADMIN_PASS in environment variables");
+          return null;
+        }
+
         if (
-          credentials.username === "admin" &&
-          credentials.password === "sa7ar123"
+          credentials.username === adminUser &&
+          credentials.password === adminPass
         ) {
           return {
             id: "1",
             name: "Admin",
             role: "SUPER_ADMIN",
-          }
+          };
         }
 
-        return null
+        return null;
       },
     }),
   ],
@@ -44,24 +52,24 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.name = user.name
-        token.role = (user as any).role
+        token.id = user.id;
+        token.name = user.name;
+        token.role = (user as any).role;
       }
-      return token
+      return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
-        ;(session.user as any).id = token.id
-        session.user.name = token.name as string
-        ;(session.user as any).role = token.role
+        (session.user as any).id = token.id;
+        session.user.name = token.name as string;
+        (session.user as any).role = token.role;
       }
-      return session
+      return session;
     },
   },
-}
+};
 
-const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

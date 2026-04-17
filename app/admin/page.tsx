@@ -1,6 +1,18 @@
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AdminDashboard() {
+  // 🔒 Double protection (server-side auth check)
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/admin/login");
+  }
 
   // 📊 Stats
   const totalRepairs = await prisma.repairCase.count();
@@ -20,7 +32,6 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-
       <h2 className="text-3xl font-bold mb-6">
         Admin Dashboard
       </h2>
@@ -144,7 +155,6 @@ export default async function AdminDashboard() {
         </div>
 
       </div>
-
     </div>
   );
 }
