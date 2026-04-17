@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id     Int     @id @default(autoincrement())
+  name   String
+  slug   String  @unique
+  devices Device[]
+}
+
+model Device {
+  id      Int          @id @default(autoincrement())
+  name    String
+  slug    String       @unique
+  brandId Int
+  brand   Brand        @relation(fields: [brandId], references: [id])
+  repairs RepairCase[]
+}
+
+model RepairCase {
+  id         Int      @id @default(autoincrement())
+  title      String
+  slug       String   @unique
+  problem    String
+  solution   String
+  repairTime String?
+  videoUrl   String?
+  deviceId   Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  images     String[] @default([])
+  device     Device?  @relation(fields: [deviceId], references: [id])
+}
+
+model BusinessInfo {
+  id           Int      @id @default(autoincrement())
+  workingHours String
+  daysOff      String
+  notice       String?
+  updatedAt    DateTime @updatedAt
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
