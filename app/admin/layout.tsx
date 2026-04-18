@@ -1,73 +1,128 @@
 "use client";
 
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname();
+export default function AdminLogin() {
+  const { status } = useSession();
 
-  // ✅ If login page → show clean layout
-  if (pathname === "/admin/login") {
-    return <>{children}</>;
-  }
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Secure logout before viewing website
-  const handleViewWebsite = async () => {
-    await signOut({
+  // 🔒 Basic anti-bruteforce cooldown
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [attempts, setAttempts] = useState(0);
+
+  // ✅ If already logged in → skip login page
+  useEffect(() => {
+    if (status === "authenticated") {
+      window.location.replace("/admin");
+    }
+  }, [status]);
+
+  async function handleLogin(e: any) {
+    e.preventDefault();
+
+    // block if cooldown active
+    if (lockedUntil && Date.now() < lockedUntil) {
+      setError("Too many attempts. Please wait 30 seconds.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    const res = await signIn("credentials", {
+      username,
+      password,
       redirect: false,
-      callbackUrl: "/admin/login",
     });
 
-    // force clean navigation after logout
-    window.location.replace("/");
-  };
+    setLoading(false);
+
+    // ❌ login failed
+    if (res?.error) {
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
+
+      // after 5 failed tries = lock 30 sec
+      if (newAttempts >= 5) {
+        setLockedUntil(Date.now() + 30000);
+        setAttempts(0);
+        setError("Too many attempts. Please wait 30 seconds.");
+      } else {
+        setError("Invalid username or password");
+      }
+
+      return;
+    }
+
+    // ✅ success reset protection
+    setAttempts(0);
+    setLockedUntil(null);
+
+    window.location.replace("/admin");
+  }
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500">Checking session...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-6xl mx-auto py-10 px-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
-        <div className="mb-8 border-b pb-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            Sa7ar Quick Care Admin
-          </h1>
+      <form
+        onSubmit={handleLogin}
+        className="bg-white p-8 rounded-xl shadow w-[350px]"
+      >
 
-          <button
-            onClick={handleViewWebsite}
-            className="text-sm text-gray-600 hover:underline"
-          >
-            View Website
-          </button>
-        </div>
+        <h1 className="text-2xl font-bold mb-2 text-center">
+          Admin Login
+        </h1>
 
-        <nav className="flex gap-6 mb-8 text-sm">
-          <Link href="/admin" className="text-gray-700 hover:underline">
-            Dashboard
-          </Link>
+        <p className="text-sm text-gray-500 text-center mb-6">
+          Sa7ar Quick Care Secure Access
+        </p>
 
-          <Link href="/admin/repairs" className="text-gray-700 hover:underline">
-            Repair Cases
-          </Link>
+        {error && (
+          <p className="text-red-500 mb-4 text-center text-sm">
+            {error}
+          </p>
+        )}
 
-          <Link href="/admin/brands" className="text-gray-700 hover:underline">
-            Brands
-          </Link>
+        <input
+          placeholder="Username"
+          className="border p-2 w-full mb-4 rounded"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
+        />
 
-          <Link href="/admin/devices" className="text-gray-700 hover:underline">
-            Devices
-          </Link>
+        <input
+          placeholder="Password"
+          type="password"
+          className="border p-2 w-full mb-6 rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
+        />
 
-          <Link href="/admin/settings" className="text-gray-700 hover:underline">
-            Settings
-          </Link>
-        </nav>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-black text-white w-full py-2 rounded disabled:opacity-60"
+        >
+          {loading ? "Checking..." : "Login"}
+        </button>
 
-        {children}
-      </div>
+      </form>
+
     </div>
   );
 }
