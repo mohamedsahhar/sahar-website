@@ -41,14 +41,6 @@ export default async function Contact() {
             "Hello, I need a repair service for my device."
           )}`}
           target="_blank"
-          onClick={() => {
-            if (typeof window !== "undefined" && window.gtag) {
-              window.gtag("event", "click_whatsapp", {
-                page: "contact",
-                location: "top_buttons",
-              })
-            }
-          }}
           className="bg-green-600 text-white px-5 py-3 rounded-lg text-center hover:bg-green-700 transition"
         >
           WhatsApp Now
@@ -56,14 +48,6 @@ export default async function Contact() {
 
         <a
           href="tel:+201021024094"
-          onClick={() => {
-            if (typeof window !== "undefined" && window.gtag) {
-              window.gtag("event", "click_call", {
-                page: "contact",
-                location: "top_buttons",
-              })
-            }
-          }}
           className="bg-black text-white px-5 py-3 rounded-lg text-center hover:bg-gray-800 transition"
         >
           Call Now
@@ -84,15 +68,24 @@ export default async function Contact() {
 
             <div className="flex flex-col gap-2 mt-1">
 
-              <a href="tel:+201021024094" className="text-blue-600 hover:underline transition">
+              <a
+                href="tel:+201021024094"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 102 102 4094
               </a>
 
-              <a href="tel:+201210005005" className="text-blue-600 hover:underline transition">
+              <a
+                href="tel:+201210005005"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 121 000 5005
               </a>
 
-              <a href="tel:+201208590878" className="text-blue-600 hover:underline transition">
+              <a
+                href="tel:+201208590878"
+                className="text-blue-600 hover:underline transition"
+              >
                 +20 120 859 0878
               </a>
 
@@ -103,13 +96,6 @@ export default async function Contact() {
           <div>
             <Link
               href="/repair-request"
-              onClick={() => {
-                if (typeof window !== "undefined" && window.gtag) {
-                  window.gtag("event", "click_book_repair", {
-                    page: "contact",
-                  })
-                }
-              }}
               className="inline-block border px-5 py-3 rounded-lg text-center hover:bg-gray-100 transition"
             >
               Book Repair
@@ -131,14 +117,6 @@ export default async function Contact() {
                 "Hello, I need a repair service for my device."
               )}`}
               target="_blank"
-              onClick={() => {
-                if (typeof window !== "undefined" && window.gtag) {
-                  window.gtag("event", "click_whatsapp", {
-                    page: "contact",
-                    location: "middle_section",
-                  })
-                }
-              }}
               className="inline-block bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
             >
               Chat on WhatsApp
@@ -163,14 +141,6 @@ export default async function Contact() {
             <Link
               href="https://www.google.com/maps/place/sa7ar+quick+care/@30.0041637,31.4187335,17z/data=!3m1!4b1!4m6!3m5!1s0x14583d534282499b:0x71738e9db973f674!8m2!3d30.0041637!4d31.4213138!16s%2Fg%2F11rgt5pnfn"
               target="_blank"
-              onClick={() => {
-                if (typeof window !== "undefined" && window.gtag) {
-                  window.gtag("event", "click_map", {
-                    page: "contact",
-                    location: "address_section",
-                  })
-                }
-              }}
               className="text-blue-600 hover:underline text-sm mt-1 inline-block"
             >
               Open in Google Maps
@@ -236,13 +206,6 @@ export default async function Contact() {
           <a
             href="https://www.google.com/maps/dir/?api=1&destination=30.0041637,31.4213138"
             target="_blank"
-            onClick={() => {
-              if (typeof window !== "undefined" && window.gtag) {
-                window.gtag("event", "click_directions", {
-                  page: "contact",
-                })
-              }
-            }}
             className="inline-block mt-3 text-blue-600 hover:underline"
           >
             Get Directions
