@@ -3,28 +3,33 @@ import { prisma } from "@/lib/prisma"
 import DevicesClient from "./DevicesClient"
 
 export default async function DevicesPage() {
-
   const devices = await prisma.device.findMany({
     include: {
-      brand: true
+      brand: true,
     },
     orderBy: {
-      name: "asc"
-    }
+      name: "asc",
+    },
+  })
+
+  const brands = await prisma.brand.findMany({
+    orderBy: {
+      name: "asc",
+    },
   })
 
   const recentRepairs = await prisma.repairCase.findMany({
     take: 4,
     orderBy: {
-      createdAt: "desc"
+      createdAt: "desc",
     },
     include: {
       device: {
         include: {
-          brand: true
-        }
-      }
-    }
+          brand: true,
+        },
+      },
+    },
   }) as any
 
   return (
@@ -45,10 +50,11 @@ export default async function DevicesPage() {
         Repairable Devices
       </h2>
 
-      <DevicesClient devices={devices} />
+      {/* NEW: Brand Filter Ready */}
+      <DevicesClient devices={devices} brands={brands} />
 
       {/* Recent Repairs */}
-      <h2 className="text-2xl font-semibold mb-6">
+      <h2 className="text-2xl font-semibold mb-6 mt-12">
         Recent Repair Cases
       </h2>
 

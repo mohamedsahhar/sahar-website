@@ -253,21 +253,27 @@ Please let me know availability and estimated cost.`
       {relatedRepairs.length > 0 && (
         <div className="mt-12">
 
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+          <h2 className="text-xl font-semibold mb-5 text-gray-900">
             Related Repairs
           </h2>
 
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             {relatedRepairs.map((item: any) => (
               <Link
                 key={item.id}
                 href={`/cases/${item.slug}`}
-                className="block p-4 border rounded-lg hover:bg-gray-50"
+                className="group border rounded-xl p-5 bg-white hover:shadow-md hover:border-gray-300 transition"
               >
-                <p className="font-medium text-gray-800">
+
+                <p className="font-semibold text-gray-900 group-hover:text-green-600 transition mb-2">
                   {item.title}
                 </p>
+
+                <p className="text-sm text-gray-500">
+                  View repair details →
+                </p>
+
               </Link>
             ))}
 

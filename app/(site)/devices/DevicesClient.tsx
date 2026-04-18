@@ -3,13 +3,22 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 
-export default function DevicesClient({ devices }: any) {
+export default function DevicesClient({ devices, brands }: any) {
   const [search, setSearch] = useState("")
   const [sort, setSort] = useState("az")
+  const [brand, setBrand] = useState("all")
   const [visible, setVisible] = useState(12)
 
   const filteredDevices = useMemo(() => {
     let items = [...devices]
+
+    // Brand Filter
+    if (brand !== "all") {
+      items = items.filter(
+        (device: any) =>
+          device.brand?.name?.toLowerCase() === brand.toLowerCase()
+      )
+    }
 
     // Search
     if (search.trim()) {
@@ -38,7 +47,7 @@ export default function DevicesClient({ devices }: any) {
     }
 
     return items
-  }, [devices, search, sort])
+  }, [devices, search, sort, brand])
 
   const shownDevices = filteredDevices.slice(0, visible)
 
@@ -46,7 +55,7 @@ export default function DevicesClient({ devices }: any) {
     <div>
 
       {/* Controls */}
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
+      <div className="grid md:grid-cols-3 gap-4 mb-6">
 
         <input
           type="text"
@@ -60,6 +69,23 @@ export default function DevicesClient({ devices }: any) {
         />
 
         <select
+          value={brand}
+          onChange={(e) => {
+            setBrand(e.target.value)
+            setVisible(12)
+          }}
+          className="border rounded-lg px-4 py-3"
+        >
+          <option value="all">All Brands</option>
+
+          {brands.map((item: any) => (
+            <option key={item.id} value={item.name}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+
+        <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
           className="border rounded-lg px-4 py-3"
@@ -69,6 +95,11 @@ export default function DevicesClient({ devices }: any) {
         </select>
 
       </div>
+
+      {/* Result Count */}
+      <p className="text-sm text-gray-500 mb-4">
+        {filteredDevices.length} devices found
+      </p>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
