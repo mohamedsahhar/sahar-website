@@ -1,11 +1,9 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export default function AdminLogin() {
-  const { status } = useSession();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,13 +12,6 @@ export default function AdminLogin() {
   // 🔒 Basic anti-bruteforce cooldown
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
   const [attempts, setAttempts] = useState(0);
-
-  // ✅ If already logged in → skip login page
-  useEffect(() => {
-    if (status === "authenticated") {
-      window.location.replace("/admin");
-    }
-  }, [status]);
 
   async function handleLogin(e: any) {
     e.preventDefault();
@@ -47,7 +38,6 @@ export default function AdminLogin() {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
 
-      // after 5 failed tries = lock 30 sec
       if (newAttempts >= 5) {
         setLockedUntil(Date.now() + 30000);
         setAttempts(0);
@@ -59,19 +49,11 @@ export default function AdminLogin() {
       return;
     }
 
-    // ✅ success reset protection
+    // ✅ success
     setAttempts(0);
     setLockedUntil(null);
 
     window.location.replace("/admin");
-  }
-
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-500">Checking session...</p>
-      </div>
-    );
   }
 
   return (
