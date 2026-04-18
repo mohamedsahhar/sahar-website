@@ -3,22 +3,33 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const body = await req.json();
 
-  if (
-    body.username === "admin" &&
-    body.password === "sa7ar123"
-  ) {
-    const res = NextResponse.json({ ok: true });
+  const username = body.username;
+  const password = body.password;
 
-    res.cookies.set("sa7ar_admin", "yes", {
-      path: "/",
-      httpOnly: true,
+  const adminUser = process.env.ADMIN_USER;
+  const adminPass = process.env.ADMIN_PASS;
+
+  if (
+    username === adminUser &&
+    password === adminPass
+  ) {
+    const response = NextResponse.json({
+      success: true,
     });
 
-    return res;
+    response.cookies.set("sa7ar_admin", "yes", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 8,
+    });
+
+    return response;
   }
 
   return NextResponse.json(
-    { error: "wrong" },
+    { success: false },
     { status: 401 }
   );
 }
