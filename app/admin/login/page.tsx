@@ -1,82 +1,78 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { signIn } from "next-auth/react"
+import { useState } from "react"
 
-export default function AdminLoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export default function AdminLogin() {
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
-    setLoading(true);
-    setError("");
+  async function handleLogin(e: any) {
+    e.preventDefault()
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    });
+    const res = await signIn("credentials", {
+      username,
+      password,
+      redirect: false,
+    })
 
-    if (res.ok) {
-      window.location.href = "/admin";
-      return;
+    console.log("LOGIN RESPONSE:", res) // 👈 DEBUG LINE
+
+    // ❌ login failed
+    if (res?.error) {
+      setError("Invalid username or password")
+      return
     }
 
-    setError("Invalid username or password");
-    setLoading(false);
+    // ✅ login success
+    window.location.href = "/admin"
   }
 
   return (
+    
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+
       <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow w-[360px]"
+        onSubmit={handleLogin}
+        className="bg-white p-8 rounded-xl shadow w-[350px]"
       >
-        <h1 className="text-2xl font-bold text-center mb-2">
+
+        <h1 className="text-2xl font-bold mb-6 text-center">
           Admin Login
         </h1>
 
-        <p className="text-sm text-gray-500 text-center mb-6">
-          Sa7ar Quick Care Secure Access
-        </p>
-
         {error && (
-          <p className="text-red-500 text-sm text-center mb-4">
+          <p className="text-red-500 mb-4 text-center">
             {error}
           </p>
         )}
 
         <input
-          className="border p-3 w-full rounded mb-4"
           placeholder="Username"
+          className="border p-2 w-full mb-4"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
-          type="password"
-          className="border p-3 w-full rounded mb-6"
           placeholder="Password"
+          type="password"
+          className="border p-2 w-full mb-6"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           type="submit"
-          disabled={loading}
-          className="bg-black text-white w-full py-3 rounded"
+          className="bg-black text-white w-full py-2 rounded"
         >
-          {loading ? "Checking..." : "Login"}
+          Login
         </button>
+
       </form>
+
     </div>
-  );
+  )
 }

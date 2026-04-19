@@ -47,6 +47,21 @@ export default function AdminDevicesPage() {
     loadDevices();
   }
 
+  async function deleteDevice(id:number){
+    const confirmDelete = confirm("Delete this device?");
+    if(!confirmDelete) return;
+
+    await fetch("/api/devices",{
+      method:"DELETE",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({ id })
+    });
+
+    loadDevices();
+  }
+
   return (
     <div className="max-w-6xl mx-auto p-6">
 
@@ -126,14 +141,20 @@ export default function AdminDevicesPage() {
                   <td className="p-3">
                     <div className="flex justify-end gap-2">
 
-                      {/* ✅ Edit */}
+                      {/* ✅ Edit (WORKING) */}
                       <Link href={`/admin/devices/${device.id}/edit`}>
                         <button className="bg-blue-600 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-700">
                           Edit
                         </button>
                       </Link>
 
-                      {/* ❌ Delete removed for safety */}
+                      {/* ✅ Delete */}
+                      <button
+                        onClick={()=>deleteDevice(device.id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded-md text-xs hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
 
                     </div>
                   </td>

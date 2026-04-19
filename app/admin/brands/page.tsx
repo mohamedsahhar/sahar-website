@@ -45,7 +45,24 @@ export default async function BrandsPage() {
                 </button>
               </Link>
 
-              {/* ❌ Delete button removed for safety */}
+              <form
+                action={async () => {
+                  "use server";
+
+                  await prisma.brand.delete({
+                    where: {
+                      id: brand.id,
+                    },
+                  });
+                }}
+              >
+                <button
+                  type="submit"
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </form>
 
             </div>
           </div>
