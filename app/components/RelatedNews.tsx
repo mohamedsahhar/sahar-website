@@ -35,7 +35,7 @@ export default function RelatedNews() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
   return (
-    <section className="py-24 md:py-28 bg-white text-center px-4 md:px-10">
+    <section className="py-20 md:py-24 bg-white text-center px-4 md:px-10">
 
       <h2 className="text-3xl font-bold text-gray-900">
         Inside Sa7ar Quick Care
@@ -45,12 +45,12 @@ export default function RelatedNews() {
         Real moments from our repair work and workshop
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto">
 
         {newsItems.map((item, index) => (
           <div
             key={index}
-            className="cursor-pointer border rounded-xl overflow-hidden group"
+            className="cursor-pointer border rounded-xl overflow-hidden group bg-white"
             onClick={() => setActiveItem(item)}
             onMouseEnter={() => videoRefs.current[index]?.play()}
             onMouseLeave={() => {
@@ -61,9 +61,10 @@ export default function RelatedNews() {
               }
             }}
           >
+
             <div className="relative">
 
-              {/* Video preview */}
+              {/* Optimized Preview */}
               <video
                 ref={(el) => {
                   videoRefs.current[index] = el
@@ -72,14 +73,15 @@ export default function RelatedNews() {
                 muted
                 loop
                 playsInline
-                className="w-full h-56 object-cover"
+                preload="none"
                 poster={item.thumbnail}
+                className="w-full h-56 object-cover"
               />
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
 
-              {/* ▶ Play icon */}
+              {/* Play Icon */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-white/90 rounded-full p-4 shadow-lg">
                   <svg
@@ -96,14 +98,17 @@ export default function RelatedNews() {
             </div>
 
             <div className="p-4">
-              <p className="text-gray-900 font-medium">{item.title}</p>
+              <p className="text-gray-900 font-medium">
+                {item.title}
+              </p>
             </div>
+
           </div>
         ))}
 
       </div>
 
-      {/* MODAL */}
+      {/* Modal */}
       {activeItem && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4"
@@ -117,6 +122,7 @@ export default function RelatedNews() {
               src={activeItem.src}
               controls
               autoPlay
+              preload="metadata"
               className="w-full max-h-[70vh] object-contain"
             />
           </div>

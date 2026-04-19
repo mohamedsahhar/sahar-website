@@ -3,40 +3,51 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const dynamic = "force-dynamic";
 
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
     CredentialsProvider({
       name: "Admin Login",
+
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
 
       async authorize(credentials) {
-        if (!credentials) return null;
+        if (!credentials) {
+          await wait(1500);
+          return null;
+        }
 
         const adminUser = process.env.ADMIN_USER;
         const adminPass = process.env.ADMIN_PASS;
 
         if (!adminUser || !adminPass) {
           console.error("Missing ADMIN_USER or ADMIN_PASS");
+          await wait(1500);
           return null;
         }
 
-        if (
+        const validUser =
           credentials.username === adminUser &&
-          credentials.password === adminPass
-        ) {
-          return {
-            id: "1",
-            name: "Admin",
-            role: "SUPER_ADMIN",
-          };
+          credentials.password === adminPass;
+
+        if (!validUser) {
+          await wait(1800);
+          return null;
         }
 
-        return null;
+        return {
+          id: "1",
+          name: "Admin",
+          role: "SUPER_ADMIN",
+        };
       },
     }),
   ],

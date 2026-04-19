@@ -7,38 +7,7 @@ C:.
 |       |   \---chunks
 |       +---cache
 |       |   +---images
-|       |   |   +----eV2214Tr0pSQUXNquwxB1Rkc4r06MPdRvkWzsRK7Cw
-|       |   |   +---2ORHi_znRQ_3fWC97yF7omZEStj_M0ZuHa5kBiQPw48
-|       |   |   +---8jlZMG6LJ9nk7zVxIMtrL1xtGvy6qfmTBaAhm9RRGbY
-|       |   |   +---9NkbfP8yEUtO244_Ffif4dmbpiHeoQndgAkz1Hm7Jdc
-|       |   |   +---aR1WFr96874vd-gcoxdVH_XQ8dXQkkX22mm5iUpY0DQ
-|       |   |   +---beT1l0tJlXikdLjSlRvJzYU2ReC5o3DQm8gMSSly5Ik
-|       |   |   +---c37OuItYIu3l8TPR4Tr9iVPM3VqKSD07ixRlf5NuyLM
-|       |   |   +---EBIhgtUHP0gO5WFgGqRDZrqe5ZmSnEZCbCSsOxtf_Wo
-|       |   |   +---FQy2PLMpe7n7hSaZGw-gh9m3Rxs3fe-zgBOn3Xz6zrc
-|       |   |   +---HRB8u-2No28JEFwQrmUgOMXLnfkp2LSwu5c_qk56J74
-|       |   |   +---i8jzuHYJOU21zJUNiNmQ7EXaUds-9qSa2JzdoIhg6o8
-|       |   |   +---ISSJtslua83sIQyLq2OFCeZtKZYhbtjGL5Ah9J7LscE
-|       |   |   +---J4SYwKGc41Mx03h7hHaUxcD6CCeR_6y_7ADYyuSOYi0
-|       |   |   +---kGAfrCnNFMzmfCm-EH0QVAkQ58zoUY2FqxNHX3YovJw
-|       |   |   +---kiP33bU1ZQqC39cL5E3PZBQ6IcabAJQEPwVxEiLVYVU
-|       |   |   +---L7gLFRtQ0fL5dHGqMgkSQjXM4xVrvAHiR4YLOkgGPQ4
-|       |   |   +---MCgbE2In0rgk4H-yM5nwtthepmFTooP24GhaL8QkJrU
-|       |   |   +---odhjPW8T7Ruecv90Dma7TJxa0_XePEmshVlLuLSJ3qQ
-|       |   |   +---OGDLqrbnCG0M7xiFILnGX-BHhbHBm1_y1VTEJD0_Q7c
-|       |   |   +---pSIUBPYj3KbIE52k30gc82Ie3n0V7W4Dr_7Pvp5l8z4
-|       |   |   +---QKUvq_5IMygoV6zeM8Q84vmAqThYVDmQJELkJlD5p6Q
-|       |   |   +---R3bSQ3q-cgW9q0WRGgMUNiVZR0dplk32nxzPWqsLbu8
-|       |   |   +---S6G1I2-pI0PRjgD1T0EyE9LcUrWBU38TN2wUJ35WXd4
-|       |   |   +---uFJFPUQPdjdXup3dmv46YxfQlvCcDQRvWKmJ5etPb1s
-|       |   |   +---V7QRM0WNFQ5PLSIohrDNE_mBgZLh1dW1yJB6dm_l91Y
-|       |   |   +---vBRWrGnGufI0OTs83jGk_BmxuA1gqEemOirbozPzQ-0
-|       |   |   +---ver-ZTkQIy96JWbhRc-OxV2ZfB1IyGZMCe0PlcQn9nE
-|       |   |   +---XJ1DgIdsktk_xj3eW4ABSa0vB6RWv4eyELmB0iNloM0
-|       |   |   +---XlUZxZitlJydtiCi6vbrfGNOQmC-4kks-jS434VwUpU
-|       |   |   +---yClBL6zQgkBEHIkHv3DsP5eizchivSGOjPV8wGST1Dc
-|       |   |   +---yOfQ3MFVkQXsgy9_YbESS-uX1rdZqp6imJMK-ppyRgk
-|       |   |   \---_kkX5wYJd7p1Tgwa42JT0mWC4f8uN_4DnyXqyYlIHAA
+|       |   |   \---J4SYwKGc41Mx03h7hHaUxcD6CCeR_6y_7ADYyuSOYi0
 |       |   \---turbopack
 |       |       \---23c46498
 |       +---logs
@@ -51,67 +20,24 @@ C:.
 |       +---server
 |       |   +---app
 |       |   |   +---(site)
-|       |   |   |   +---cases
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[slug]
-|       |   |   |   |       \---page
-|       |   |   |   +---contact
-|       |   |   |   |   \---page
-|       |   |   |   +---devices
-|       |   |   |   |   \---page
-|       |   |   |   +---page
-|       |   |   |   +---repair-request
-|       |   |   |   |   \---page
-|       |   |   |   \---repairs
-|       |   |   |       +---page
-|       |   |   |       \---[brand]
-|       |   |   |           \---page
+|       |   |   |   \---page
 |       |   |   +---admin
-|       |   |   |   +---brands
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[id]
-|       |   |   |   |       \---edit
-|       |   |   |   |           \---page
-|       |   |   |   +---devices
-|       |   |   |   |   +---page
-|       |   |   |   |   \---[id]
-|       |   |   |   |       \---edit
-|       |   |   |   |           \---page
 |       |   |   |   +---login
 |       |   |   |   |   \---page
-|       |   |   |   +---page
-|       |   |   |   +---settings
-|       |   |   |   |   \---page
-|       |   |   |   \---users
-|       |   |   |       \---new
-|       |   |   |           \---page
+|       |   |   |   \---page
 |       |   |   +---api
-|       |   |   |   +---admin
-|       |   |   |   |   \---user
-|       |   |   |   |       \---route
-|       |   |   |   +---auth
-|       |   |   |   |   \---[...nextauth]
-|       |   |   |   |       \---route
-|       |   |   |   +---brands
-|       |   |   |   |   \---route
-|       |   |   |   +---business
-|       |   |   |   |   \---route
-|       |   |   |   \---devices
-|       |   |   |       \---route
+|       |   |   |   \---auth
+|       |   |   |       \---[...nextauth]
+|       |   |   |           \---route
 |       |   |   \---_not-found
 |       |   |       \---page
 |       |   +---chunks
 |       |   |   \---ssr
 |       |   +---edge
 |       |   |   \---chunks
-|       |   +---middleware
-|       |   \---pages
-|       |       +---_app
-|       |       +---_document
-|       |       \---_error
+|       |   \---middleware
 |       +---static
 |       |   +---chunks
-|       |   |   \---pages
 |       |   +---development
 |       |   \---media
 |       \---types
@@ -159,18 +85,13 @@ C:.
 |   |   +---business
 |   |   +---cases
 |   |   +---devices
+|   |   +---login
 |   |   \---repairs
 |   \---components
 +---data
 +---lib
 +---node_modules
 |   +---.bin
-|   +---.cache
-|   |   +---jiti
-|   |   \---prisma
-|   |       \---master
-|   |           \---c2990dca591cba766e3b7ef5d9e8a84796e47ab7
-|   |               \---windows
 |   +---.prisma
 |   |   \---client
 |   +---@alloc
@@ -2849,4 +2770,5 @@ C:.
 +---public
 |   +---news
 |   \---repairs
-\---scripts
++---scripts
+\---types

@@ -4,9 +4,11 @@ import Script from "next/script"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sa7arrepair.com"),
+
   alternates: {
     canonical: "/",
   },
+
   title: {
     default: "Sa7ar Quick Care | Electronics Repair in Egypt",
     template: "%s | Sa7ar Quick Care",
@@ -60,17 +62,51 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Sa7ar Quick Care",
+    image: "https://www.sa7arrepair.com/og-image.jpg",
+    url: "https://www.sa7arrepair.com",
+    telephone: "+201021024094",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Life Mall, First District, 5th Settlement",
+      addressLocality: "New Cairo",
+      addressRegion: "Cairo",
+      addressCountry: "EG",
+    },
+    areaServed: "Egypt",
+    priceRange: "$$",
+    sameAs: [
+      "https://www.facebook.com/sa7ar.quick.care/",
+      "https://www.instagram.com/sa7ar_quick_care/",
+      "https://www.tiktok.com/@sa7arquickcare",
+    ],
+  }
+
   return (
     <html lang="en">
       <body className="bg-gray-50 min-h-screen flex flex-col antialiased">
-        
+
         {children}
 
-        {/* ✅ Google Analytics */}
+        {/* SEO Schema */}
+        <Script
+          id="local-business-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
+
+        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-00PS7JQZXM"
           strategy="afterInteractive"
         />
+
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];

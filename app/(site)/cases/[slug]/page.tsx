@@ -5,9 +5,18 @@ import LightboxImage from "@/app/components/LightboxImage";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+//////////////////////////////////////////////////////
+// Metadata
+//////////////////////////////////////////////////////
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
   const repair = await prisma.repairCase.findFirst({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       device: {
         include: { brand: true },
@@ -27,7 +36,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const title = `${repair.title} | Sa7ar Quick Care`;
 
-  const description = `Professional repair service for ${deviceName}. ${repair.problem?.slice(0, 120) ?? ""}`;
+  const description = `Professional repair service for ${deviceName}. ${
+    repair.problem?.slice(0, 120) ?? ""
+  }`;
 
   return {
     title,
@@ -40,6 +51,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+//////////////////////////////////////////////////////
+// Page
+//////////////////////////////////////////////////////
 export default async function RepairPage({
   params,
 }: {
@@ -66,10 +80,9 @@ export default async function RepairPage({
     take: 3,
   });
 
-  const deviceName =
-    repair.device
-      ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
-      : "Device";
+  const deviceName = repair.device
+    ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
+    : "Device";
 
   const deviceSlug = repair.device?.slug;
   const brandName = repair.device?.brand?.name;
@@ -87,17 +100,37 @@ Please let me know availability and estimated cost.`
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 md:px-8 pt-6 pb-8 md:py-8">
+    <div className="max-w-4xl mx-auto px-4 md:px-8 pt-6 pb-24 md:pb-8 md:py-8">
 
       <h1 className="text-3xl font-bold mb-4 text-gray-900">
         {repair.title}
       </h1>
 
-      <p className="text-gray-700 mb-3">
+      <p className="text-gray-700 mb-4">
         Professional repair service for {deviceName} in New Cairo.
       </p>
 
-      {/* LINKS */}
+      {/* CTA */}
+      <div className="mb-6 flex flex-col sm:flex-row gap-3">
+
+        <a
+          href={`https://wa.me/201021024094?text=${whatsappMessage}`}
+          target="_blank"
+          className="bg-green-600 text-white px-5 py-3 rounded-xl font-medium text-center hover:bg-green-700 transition"
+        >
+          Ask About Similar Repair
+        </a>
+
+        <Link
+          href="/repair-request"
+          className="bg-black text-white px-5 py-3 rounded-xl font-medium text-center hover:bg-gray-800 transition"
+        >
+          Book Repair Appointment
+        </Link>
+
+      </div>
+
+      {/* Internal Links */}
       <div className="mb-6 text-sm text-gray-600 flex flex-wrap gap-3">
 
         {deviceSlug && (
@@ -120,11 +153,14 @@ Please let me know availability and estimated cost.`
 
       </div>
 
-      {/* GALLERY */}
+      {/* Optimized Gallery */}
       {galleryImages.length > 0 && (
         <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {galleryImages.map((img: string, index: number) => (
-            <div key={index} className="h-72 md:h-auto overflow-hidden rounded-xl">
+            <div
+              key={index}
+              className="h-72 md:h-72 overflow-hidden rounded-xl"
+            >
               <LightboxImage
                 src={img}
                 alt={`${repair.title} image ${index + 1}`}
@@ -134,58 +170,14 @@ Please let me know availability and estimated cost.`
         </div>
       )}
 
-      {/* VIDEO */}
-      {repair.videoUrl && (
-        <div className="mb-8">
-
-          <h2 className="text-lg font-semibold mb-3 text-gray-900">
-            Repair Video
-          </h2>
-
-          <a
-            href={repair.videoUrl}
-            target="_blank"
-            className="inline-block group"
-          >
-            <div className="w-64 sm:w-72 aspect-video rounded-xl overflow-hidden border bg-gray-100 relative">
-
-              {galleryImages[0] && (
-                <img
-                  src={galleryImages[0]}
-                  className="w-full h-full object-cover group-hover:scale-105 transition"
-                />
-              )}
-
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 bg-black/70 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-
-            </div>
-
-            <p className="text-sm text-gray-500 mt-2">
-              Watch on Instagram
-            </p>
-
-          </a>
-
-        </div>
-      )}
-
-      {/* CONTENT */}
+      {/* Content */}
       <div className="space-y-6">
 
         <div>
           <h2 className="text-xl font-semibold mb-2 text-gray-900">
             Problem
           </h2>
+
           <p className="text-gray-700">
             {repair.problem}
           </p>
@@ -195,61 +187,15 @@ Please let me know availability and estimated cost.`
           <h2 className="text-xl font-semibold mb-2 text-gray-900">
             Solution
           </h2>
+
           <p className="text-gray-700">
             {repair.solution}
           </p>
         </div>
 
-        {repair.repairTime && (
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-gray-900">
-              Repair Time
-            </h2>
-            <p className="text-gray-700">
-              {repair.repairTime}
-            </p>
-          </div>
-        )}
-
       </div>
 
-      {/* CTA */}
-      <div className="mt-10 p-6 bg-gray-100 rounded-xl text-center border">
-
-        <h3 className="text-xl font-semibold mb-2 text-gray-900">
-          Need a similar repair?
-        </h3>
-
-        <p className="text-gray-600 mb-5">
-          Fast diagnostics, professional service, and quick WhatsApp response.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-
-          <a
-            href={`https://wa.me/201021024094?text=${whatsappMessage}`}
-            target="_blank"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
-          >
-            Get Similar Repair on WhatsApp
-          </a>
-
-          <a
-            href="/repair-request"
-            className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
-          >
-            Book Repair Appointment
-          </a>
-
-        </div>
-
-        <p className="text-sm text-gray-500 mt-4">
-          No obligation consultation • Located in New Cairo
-        </p>
-
-      </div>
-
-      {/* RELATED */}
+      {/* Related Repairs */}
       {relatedRepairs.length > 0 && (
         <div className="mt-12">
 
@@ -263,17 +209,15 @@ Please let me know availability and estimated cost.`
               <Link
                 key={item.id}
                 href={`/cases/${item.slug}`}
-                className="group border rounded-xl p-5 bg-white hover:shadow-md hover:border-gray-300 transition"
+                className="group border rounded-xl p-5 bg-white hover:shadow-md transition"
               >
-
-                <p className="font-semibold text-gray-900 group-hover:text-green-600 transition mb-2">
+                <p className="font-semibold text-gray-900 mb-2">
                   {item.title}
                 </p>
 
                 <p className="text-sm text-gray-500">
                   View repair details →
                 </p>
-
               </Link>
             ))}
 
@@ -281,6 +225,17 @@ Please let me know availability and estimated cost.`
 
         </div>
       )}
+
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t p-3 md:hidden">
+        <a
+          href={`https://wa.me/201021024094?text=${whatsappMessage}`}
+          target="_blank"
+          className="block w-full text-center bg-green-600 text-white py-3 rounded-xl font-semibold"
+        >
+          WhatsApp for Similar Repair
+        </a>
+      </div>
 
     </div>
   );

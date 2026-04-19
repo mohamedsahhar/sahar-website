@@ -2,15 +2,16 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
+//////////////////////////////////////////////////////
 // SEO
+//////////////////////////////////////////////////////
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ brand: string }>
 }) {
-
   const { brand } = await params
 
   if (!brand) {
@@ -20,7 +21,6 @@ export async function generateMetadata({
     }
   }
 
-  // ✅ FIX: decode URL
   const decodedBrand = decodeURIComponent(brand)
 
   const displayBrand =
@@ -33,44 +33,27 @@ export async function generateMetadata({
   return {
     title,
     description,
-
-    openGraph: {
-      title,
-      description,
-      url: `/repairs/${brand}`,
-      type: "website",
-      images: [
-        {
-          url: "/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${displayBrand} Repair`,
-        },
-      ],
-    },
   }
 }
 
+//////////////////////////////////////////////////////
 // PAGE
+//////////////////////////////////////////////////////
 export default async function BrandPage({
   params,
 }: {
   params: Promise<{ brand: string }>
 }) {
-
   const { brand } = await params
 
   if (!brand) {
     return (
       <main className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">
-          Invalid brand.
-        </p>
+        <p className="text-gray-500">Invalid brand.</p>
       </main>
     )
   }
 
-  // ✅ FIX: decode URL
   const decodedBrand = decodeURIComponent(brand)
 
   const displayBrand =
@@ -80,10 +63,7 @@ export default async function BrandPage({
     where: {
       device: {
         brand: {
-          name: {
-            equals: decodedBrand,
-            mode: "insensitive",
-          },
+          slug: decodedBrand.toLowerCase(),
         },
       },
     },
@@ -102,6 +82,17 @@ export default async function BrandPage({
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
 
+      {/* Back Button */}
+      <div className="mb-8">
+        <Link
+          href="/repairs"
+          className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-black transition"
+        >
+          ← Back to Brands
+        </Link>
+      </div>
+
+      {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-2xl md:text-3xl font-bold mb-4">
           {displayBrand} Repair Services
@@ -112,16 +103,17 @@ export default async function BrandPage({
         </p>
       </div>
 
+      {/* Empty State */}
       {filteredCases.length === 0 && (
         <p className="text-gray-500 text-center mb-12">
           No repairs found for this brand yet.
         </p>
       )}
 
+      {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {filteredCases.map((repair: any) => (
-
           <Link
             key={repair.id}
             href={`/cases/${repair.slug}`}
@@ -129,13 +121,16 @@ export default async function BrandPage({
           >
 
             {repair.images?.[0] && (
-              <Image
-                src={repair.images[0]}
-                alt={`${repair.device?.brand?.name} ${repair.device?.name} repair`}
-                width={600}
-                height={400}
-                className="w-full h-48 object-cover"
-              />
+              <div className="relative w-full h-48">
+                <Image
+                  src={repair.images[0]}
+                  alt={`${repair.device?.brand?.name} ${repair.device?.name} repair`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  loading="lazy"
+                />
+              </div>
             )}
 
             <div className="p-4">
@@ -157,7 +152,6 @@ export default async function BrandPage({
             </div>
 
           </Link>
-
         ))}
 
       </div>

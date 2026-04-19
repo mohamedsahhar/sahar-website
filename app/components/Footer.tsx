@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -51,7 +52,7 @@ export default function Footer() {
             </li>
 
             <li>
-              <Link href="/request-repair" className="hover:text-white">
+              <Link href="/repair-request" className="hover:text-white">
                 Book Repair
               </Link>
             </li>
@@ -85,12 +86,14 @@ export default function Footer() {
             <a
               href="https://wa.me/201021024094"
               target="_blank"
+              rel="noopener noreferrer"
               className="hover:opacity-80"
             >
-              <img
+              <Image
                 src="/whatsapp.svg"
                 alt="WhatsApp"
-                className="w-5 h-5"
+                width={20}
+                height={20}
               />
             </a>
 
@@ -98,6 +101,7 @@ export default function Footer() {
             <a
               href="https://www.facebook.com/sa7ar.quick.care/"
               target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -109,6 +113,7 @@ export default function Footer() {
             <a
               href="https://www.instagram.com/sa7ar_quick_care/"
               target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -122,12 +127,14 @@ export default function Footer() {
             <a
               href="https://www.tiktok.com/@sa7arquickcare"
               target="_blank"
+              rel="noopener noreferrer"
               className="hover:opacity-80"
             >
-              <img
+              <Image
                 src="/tiktok.svg"
                 alt="TikTok"
-                className="w-5 h-5"
+                width={20}
+                height={20}
               />
             </a>
 

@@ -6,7 +6,10 @@ import { useEffect, useState } from "react"
 export default function AdminLogin() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const [attempts, setAttempts] = useState(0)
   const [lockedUntil, setLockedUntil] = useState<number | null>(null)
@@ -64,15 +67,18 @@ export default function AdminLogin() {
   async function handleLogin(e: any) {
     e.preventDefault()
 
+    if (loading) return
+
     if (lockedUntil && Date.now() < lockedUntil) {
       setError(`Too many attempts. Try again in ${timeLeft}s`)
       return
     }
 
+    setLoading(true)
     setError("")
 
     const res = await signIn("credentials", {
-      username,
+      username: username.trim(),
       password,
       redirect: false,
     })
@@ -85,6 +91,7 @@ export default function AdminLogin() {
 
       if (newAttempts >= 5) {
         const lockTime = Date.now() + 10 * 60 * 1000
+
         setLockedUntil(lockTime)
         localStorage.setItem("adminLockedUntil", String(lockTime))
         setError("Too many attempts. Locked for 10 minutes.")
@@ -92,6 +99,7 @@ export default function AdminLogin() {
         setError(`Invalid username or password (${newAttempts}/5)`)
       }
 
+      setLoading(false)
       return
     }
 
@@ -105,46 +113,72 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
 
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow w-[350px]"
+        className="bg-white w-full max-w-sm rounded-2xl shadow-xl p-8 border"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Admin Login
-        </h1>
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold">
+            Admin Login
+          </h1>
+
+          <p className="text-gray-500 text-sm mt-2">
+            Sa7ar Quick Care Control Panel
+          </p>
+        </div>
 
         {error && (
-          <p className="text-red-500 mb-4 text-center text-sm">
+          <div className="mb-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg p-3 text-center">
             {error}
-          </p>
+          </div>
         )}
 
         <input
           placeholder="Username"
-          className="border p-2 w-full mb-4"
+          className="border rounded-lg p-3 w-full mb-4 outline-none focus:ring-2 focus:ring-black"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          disabled={!!lockedUntil}
+          disabled={!!lockedUntil || loading}
+          autoComplete="username"
         />
 
-        <input
-          placeholder="Password"
-          type="password"
-          className="border p-2 w-full mb-6"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={!!lockedUntil}
-        />
+        <div className="relative mb-5">
+          <input
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            className="border rounded-lg p-3 w-full pr-16 outline-none focus:ring-2 focus:ring-black"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={!!lockedUntil || loading}
+            autoComplete="current-password"
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-3 text-sm text-gray-500"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <button
           type="submit"
-          disabled={!!lockedUntil}
-          className="bg-black text-white w-full py-2 rounded disabled:opacity-50"
+          disabled={!!lockedUntil || loading}
+          className="bg-black text-white w-full py-3 rounded-lg font-medium hover:opacity-90 transition disabled:opacity-50"
         >
-          {lockedUntil ? `Locked (${timeLeft}s)` : "Login"}
+          {loading
+            ? "Signing in..."
+            : lockedUntil
+            ? `Locked (${timeLeft}s)`
+            : "Login"}
         </button>
+
+        <p className="text-center text-xs text-gray-400 mt-5">
+          Protected Admin Access
+        </p>
 
       </form>
 

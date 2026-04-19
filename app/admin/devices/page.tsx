@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function AdminDevicesPage() {
-
   const [devices, setDevices] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [name, setName] = useState("");
   const [brandId, setBrandId] = useState("");
+
+  // NEW FILTERS
+  const [search, setSearch] = useState("");
+  const [filterBrand, setFilterBrand] = useState("");
 
   async function loadDevices() {
     const res = await fetch("/api/devices");
@@ -28,18 +31,17 @@ export default function AdminDevicesPage() {
   }, []);
 
   async function addDevice() {
-
     if (!name || !brandId) return;
 
     await fetch("/api/devices", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
-        brandId
-      })
+        brandId,
+      }),
     });
 
     setName("");
@@ -47,20 +49,20 @@ export default function AdminDevicesPage() {
     loadDevices();
   }
 
-  async function deleteDevice(id:number){
-    const confirmDelete = confirm("Delete this device?");
-    if(!confirmDelete) return;
+  //////////////////////////////////////////////////////
+  // FILTERED DATA
+  //////////////////////////////////////////////////////
+  const filteredDevices = devices.filter((device: any) => {
+    const matchSearch =
+      device.name.toLowerCase().includes(search.toLowerCase()) ||
+      device.slug.toLowerCase().includes(search.toLowerCase()) ||
+      device.brand?.name.toLowerCase().includes(search.toLowerCase());
 
-    await fetch("/api/devices",{
-      method:"DELETE",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({ id })
-    });
+    const matchBrand =
+      !filterBrand || String(device.brand?.id) === filterBrand;
 
-    loadDevices();
-  }
+    return matchSearch && matchBrand;
+  });
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -71,16 +73,16 @@ export default function AdminDevicesPage() {
       </h1>
 
       {/* Add Device */}
-      <div className="flex gap-3 mb-6">
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
 
         <select
           className="border p-2 rounded-md"
           value={brandId}
-          onChange={(e)=>setBrandId(e.target.value)}
+          onChange={(e) => setBrandId(e.target.value)}
         >
           <option value="">Select Brand</option>
 
-          {brands.map((brand:any)=>(
+          {brands.map((brand: any) => (
             <option key={brand.id} value={brand.id}>
               {brand.name}
             </option>
@@ -90,7 +92,7 @@ export default function AdminDevicesPage() {
         <input
           className="border p-2 rounded-md flex-1"
           value={name}
-          onChange={(e)=>setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Device name"
         />
 
@@ -103,13 +105,41 @@ export default function AdminDevicesPage() {
 
       </div>
 
+      {/* Filters */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+
+        <input
+          className="border p-2 rounded-md"
+          placeholder="Search device / slug / brand..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <select
+          className="border p-2 rounded-md"
+          value={filterBrand}
+          onChange={(e) => setFilterBrand(e.target.value)}
+        >
+          <option value="">All Brands</option>
+
+          {brands.map((brand: any) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.name}
+            </option>
+          ))}
+        </select>
+
+      </div>
+
       {/* Empty */}
-      {devices.length === 0 && (
-        <p className="text-gray-500">No devices found.</p>
+      {filteredDevices.length === 0 && (
+        <p className="text-gray-500">
+          No devices found.
+        </p>
       )}
 
       {/* Table */}
-      {devices.length > 0 && (
+      {filteredDevices.length > 0 && (
         <div className="overflow-x-auto border rounded-xl">
           <table className="w-full text-sm">
 
@@ -123,7 +153,7 @@ export default function AdminDevicesPage() {
             </thead>
 
             <tbody>
-              {devices.map((device:any)=>(
+              {filteredDevices.map((device: any) => (
                 <tr key={device.id} className="border-t">
 
                   <td className="p-3 font-medium">
@@ -141,20 +171,11 @@ export default function AdminDevicesPage() {
                   <td className="p-3">
                     <div className="flex justify-end gap-2">
 
-                      {/* ✅ Edit (WORKING) */}
                       <Link href={`/admin/devices/${device.id}/edit`}>
                         <button className="bg-blue-600 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-700">
                           Edit
                         </button>
                       </Link>
-
-                      {/* ✅ Delete */}
-                      <button
-                        onClick={()=>deleteDevice(device.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded-md text-xs hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
 
                     </div>
                   </td>

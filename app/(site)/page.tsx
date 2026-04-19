@@ -1,7 +1,8 @@
 import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import RelatedNews from "@/app/components/RelatedNews"
+import RelatedNews from "@/app/components/RelatedNews";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -32,25 +33,31 @@ export default async function Home() {
     <main className="min-h-screen bg-white">
 
       {/* HERO */}
-      <section className="text-center py-12 md:py-28 bg-gradient-to-b from-white to-gray-100 px-4">
+      <section className="text-center py-14 md:py-28 bg-gradient-to-b from-white via-gray-50 to-gray-100 px-4">
 
-        <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
-          Phone & Electronics Repair in Cairo, Egypt
+        <div className="mb-5">
+          <span className="inline-block bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-full text-sm font-medium">
+            Trusted Repair Center in New Cairo
+          </span>
+        </div>
+
+        <h1 className="text-4xl md:text-6xl font-bold mb-5 text-gray-900 leading-tight max-w-5xl mx-auto">
+          Professional Phone & Electronics Repair in Cairo, Egypt
         </h1>
 
-        <p className="text-base md:text-xl text-gray-700 mb-6">
-          Phones • Speakers • Robot Vacuums • DJ Mixers • AirPods
+        <p className="text-lg md:text-2xl text-gray-700 mb-5 font-medium">
+          iPhone • AirPods • JBL • Speakers • Robot Vacuums
         </p>
 
-        <p className="text-gray-600 max-w-2xl mx-auto mb-3">
-          Sa7ar Quick Care is a professional electronics repair center in New Cairo, Egypt specializing in phone repair, iPhone repair, AirPods repair, JBL speaker repair, and advanced electronics maintenance.
+        <p className="text-gray-600 max-w-3xl mx-auto mb-3 text-base md:text-lg">
+          Fast diagnostics, honest service, and real repair expertise for advanced electronics.
         </p>
 
-        <p className="text-gray-500 text-sm">
-          Located in New Cairo – Serving all areas of Cairo and Egypt.
+        <p className="text-gray-500 text-sm md:text-base">
+          Located in New Cairo – Serving customers across Cairo & Egypt.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600 mt-4">
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-blue-600 mt-5">
           <Link href="/devices" className="underline hover:text-blue-800">
             Browse Devices
           </Link>
@@ -65,27 +72,31 @@ export default async function Home() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
 
           <a
             href="https://wa.me/201021024094"
             target="_blank"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition"
+            className="inline-block bg-green-600 text-white px-7 py-4 rounded-xl font-semibold hover:bg-green-700 transition shadow-md"
           >
             Contact us on WhatsApp
           </a>
 
           <Link
             href="/repair-request"
-            className="inline-block bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition"
+            className="inline-block bg-black text-white px-7 py-4 rounded-xl font-semibold hover:bg-gray-800 transition shadow-md"
           >
             Book Repair Appointment
           </Link>
 
         </div>
 
+        <p className="mt-6 text-sm text-gray-500">
+          Trusted by customers across Egypt for reliable repair service.
+        </p>
+
         {/* Trust Strip */}
-        <div className="mt-5 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
+        <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm text-gray-600">
 
           <span className="border px-3 py-1 rounded-full bg-white">
             Same Day Service Available
@@ -175,11 +186,16 @@ export default async function Home() {
             >
 
               {c.images?.[0] && (
-                <img
-                  src={c.images[0]}
-                  alt={c.title}
-                  className="w-full h-44 md:h-56 object-cover"
-                />
+                <div className="relative w-full h-44 md:h-56">
+                  <Image
+                    src={c.images[0]}
+                    alt={c.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                  />
+                </div>
               )}
 
               <div className="p-5">

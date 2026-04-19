@@ -1,6 +1,10 @@
 import type { Metadata } from "next"
-import Navbar from "@/app/components/Navbar"
+import dynamic from "next/dynamic"
 import Footer from "@/app/components/Footer"
+
+const Navbar = dynamic(() => import("@/app/components/Navbar"), {
+  ssr: true,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sa7arrepair.com"),
@@ -25,7 +29,9 @@ export default function SiteLayout({
 
       <Navbar />
 
-      {children}
+      <main>
+        {children}
+      </main>
 
       <Footer />
 
@@ -37,6 +43,7 @@ export default function SiteLayout({
           <a
             href="https://wa.me/201021024094"
             target="_blank"
+            rel="noopener noreferrer"
             className="bg-green-600 text-white text-center py-3"
           >
             WhatsApp
@@ -52,6 +59,7 @@ export default function SiteLayout({
           <a
             href="https://www.google.com/maps/dir/?api=1&destination=30.0041637,31.4213138"
             target="_blank"
+            rel="noopener noreferrer"
             className="bg-blue-600 text-white text-center py-3"
           >
             Map
