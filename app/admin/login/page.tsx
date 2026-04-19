@@ -1,11 +1,9 @@
 "use client"
 
-import { signIn, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useEffect, useState } from "react"
 
 export default function AdminLogin() {
-  const { status } = useSession()
-
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -13,15 +11,6 @@ export default function AdminLogin() {
   const [attempts, setAttempts] = useState(0)
   const [lockedUntil, setLockedUntil] = useState<number | null>(null)
   const [timeLeft, setTimeLeft] = useState(0)
-
-  //////////////////////////////////////////////////////
-  // AUTO REDIRECT IF ALREADY LOGGED IN
-  //////////////////////////////////////////////////////
-  useEffect(() => {
-    if (status === "authenticated") {
-      window.location.href = "/admin"
-    }
-  }, [status])
 
   //////////////////////////////////////////////////////
   // LOAD SAVED LOCK STATUS
