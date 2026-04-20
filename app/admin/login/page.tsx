@@ -90,13 +90,13 @@ export default function AdminLogin() {
       localStorage.setItem("adminAttempts", String(newAttempts))
 
       if (newAttempts >= 5) {
-        const lockTime = Date.now() + 10 * 60 * 1000
+        const lockTime = Date.now() + 15 * 60 * 1000
 
         setLockedUntil(lockTime)
         localStorage.setItem("adminLockedUntil", String(lockTime))
-        setError("Too many attempts. Locked for 10 minutes.")
+        setError("Too many attempts. Login temporarily locked.")
       } else {
-        setError(`Invalid username or password (${newAttempts}/5)`)
+        setError("Invalid credentials")
       }
 
       setLoading(false)
@@ -108,6 +108,7 @@ export default function AdminLogin() {
 
     setAttempts(0)
     setLockedUntil(null)
+    setError("")
 
     window.location.href = "/admin"
   }
@@ -159,6 +160,7 @@ export default function AdminLogin() {
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-3 text-sm text-gray-500"
+            disabled={!!lockedUntil || loading}
           >
             {showPassword ? "Hide" : "Show"}
           </button>
