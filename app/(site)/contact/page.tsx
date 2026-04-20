@@ -119,8 +119,6 @@ export default async function Contact() {
 
       </section>
 
-      {/* Existing Page Content Continues Here Exactly Same */}
-      
       <div className="grid md:grid-cols-2 gap-10">
 
         <div className="space-y-8">
@@ -133,6 +131,27 @@ export default async function Contact() {
               <a href="tel:+201210005005" className="text-blue-600 hover:underline">+20 121 000 5005</a>
               <a href="tel:+201208590878" className="text-blue-600 hover:underline">+20 120 859 0878</a>
             </div>
+          </div>
+
+          {/* ✅ RESTORED WORKING HOURS */}
+          <div className="bg-white border rounded-2xl p-6">
+            <h2 className="text-xl font-semibold mb-4">Working Hours</h2>
+
+            <p className="text-gray-700">
+              {business?.workingHours || "Please contact us for working hours"}
+            </p>
+
+            {business?.daysOff && (
+              <p className="text-sm text-gray-500 mt-2">
+                Days Off: {business.daysOff}
+              </p>
+            )}
+
+            {business?.notice && (
+              <p className="text-sm text-red-500 mt-2">
+                {business.notice}
+              </p>
+            )}
           </div>
 
           <div className="bg-white border rounded-2xl p-6">
@@ -153,14 +172,14 @@ export default async function Contact() {
           <div className="border rounded-2xl overflow-hidden shadow-sm">
 
             <iframe
-  src="https://www.google.com/maps?q=30.0041637,31.4213138&z=17&output=embed"
-  width="100%"
-  height="430"
-  loading="lazy"
-  title="Sa7ar Quick Care Map"
-  style={{ border: 0 }}
-  referrerPolicy="no-referrer-when-downgrade"
-></iframe>
+              src="https://www.google.com/maps?q=30.0041637,31.4213138&z=17&output=embed"
+              width="100%"
+              height="430"
+              loading="lazy"
+              title="Sa7ar Quick Care Map"
+              style={{ border: 0 }}
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
 
           </div>
         </div>
