@@ -153,13 +153,13 @@ Please let me know availability and estimated cost.`
 
       </div>
 
-      {/* Optimized Gallery */}
+      {/* Gallery */}
       {galleryImages.length > 0 && (
         <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {galleryImages.map((img: string, index: number) => (
             <div
               key={index}
-              className="h-72 md:h-72 overflow-hidden rounded-xl"
+              className="h-72 overflow-hidden rounded-xl flex items-center justify-center bg-white border"
             >
               <LightboxImage
                 src={img}
@@ -167,6 +167,45 @@ Please let me know availability and estimated cost.`
               />
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Optimized Video Preview Card */}
+      {repair.videoUrl && galleryImages.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+            Repair Video
+          </h2>
+
+          <a
+            href={repair.videoUrl}
+            target="_blank"
+            className="block max-w-md rounded-xl overflow-hidden border bg-white hover:shadow-md transition"
+          >
+            <div className="relative">
+              <img
+                src={galleryImages[0]}
+                alt="Repair Video Preview"
+                className="w-full h-40 md:h-48 object-cover"
+              />
+
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-xl font-bold">
+                  ▶
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4">
+              <p className="font-semibold text-gray-900">
+                Watch Repair Video
+              </p>
+
+              <p className="text-sm text-gray-500">
+                See the real repair result →
+              </p>
+            </div>
+          </a>
         </div>
       )}
 
@@ -192,6 +231,18 @@ Please let me know availability and estimated cost.`
             {repair.solution}
           </p>
         </div>
+
+        {repair.repairTime && (
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-gray-900">
+              Repair Time
+            </h2>
+
+            <p className="text-gray-700">
+              {repair.repairTime}
+            </p>
+          </div>
+        )}
 
       </div>
 
