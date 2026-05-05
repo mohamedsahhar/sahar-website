@@ -25,7 +25,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
 
   const brands = [
     ...new Set(cases.map(c => c.device?.brand?.name).filter(Boolean))
-  ];
+  ].sort((a, b) => a.localeCompare(b));
 
   const devices = [
     ...new Set(
@@ -36,7 +36,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
         .map(c => c.device?.name)
         .filter(Boolean)
     )
-  ];
+  ].sort((a, b) => a.localeCompare(b));
 
   const filteredCases = cases.filter(c => {
     const matchesSearch =

@@ -12,6 +12,7 @@ model Brand {
   name   String
   slug   String  @unique
   devices Device[]
+  products Product[] // ✅ SAFE ADD
 }
 
 model Device {
@@ -21,6 +22,8 @@ model Device {
   brandId Int
   brand   Brand        @relation(fields: [brandId], references: [id])
   repairs RepairCase[]
+
+  products Product[]   // ✅ REQUIRED FIX (SAFE)
 }
 
 model RepairCase {
@@ -60,4 +63,69 @@ enum Role {
   SUPER_ADMIN
   ADMIN
   EDITOR
+}
+
+////////////////////////////////////////////////////////////
+// 🆕 SA7AR SHOP MODELS (SAFE ADDITION ONLY)
+////////////////////////////////////////////////////////////
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  slug          String        @unique
+  isActive      Boolean       @default(true)
+  isDeleted     Boolean       @default(false)
+  subcategories Subcategory[]
+  products      Product[]
+}
+
+model Subcategory {
+  id         Int       @id @default(autoincrement())
+  name       String
+  slug       String
+  categoryId Int
+  isActive   Boolean   @default(true)
+  isDeleted  Boolean   @default(false)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  products   Product[]
+
+  @@unique([slug, categoryId])
+}
+
+model Product {
+  id            Int        @id @default(autoincrement())
+  title         String
+  slug          String     @unique
+  description   String
+
+  brandId       Int
+  brand         Brand      @relation(fields: [brandId], references: [id])
+
+  deviceId      Int?       // ✅ OPTIONAL
+  device        Device?    @relation(fields: [deviceId], references: [id])
+
+  categoryId    Int
+  category      Category   @relation(fields: [categoryId], references: [id])
+
+  subcategoryId Int
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id])
+
+  condition     String
+  stockStatus   String
+
+  images        String[]   @default([])
+  colors        String[]   @default([])
+
+  shippingInfo  String
+
+  featured      Boolean    @default(false)
+
+  seoTitle      String?
+  seoDescription String?
+
+  isActive      Boolean    @default(true)
+  isDeleted     Boolean    @default(false)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }

@@ -74,6 +74,27 @@ export default function AdminLayout({
           </Link>
 
           <Link
+            href="/admin/products"
+            className="bg-white border rounded-lg px-4 py-3 text-center hover:bg-gray-50 transition"
+          >
+            Products
+          </Link>
+
+          <Link
+            href="/admin/categories"
+            className="bg-white border rounded-lg px-4 py-3 text-center hover:bg-gray-50 transition"
+          >
+            Categories
+          </Link>
+
+          <Link
+            href="/admin/subcategories"
+            className="bg-white border rounded-lg px-4 py-3 text-center hover:bg-gray-50 transition"
+          >
+            Subcategories
+          </Link>
+
+          <Link
             href="/admin/settings"
             className="bg-white border rounded-lg px-4 py-3 text-center hover:bg-gray-50 transition col-span-2 md:col-span-1"
           >

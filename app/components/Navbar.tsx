@@ -61,6 +61,10 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
+          <Link href="/shop" className={linkClass("/shop")}>
+            Shop
+          </Link>
+
           <Link href="/contact" className={linkClass("/contact")}>
             Contact
           </Link>
@@ -107,6 +111,10 @@ export default function Navbar() {
 
           <Link href="/cases" onClick={closeMenu}>
             Repair Cases
+          </Link>
+
+          <Link href="/shop" onClick={closeMenu}>
+            Shop
           </Link>
 
           <Link href="/contact" onClick={closeMenu}>

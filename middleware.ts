@@ -1,7 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 
 export default withAuth(
-  function middleware(req) {},
+  function middleware() {},
   {
     callbacks: {
       authorized: ({ token }) => {
@@ -21,6 +21,9 @@ export const config = {
     "/admin/repairs/:path*",
     "/admin/brands/:path*",
     "/admin/devices/:path*",
+    "/admin/products/:path*",
+    "/admin/categories/:path*",
+    "/admin/subcategories/:path*",
     "/admin/settings/:path*",
   ],
 };

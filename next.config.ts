@@ -1,11 +1,34 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: [
+    "localhost",
+    "127.0.0.1",
+    "*.localhost",
+    "sa7arrepair.com",
+    "www.sa7arrepair.com",
+  ],
+
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 
   async redirects() {
+    if (process.env.NODE_ENV === "development") {
+      return [
+        {
+          source: "/services",
+          destination: "/",
+          permanent: true,
+        },
+      ];
+    }
+
     return [
       // ✅ Force non-www → www
       {
