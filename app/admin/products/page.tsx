@@ -111,7 +111,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={pageStyle}>
       <h1>Manage Products</h1>
 
       <div style={{ marginTop: "20px", marginBottom: "20px" }}>
@@ -120,7 +120,7 @@ export default function ProductsPage() {
         </Link>
       </div>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div style={filtersStyle}>
         <input
           placeholder="Search product / slug / brand..."
           value={search}
@@ -164,13 +164,9 @@ export default function ProductsPage() {
       </div>
 
       <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
+        style={tableScrollStyle}
       >
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table style={tableStyle}>
           <thead style={{ background: "#f5f5f5" }}>
             <tr>
               <th style={thStyle}>Product</th>
@@ -291,21 +287,57 @@ const thStyle = {
   textAlign: "left" as const,
   padding: "12px",
   fontSize: "14px",
+  whiteSpace: "nowrap" as const,
 };
 
 const tdStyle = {
   padding: "12px",
   fontSize: "14px",
+  whiteSpace: "nowrap" as const,
+};
+
+const pageStyle = {
+  padding: "20px",
+  width: "100%",
+  maxWidth: "100%",
+  overflowX: "hidden" as const,
+};
+
+const filtersStyle = {
+  display: "flex",
+  flexWrap: "wrap" as const,
+  gap: "10px",
+  marginBottom: "20px",
+  width: "100%",
+  maxWidth: "100%",
+};
+
+const tableScrollStyle = {
+  border: "1px solid #ddd",
+  borderRadius: "10px",
+  overflowX: "auto" as const,
+  overflowY: "hidden" as const,
+  maxWidth: "100%",
+  width: "100%",
+};
+
+const tableStyle = {
+  minWidth: "860px",
+  width: "100%",
+  borderCollapse: "collapse" as const,
 };
 
 const inputStyle = {
-  flex: 1,
+  flex: "1 1 240px",
+  minWidth: 0,
   padding: "10px",
   borderRadius: "6px",
   border: "1px solid #ccc",
 };
 
 const selectStyle = {
+  flex: "1 1 160px",
+  minWidth: 0,
   padding: "10px",
   borderRadius: "6px",
   border: "1px solid #ccc",
