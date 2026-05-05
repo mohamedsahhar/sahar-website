@@ -44,7 +44,7 @@ export default function ImageUpload({
     const usesSlugNaming = slug !== undefined;
     const cleanSlug = slug?.trim();
     if (usesSlugNaming && !cleanSlug) {
-      alert("Enter a product title first so the image can use the product slug.");
+      alert("Enter a title first so the image can use the generated slug.");
       return;
     }
 

@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ImageUpload from "@/app/components/ImageUpload";
 
+function makeSlug(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default function EditRepairPage() {
 
   const params = useParams();
@@ -187,6 +195,8 @@ export default function EditRepairPage() {
           <h2 className="font-semibold text-lg">Gallery (Drag to reorder)</h2>
 
           <ImageUpload
+            slug={makeSlug(title)}
+            existingImages={images}
             onUpload={(url:string)=>
               setImages((prev)=>[...prev,url])
             }
