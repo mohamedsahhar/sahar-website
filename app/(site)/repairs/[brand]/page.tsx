@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
+import BrandRepairsClient from "./BrandRepairsClient"
 
 export const dynamic = "force-dynamic"
 
@@ -111,50 +112,8 @@ export default async function BrandPage({
       )}
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {filteredCases.map((repair: any) => (
-          <Link
-            key={repair.id}
-            href={`/cases/${repair.slug}`}
-            className="border rounded-xl overflow-hidden hover:shadow-lg transition bg-white"
-          >
-
-            {repair.images?.[0] && (
-              <div className="relative w-full h-48">
-                <Image
-                  src={repair.images[0]}
-                  alt={`${repair.device?.brand?.name} ${repair.device?.name} repair`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  loading="lazy"
-                />
-              </div>
-            )}
-
-            <div className="p-4">
-
-              <h2 className="font-semibold text-lg mb-2">
-                {repair.title}
-              </h2>
-
-              <p className="text-sm text-gray-500">
-                {repair.device?.brand?.name} • {repair.device?.name}
-              </p>
-
-              {repair.repairTime && (
-                <p className="text-sm text-gray-500 mt-1">
-                  Repair time: {repair.repairTime}
-                </p>
-              )}
-
-            </div>
-
-          </Link>
-        ))}
-
-      </div>
+      
+<BrandRepairsClient repairs={filteredCases} />
 
     </main>
   )
