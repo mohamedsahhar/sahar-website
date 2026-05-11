@@ -139,9 +139,7 @@ export default async function ShopCatalog({
             </h1>
           </div>
 
-          <div className="hidden md:flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gray-950 text-white">
-            <PackageSearch size={23} aria-hidden="true" />
-          </div>
+         
         </div>
       </section>
 
