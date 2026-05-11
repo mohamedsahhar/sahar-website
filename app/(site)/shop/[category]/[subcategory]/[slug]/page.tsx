@@ -136,6 +136,7 @@ Product link: ${productUrl}`
   );
 
   const isAvailable = product.stockStatus.toLowerCase() === "available";
+
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -183,7 +184,10 @@ Product link: ${productUrl}`
           Shop
         </Link>
         <span>/</span>
-        <Link href={`/shop/${product.category.slug}`} className="hover:text-gray-900 transition">
+        <Link
+          href={`/shop/${product.category.slug}`}
+          className="hover:text-gray-900 transition"
+        >
           {product.category.name}
         </Link>
         <span>/</span>
@@ -272,31 +276,6 @@ Product link: ${productUrl}`
               </div>
             )}
           </div>
-        </div>
-      </section>
-
-      <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="border border-gray-200 rounded-lg bg-white p-5">
-          <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">
-            Category
-          </p>
-          <p className="font-semibold text-gray-950">{product.category.name}</p>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg bg-white p-5">
-          <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">
-            Subcategory
-          </p>
-          <p className="font-semibold text-gray-950">
-            {product.subcategory.name}
-          </p>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg bg-white p-5">
-          <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">
-            Sales Channel
-          </p>
-          <p className="font-semibold text-gray-950">WhatsApp inquiry</p>
         </div>
       </section>
 

@@ -81,14 +81,22 @@ export default async function ShopCatalog({
       },
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     }),
-    prisma.brand.findMany({
-      orderBy: { name: "asc" },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
+   prisma.brand.findMany({
+  where: {
+    products: {
+      some: {
+        isActive: true,
+        isDeleted: false,
       },
-    }),
+    },
+  },
+  orderBy: { name: "asc" },
+  select: {
+    id: true,
+    name: true,
+    slug: true,
+  },
+}),
     prisma.category.findMany({
       where: {
         isActive: true,
