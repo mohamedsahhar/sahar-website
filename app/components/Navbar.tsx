@@ -1,21 +1,26 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 
 export default function Navbar() {
-
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const isTrackingPage = pathname === "/track" || pathname.startsWith("/track/")
+  const englishHref = isTrackingPage ? `${pathname}?lang=en` : "/"
+  const arabicHref = isTrackingPage ? `${pathname}?lang=ar` : "/ar"
 
   const closeMenu = () => setMenuOpen(false)
+  const rememberLanguage = (language: "ar" | "en") => {
+    window.localStorage.setItem("sa7ar_language", language)
+    closeMenu()
+  }
 
   return (
     <nav className="bg-white shadow-md px-6 py-4">
-
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-
-        {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/sahar-transparent-black.png"
@@ -27,9 +32,7 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-gray-700 font-medium">
-
           <Link href="/" className="hover:text-black transition">
             Home
           </Link>
@@ -46,13 +49,10 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
-          
-
           <Link href="/contact" className="hover:text-black transition">
             Contact
           </Link>
 
-          {/* CTA Button */}
           <Link
             href="/repair-request"
             className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
@@ -60,15 +60,25 @@ export default function Navbar() {
             Request Repair
           </Link>
 
-          {/* 🌍 Language Switch */}
-<div className="flex items-center gap-2 ml-4 text-sm">
-  <Link href="/" className="hover:text-black">EN</Link>
-  <span>|</span>
-  <Link href="/ar" className="hover:text-black">عربي</Link>
-</div>
+          <div className="flex items-center gap-2 ml-4 text-sm">
+            <Link
+              href={englishHref}
+              onClick={() => rememberLanguage("en")}
+              className="hover:text-black"
+            >
+              EN
+            </Link>
+            <span>|</span>
+            <Link
+              href={arabicHref}
+              onClick={() => rememberLanguage("ar")}
+              className="hover:text-black"
+            >
+              عربي
+            </Link>
+          </div>
         </div>
 
-        {/* Mobile Button */}
         <button
           aria-label="Open menu"
           className="md:hidden text-3xl"
@@ -76,13 +86,10 @@ export default function Navbar() {
         >
           ☰
         </button>
-
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden mt-6 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
-
           <Link href="/" onClick={closeMenu}>
             Home
           </Link>
@@ -99,8 +106,6 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
-          
-
           <Link href="/contact" onClick={closeMenu}>
             Contact
           </Link>
@@ -112,14 +117,17 @@ export default function Navbar() {
           >
             Request Repair
           </Link>
-{/* 🌍 Language Switch */}
-<div className="flex gap-3 pt-4 border-t">
-  <Link href="/" onClick={closeMenu}>EN</Link>
-  <Link href="/ar" onClick={closeMenu}>عربي</Link>
-</div>
+
+          <div className="flex gap-3 pt-4 border-t">
+            <Link href={englishHref} onClick={() => rememberLanguage("en")}>
+              EN
+            </Link>
+            <Link href={arabicHref} onClick={() => rememberLanguage("ar")}>
+              عربي
+            </Link>
+          </div>
         </div>
       )}
-
     </nav>
   )
 }

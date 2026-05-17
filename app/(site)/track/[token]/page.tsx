@@ -2,29 +2,67 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import { TrackingResult, type TrackingResponse } from "../TrackingResult"
+import { TrackingResult, type TrackingLanguage, type TrackingResponse } from "../TrackingResult"
 
 const API_BASE = "https://system.sa7arrepair.com/api/public/track"
-const genericError =
-  "تعذر العثور على بيانات الصيانة. يرجى التأكد من رقم الصيانة ورقم الهاتف."
+const languageStorageKey = "sa7ar_language"
+
+const pageCopy = {
+  ar: {
+    dir: "rtl" as const,
+    eyebrow: "متابعة الصيانة",
+    title: "حالة الصيانة",
+    loading: "جاري تحميل حالة الصيانة...",
+    error: "تعذر العثور على بيانات الصيانة. يرجى التأكد من رقم الصيانة ورقم الهاتف.",
+  },
+  en: {
+    dir: "ltr" as const,
+    eyebrow: "Repair Tracking",
+    title: "Repair Status",
+    loading: "Loading repair status...",
+    error: "We could not find this repair. Please check the repair number and phone number.",
+  },
+}
+
+function getRequestedLanguage(): TrackingLanguage {
+  if (typeof window === "undefined") return "ar"
+
+  const params = new URLSearchParams(window.location.search)
+  const lang = params.get("lang")
+
+  if (lang === "en" || lang === "ar") {
+    window.localStorage.setItem(languageStorageKey, lang)
+    return lang
+  }
+
+  const storedLang = window.localStorage.getItem(languageStorageKey)
+
+  return storedLang === "en" || storedLang === "ar" ? storedLang : "ar"
+}
 
 export default function TokenTrackingPage() {
   const params = useParams()
   const token = String(params?.token || "")
+  const [language, setLanguage] = useState<TrackingLanguage>("ar")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [repair, setRepair] =
     useState<TrackingResponse["repair"]>(undefined)
+  const copy = pageCopy[language]
+
+  useEffect(() => {
+    setLanguage(getRequestedLanguage())
+  }, [])
 
   useEffect(() => {
     if (!token) {
       setLoading(false)
-      setError(genericError)
+      setError(copy.error)
       return
     }
 
     loadTracking()
-  }, [token])
+  }, [token, language])
 
   async function loadTracking() {
     try {
@@ -40,12 +78,12 @@ export default function TokenTrackingPage() {
       const data = (await response.json()) as TrackingResponse
 
       if (!response.ok || !data.success || !data.repair) {
-        throw new Error(genericError)
+        throw new Error(copy.error)
       }
 
       setRepair(data.repair)
     } catch {
-      setError(genericError)
+      setError(copy.error)
       setRepair(undefined)
     } finally {
       setLoading(false)
@@ -53,18 +91,20 @@ export default function TokenTrackingPage() {
   }
 
   return (
-    <div style={page} dir="rtl">
+    <div style={page} dir={copy.dir}>
       <section style={card}>
         <div style={header}>
-          <p style={eyebrow}>متابعة الصيانة</p>
-          <h1 style={title}>حالة الصيانة</h1>
+          <p style={eyebrow}>{copy.eyebrow}</p>
+          <h1 style={title}>{copy.title}</h1>
         </div>
 
-        {loading && <div style={loadingBox}>جاري تحميل حالة الصيانة...</div>}
+        {loading && <div style={loadingBox}>{copy.loading}</div>}
 
         {!loading && error && <div style={errorBox}>{error}</div>}
 
-        {!loading && repair && <TrackingResult repair={repair} />}
+        {!loading && repair && (
+          <TrackingResult repair={repair} language={language} />
+        )}
       </section>
     </div>
   )

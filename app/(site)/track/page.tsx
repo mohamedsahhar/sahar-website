@@ -1,18 +1,68 @@
 ﻿"use client"
 
-import { useState } from "react"
-import { TrackingResult, type TrackingResponse } from "./TrackingResult"
+import { useEffect, useState } from "react"
+import { TrackingResult, type TrackingLanguage, type TrackingResponse } from "./TrackingResult"
 
 const API_URL = "https://system.sa7arrepair.com/api/public/track"
-const genericError =
-  "تعذر العثور على بيانات الصيانة. يرجى التأكد من رقم الصيانة ورقم الهاتف."
+const languageStorageKey = "sa7ar_language"
+
+const pageCopy = {
+  ar: {
+    dir: "rtl" as const,
+    eyebrow: "متابعة الصيانة",
+    title: "تابع حالة جهازك",
+    subtitle: "أدخل رقم الصيانة ورقم الهاتف المسجل لمعرفة آخر حالة للصيانة.",
+    repairNumber: "رقم الصيانة",
+    repairPlaceholder: "مثال: R-20260517-001",
+    phone: "رقم الهاتف",
+    phonePlaceholder: "01XXXXXXXXX",
+    submit: "متابعة حالة الصيانة",
+    loading: "جاري البحث...",
+    error: "تعذر العثور على بيانات الصيانة. يرجى التأكد من رقم الصيانة ورقم الهاتف.",
+  },
+  en: {
+    dir: "ltr" as const,
+    eyebrow: "Repair Tracking",
+    title: "Track your device repair",
+    subtitle: "Enter your repair number and registered phone number to see the latest repair status.",
+    repairNumber: "Repair number",
+    repairPlaceholder: "Example: R-20260517-001",
+    phone: "Phone number",
+    phonePlaceholder: "01XXXXXXXXX",
+    submit: "Track repair status",
+    loading: "Searching...",
+    error: "We could not find this repair. Please check the repair number and phone number.",
+  },
+}
+
+function getRequestedLanguage(): TrackingLanguage {
+  if (typeof window === "undefined") return "ar"
+
+  const params = new URLSearchParams(window.location.search)
+  const lang = params.get("lang")
+
+  if (lang === "en" || lang === "ar") {
+    window.localStorage.setItem(languageStorageKey, lang)
+    return lang
+  }
+
+  const storedLang = window.localStorage.getItem(languageStorageKey)
+
+  return storedLang === "en" || storedLang === "ar" ? storedLang : "ar"
+}
 
 export default function TrackLookupPage() {
+  const [language, setLanguage] = useState<TrackingLanguage>("ar")
   const [repairNumber, setRepairNumber] = useState("")
   const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [result, setResult] = useState<TrackingResponse | null>(null)
+  const copy = pageCopy[language]
+
+  useEffect(() => {
+    setLanguage(getRequestedLanguage())
+  }, [])
 
   async function submitLookup(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -37,45 +87,43 @@ export default function TrackLookupPage() {
       const data = (await response.json()) as TrackingResponse
 
       if (!response.ok || !data.success || !data.repair) {
-        throw new Error(genericError)
+        throw new Error(copy.error)
       }
 
       setResult(data)
     } catch {
-      setError(genericError)
+      setError(copy.error)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div style={page} dir="rtl">
+    <div style={page} dir={copy.dir}>
       <section style={card}>
         <div style={header}>
-          <p style={eyebrow}>متابعة الصيانة</p>
-          <h1 style={title}>تابع حالة جهازك</h1>
-          <p style={subtitle}>
-            أدخل رقم الصيانة ورقم الهاتف المسجل لمعرفة آخر حالة للصيانة.
-          </p>
+          <p style={eyebrow}>{copy.eyebrow}</p>
+          <h1 style={title}>{copy.title}</h1>
+          <p style={subtitle}>{copy.subtitle}</p>
         </div>
 
         <form onSubmit={submitLookup} style={form}>
           <label style={field}>
-            <span style={label}>رقم الصيانة</span>
+            <span style={label}>{copy.repairNumber}</span>
             <input
               value={repairNumber}
               onChange={(event) => setRepairNumber(event.target.value)}
-              placeholder="مثال: R-20260517-001"
+              placeholder={copy.repairPlaceholder}
               style={input}
             />
           </label>
 
           <label style={field}>
-            <span style={label}>رقم الهاتف</span>
+            <span style={label}>{copy.phone}</span>
             <input
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
-              placeholder="01XXXXXXXXX"
+              placeholder={copy.phonePlaceholder}
               inputMode="tel"
               style={input}
             />
@@ -89,7 +137,7 @@ export default function TrackLookupPage() {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? "جاري البحث..." : "متابعة حالة الصيانة"}
+            {loading ? copy.loading : copy.submit}
           </button>
         </form>
 
@@ -97,7 +145,7 @@ export default function TrackLookupPage() {
 
         {result?.repair && (
           <div style={resultArea}>
-            <TrackingResult repair={result.repair} />
+            <TrackingResult repair={result.repair} language={language} />
           </div>
         )}
       </section>

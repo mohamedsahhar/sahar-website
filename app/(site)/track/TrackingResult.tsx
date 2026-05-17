@@ -1,5 +1,7 @@
 ﻿"use client"
 
+export type TrackingLanguage = "ar" | "en"
+
 export type TrackingRepair = {
   repairNumber?: string
   device?: string
@@ -26,7 +28,63 @@ export type TrackingResponse = {
   error?: string
 }
 
-function formatDate(value?: string) {
+const resultCopy = {
+  ar: {
+    dir: "rtl" as const,
+    locale: "ar-EG",
+    currentStatus: "الحالة الحالية",
+    fallbackStatus: "جاري متابعة حالة الصيانة",
+    repairNumber: "رقم الصيانة",
+    device: "الجهاز",
+    brand: "الماركة",
+    receivedDate: "تاريخ الاستلام",
+    problem: "العطل المسجل",
+    timelineTitle: "متابعة الحالة",
+    helpTitle: "هل تحتاج مساعدة؟",
+    helpText: "للاستفسارات يرجى التواصل معنا عبر واتساب",
+    whatsapp: "واتساب",
+    whatsappMessage: (repairNumber: string) =>
+      `السلام عليكم، أريد الاستفسار عن حالة الصيانة رقم ${repairNumber}`,
+  },
+  en: {
+    dir: "ltr" as const,
+    locale: "en-US",
+    currentStatus: "Current status",
+    fallbackStatus: "Repair status is being updated",
+    repairNumber: "Repair number",
+    device: "Device",
+    brand: "Brand",
+    receivedDate: "Received date",
+    problem: "Reported problem",
+    timelineTitle: "Status timeline",
+    helpTitle: "Need help?",
+    helpText: "For questions, please contact us on WhatsApp.",
+    whatsapp: "WhatsApp",
+    whatsappMessage: (repairNumber: string) =>
+      `Hello, I would like to ask about repair status ${repairNumber}`,
+  },
+}
+
+const englishStatusLabels: Record<string, string> = {
+  "تم استلام الجهاز": "Device received",
+  "جاري الفحص": "Inspection in progress",
+  "في انتظار موافقة العميل": "Waiting for customer approval",
+  "جاري الإصلاح": "Repair in progress",
+  "جاري الاختبار النهائي": "Final testing in progress",
+  "جاهز للاستلام": "Ready for pickup",
+  "تم التسليم": "Delivered",
+  "جاري متابعة حالة الصيانة": "Repair status is being updated",
+}
+
+function translateStatusLabel(label: string | undefined, language: TrackingLanguage) {
+  if (!label) return resultCopy[language].fallbackStatus
+
+  if (language === "ar") return label
+
+  return englishStatusLabels[label] || label
+}
+
+function formatDate(value: string | undefined, language: TrackingLanguage) {
   if (!value) return "-"
 
   const date = new Date(value)
@@ -35,7 +93,7 @@ function formatDate(value?: string) {
     return "-"
   }
 
-  return date.toLocaleDateString("ar-EG", {
+  return date.toLocaleDateString(resultCopy[language].locale, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -44,33 +102,39 @@ function formatDate(value?: string) {
 
 export function TrackingResult({
   repair,
+  language,
 }: {
   repair: TrackingRepair
+  language: TrackingLanguage
 }) {
-  const whatsappMessage = `السلام عليكم، أريد الاستفسار عن حالة الصيانة رقم ${repair.repairNumber || ""}`
+  const copy = resultCopy[language]
+  const repairNumber = repair.repairNumber || ""
   const whatsappUrl = `https://wa.me/201021024094?text=${encodeURIComponent(
-    whatsappMessage
+    copy.whatsappMessage(repairNumber)
   )}`
 
   return (
-    <div style={resultWrap} dir="rtl">
+    <div style={resultWrap} dir={copy.dir}>
       <div style={statusPanel}>
-        <span style={statusLabel}>الحالة الحالية</span>
+        <span style={statusLabel}>{copy.currentStatus}</span>
         <strong style={statusValue}>
-          {repair.status || "جاري متابعة حالة الصيانة"}
+          {translateStatusLabel(repair.status, language)}
         </strong>
       </div>
 
       <div style={infoGrid}>
-        <Info label="رقم الصيانة" value={repair.repairNumber || "-"} />
-        <Info label="الجهاز" value={repair.device || "-"} />
-        <Info label="الماركة" value={repair.brand || "-"} />
-        <Info label="تاريخ الاستلام" value={formatDate(repair.receivedAt || repair.createdAt)} />
-        <Info label="العطل المسجل" value={repair.problem || "-"} wide />
+        <Info label={copy.repairNumber} value={repair.repairNumber || "-"} />
+        <Info label={copy.device} value={repair.device || "-"} />
+        <Info label={copy.brand} value={repair.brand || "-"} />
+        <Info
+          label={copy.receivedDate}
+          value={formatDate(repair.receivedAt || repair.createdAt, language)}
+        />
+        <Info label={copy.problem} value={repair.problem || "-"} wide />
       </div>
 
       <div style={timelineCard}>
-        <h2 style={sectionTitle}>متابعة الحالة</h2>
+        <h2 style={sectionTitle}>{copy.timelineTitle}</h2>
 
         <div style={timelineList}>
           {(repair.timeline || []).map((step) => (
@@ -79,7 +143,7 @@ export function TrackingResult({
                 {step.current ? "●" : step.completed ? "✔" : "○"}
               </span>
               <span style={step.current ? activeStep : stepText}>
-                {step.label}
+                {translateStatusLabel(step.label, language)}
               </span>
             </div>
           ))}
@@ -88,10 +152,8 @@ export function TrackingResult({
 
       <div style={contactBox}>
         <div>
-          <h2 style={sectionTitle}>هل تحتاج مساعدة؟</h2>
-          <p style={contactText}>
-            للاستفسارات يرجى التواصل معنا عبر واتساب
-          </p>
+          <h2 style={sectionTitle}>{copy.helpTitle}</h2>
+          <p style={contactText}>{copy.helpText}</p>
         </div>
 
         <a
@@ -100,7 +162,7 @@ export function TrackingResult({
           rel="noopener noreferrer"
           style={whatsappBtn}
         >
-          واتساب
+          {copy.whatsapp}
         </a>
       </div>
     </div>
