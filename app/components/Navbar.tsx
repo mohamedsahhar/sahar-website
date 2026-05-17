@@ -32,6 +32,15 @@ export default function Navbar() {
     closeMenu()
   }
 
+  const linkClass = (path: string) =>
+    pathname === path
+      ? "rounded-md bg-gray-100 px-3 py-1 text-black font-semibold"
+      : "px-3 py-1 hover:text-black transition"
+
+  const trackingClass = isTrackingPage
+    ? "rounded-md bg-gray-100 px-3 py-1 text-black font-semibold"
+    : "px-3 py-1 hover:text-black transition"
+
   return (
     <nav className="bg-white shadow-md px-6 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -46,34 +55,34 @@ export default function Navbar() {
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-6 text-gray-700 font-medium">
-          <Link href="/" className="hover:text-black transition">
+        <div className="hidden md:flex items-center gap-4 text-gray-700 font-medium">
+          <Link href="/" className={linkClass("/")}>
             Home
           </Link>
 
-          <Link href="/repairs" className="hover:text-black transition">
+          <Link href="/repairs" className={linkClass("/repairs")}>
             Repairs
           </Link>
 
-          <Link href="/devices" className="hover:text-black transition">
+          <Link href="/devices" className={linkClass("/devices")}>
             Devices
           </Link>
 
-          <Link href="/cases" className="hover:text-black transition">
+          <Link href="/cases" className={linkClass("/cases")}>
             Repair Cases
           </Link>
 
-          <Link href={trackingHref} className="hover:text-black transition">
+          <Link href={trackingHref} className={trackingClass}>
             {trackingLabel}
           </Link>
 
-          <Link href="/contact" className="hover:text-black transition">
+          <Link href="/contact" className={linkClass("/contact")}>
             Contact
           </Link>
 
           <Link
             href="/repair-request"
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
           >
             Request Repair
           </Link>
@@ -108,34 +117,34 @@ export default function Navbar() {
 
       {menuOpen && (
         <div className="md:hidden mt-6 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
-          <Link href="/" onClick={closeMenu}>
+          <Link href="/" onClick={closeMenu} className={linkClass("/")}>
             Home
           </Link>
 
-          <Link href="/repairs" onClick={closeMenu}>
+          <Link href="/repairs" onClick={closeMenu} className={linkClass("/repairs")}>
             Repairs
           </Link>
 
-          <Link href="/devices" onClick={closeMenu}>
+          <Link href="/devices" onClick={closeMenu} className={linkClass("/devices")}>
             Devices
           </Link>
 
-          <Link href="/cases" onClick={closeMenu}>
+          <Link href="/cases" onClick={closeMenu} className={linkClass("/cases")}>
             Repair Cases
           </Link>
 
-          <Link href={trackingHref} onClick={closeMenu}>
+          <Link href={trackingHref} onClick={closeMenu} className={trackingClass}>
             {trackingLabel}
           </Link>
 
-          <Link href="/contact" onClick={closeMenu}>
+          <Link href="/contact" onClick={closeMenu} className={linkClass("/contact")}>
             Contact
           </Link>
 
           <Link
             href="/repair-request"
             onClick={closeMenu}
-            className="bg-black text-white text-center px-4 py-2 rounded-lg"
+            className="bg-green-600 text-white text-center px-4 py-2 rounded-lg"
           >
             Request Repair
           </Link>

@@ -1,35 +1,39 @@
-import Link from "next/link"
+﻿import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import DevicesClient from "./DevicesClient"
 
 export default async function DevicesPage() {
-
   const devices = await prisma.device.findMany({
     include: {
-      brand: true
+      brand: true,
     },
     orderBy: {
-      name: "asc"
-    }
+      name: "asc",
+    },
+  })
+
+  const brands = await prisma.brand.findMany({
+    orderBy: {
+      name: "asc",
+    },
   })
 
   const recentRepairs = await prisma.repairCase.findMany({
     take: 4,
     orderBy: {
-      createdAt: "desc"
+      createdAt: "desc",
     },
     include: {
       device: {
         include: {
-          brand: true
-        }
-      }
-    }
+          brand: true,
+        },
+      },
+    },
   }) as any
 
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
-
-      {/* Page Header */}
       <h1 className="text-3xl font-bold mb-4 text-center">
         Devices We Repair
       </h1>
@@ -39,50 +43,23 @@ export default async function DevicesPage() {
         including headphones, speakers, smartphones, and Apple accessories.
       </p>
 
-      {/* Devices Section */}
       <h2 className="text-2xl font-semibold mb-6">
         Repairable Devices
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <DevicesClient devices={devices} brands={brands} />
 
-        {devices.map((device) => (
-
-          <Link
-            key={device.id}
-            href={`/devices/${device.slug}`}
-            className="border rounded-xl p-5 hover:shadow-md transition bg-white"
-          >
-
-            <h3 className="font-semibold text-lg">
-              {device.brand?.name} {device.name}
-            </h3>
-
-            <p className="text-gray-500 text-sm mt-1">
-              View repair cases →
-            </p>
-
-          </Link>
-
-        ))}
-
-      </div>
-
-      {/* Recent Repairs */}
-      <h2 className="text-2xl font-semibold mb-6">
+      <h2 className="text-2xl font-semibold mb-6 mt-12">
         Recent Repair Cases
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-
         {recentRepairs.map((repair: any) => (
-
           <Link
             key={repair.id}
             href={`/cases/${repair.slug}`}
             className="border rounded-xl p-5 hover:shadow-md transition bg-white"
           >
-
             <h3 className="font-semibold">
               {repair.title}
             </h3>
@@ -90,16 +67,11 @@ export default async function DevicesPage() {
             <p className="text-sm text-gray-500 mt-1">
               {repair.device?.brand?.name} • {repair.device?.name}
             </p>
-
           </Link>
-
         ))}
-
       </div>
 
-      {/* CTA */}
       <div className="bg-gray-100 p-6 rounded-xl text-center">
-
         <h2 className="text-xl font-semibold mb-3">
           Need Your Device Repaired?
         </h2>
@@ -114,9 +86,7 @@ export default async function DevicesPage() {
         >
           Request a Repair
         </Link>
-
       </div>
-
     </main>
   )
 }
