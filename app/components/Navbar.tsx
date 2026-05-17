@@ -1,20 +1,34 @@
 ﻿"use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 
+type SiteLanguage = "ar" | "en"
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [language, setLanguage] = useState<SiteLanguage>("en")
   const pathname = usePathname()
   const isTrackingPage = pathname === "/track" || pathname.startsWith("/track/")
   const englishHref = isTrackingPage ? `${pathname}?lang=en` : "/"
   const arabicHref = isTrackingPage ? `${pathname}?lang=ar` : "/ar"
+  const trackingHref = `/track?lang=${language}`
+  const trackingLabel = language === "ar" ? "متابعة الصيانة" : "Track Repair"
+
+  useEffect(() => {
+    const storedLanguage = window.localStorage.getItem("sa7ar_language")
+
+    if (storedLanguage === "ar" || storedLanguage === "en") {
+      setLanguage(storedLanguage)
+    }
+  }, [])
 
   const closeMenu = () => setMenuOpen(false)
-  const rememberLanguage = (language: "ar" | "en") => {
-    window.localStorage.setItem("sa7ar_language", language)
+  const rememberLanguage = (selectedLanguage: SiteLanguage) => {
+    window.localStorage.setItem("sa7ar_language", selectedLanguage)
+    setLanguage(selectedLanguage)
     closeMenu()
   }
 
@@ -47,6 +61,10 @@ export default function Navbar() {
 
           <Link href="/cases" className="hover:text-black transition">
             Repair Cases
+          </Link>
+
+          <Link href={trackingHref} className="hover:text-black transition">
+            {trackingLabel}
           </Link>
 
           <Link href="/contact" className="hover:text-black transition">
@@ -104,6 +122,10 @@ export default function Navbar() {
 
           <Link href="/cases" onClick={closeMenu}>
             Repair Cases
+          </Link>
+
+          <Link href={trackingHref} onClick={closeMenu}>
+            {trackingLabel}
           </Link>
 
           <Link href="/contact" onClick={closeMenu}>
