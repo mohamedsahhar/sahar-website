@@ -9,11 +9,22 @@ export type TrackingRepair = {
   problem?: string
   receivedAt?: string
   createdAt?: string
-  status?: string
+  status?: string | {
+    name?: string
+    label?: string
+    title?: string
+  }
   timeline?: Array<{
-    label: string
-    current: boolean
-    completed: boolean
+    label?: string
+    name?: string
+    status?: string
+    title?: string
+    current?: boolean
+    active?: boolean
+    isCurrent?: boolean
+    completed?: boolean
+    done?: boolean
+    isCompleted?: boolean
   }>
   shopContact?: {
     whatsapp?: string
@@ -84,6 +95,39 @@ function translateStatusLabel(label: string | undefined, language: TrackingLangu
   return englishStatusLabels[label] || label
 }
 
+function getStatusText(status: TrackingRepair["status"]) {
+  if (!status) return ""
+
+  if (typeof status === "string") {
+    return status.trim()
+  }
+
+  return (
+    status.label ||
+    status.name ||
+    status.title ||
+    ""
+  ).trim()
+}
+
+function getTimelineStepLabel(step: NonNullable<TrackingRepair["timeline"]>[number]) {
+  return (
+    step.label ||
+    step.name ||
+    step.status ||
+    step.title ||
+    ""
+  ).trim()
+}
+
+function isTimelineStepCurrent(step: NonNullable<TrackingRepair["timeline"]>[number]) {
+  return Boolean(step.current || step.active || step.isCurrent)
+}
+
+function isTimelineStepCompleted(step: NonNullable<TrackingRepair["timeline"]>[number]) {
+  return Boolean(step.completed || step.done || step.isCompleted)
+}
+
 function formatDate(value: string | undefined, language: TrackingLanguage) {
   if (!value) return "-"
 
@@ -109,6 +153,19 @@ export function TrackingResult({
 }) {
   const copy = resultCopy[language]
   const repairNumber = repair.repairNumber || ""
+  const currentStatus = getStatusText(repair.status)
+  const timeline =
+    repair.timeline && repair.timeline.length > 0
+      ? repair.timeline
+      : currentStatus
+        ? [
+            {
+              label: currentStatus,
+              current: true,
+              completed: false,
+            },
+          ]
+        : []
   const whatsappUrl = `https://wa.me/201021024094?text=${encodeURIComponent(
     copy.whatsappMessage(repairNumber)
   )}`
@@ -118,7 +175,7 @@ export function TrackingResult({
       <div style={statusPanel}>
         <span style={statusLabel}>{copy.currentStatus}</span>
         <strong style={statusValue}>
-          {translateStatusLabel(repair.status, language)}
+          {translateStatusLabel(currentStatus, language)}
         </strong>
       </div>
 
@@ -137,16 +194,22 @@ export function TrackingResult({
         <h2 style={sectionTitle}>{copy.timelineTitle}</h2>
 
         <div style={timelineList}>
-          {(repair.timeline || []).map((step) => (
-            <div key={step.label} style={timelineItem}>
-              <span style={step.current ? activeMark : step.completed ? doneMark : emptyMark}>
-                {step.current ? "●" : step.completed ? "✔" : "○"}
+          {timeline.map((step, index) => {
+            const label = getTimelineStepLabel(step)
+            const isCurrent = isTimelineStepCurrent(step)
+            const isCompleted = isTimelineStepCompleted(step)
+
+            return (
+              <div key={`${label || "timeline-step"}-${index}`} style={timelineItem}>
+              <span style={isCurrent ? activeMark : isCompleted ? doneMark : emptyMark}>
+                {isCurrent ? "●" : isCompleted ? "✔" : "○"}
               </span>
-              <span style={step.current ? activeStep : stepText}>
-                {translateStatusLabel(step.label, language)}
+              <span style={isCurrent ? activeStep : stepText}>
+                {translateStatusLabel(label, language)}
               </span>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
