@@ -26,6 +26,7 @@ export default function Navbar() {
   }, [])
 
   const closeMenu = () => setMenuOpen(false)
+
   const rememberLanguage = (selectedLanguage: SiteLanguage) => {
     window.localStorage.setItem("sa7ar_language", selectedLanguage)
     setLanguage(selectedLanguage)
@@ -58,10 +59,6 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4 text-gray-700 font-medium">
           <Link href="/" className={linkClass("/")}>
             Home
-          </Link>
-
-          <Link href="/repairs" className={linkClass("/repairs")}>
-            Repairs
           </Link>
 
           <Link href="/devices" className={linkClass("/devices")}>
@@ -119,10 +116,6 @@ export default function Navbar() {
         <div className="md:hidden mt-6 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
           <Link href="/" onClick={closeMenu} className={linkClass("/")}>
             Home
-          </Link>
-
-          <Link href="/repairs" onClick={closeMenu} className={linkClass("/repairs")}>
-            Repairs
           </Link>
 
           <Link href="/devices" onClick={closeMenu} className={linkClass("/devices")}>
