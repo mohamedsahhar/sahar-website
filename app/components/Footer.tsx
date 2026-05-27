@@ -27,20 +27,20 @@ export default function Footer() {
           <ul className="mt-3 space-y-2 text-gray-400">
 
             <li>
-              <Link href="/#services" className="hover:text-white">
-                Services
+              <Link href="/shop" className="hover:text-white">
+                Shop
               </Link>
             </li>
 
             <li>
-              <Link href="/#reviews" className="hover:text-white">
-                Customer Reviews
+              <Link href="/track" className="hover:text-white">
+                Track Repair
               </Link>
             </li>
 
             <li>
-              <Link href="/#shipping" className="hover:text-white">
-                Shipping Repair
+              <Link href="/cases" className="hover:text-white">
+                Repair Cases
               </Link>
             </li>
 
