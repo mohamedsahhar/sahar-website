@@ -1,4 +1,7 @@
 import Link from "next/link"
+import { prisma } from "@/lib/prisma"
+
+export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "Contact Sa7ar Quick Care | Electronics Repair Cairo",
@@ -6,9 +9,13 @@ export const metadata = {
     "Contact Sa7ar Quick Care in Cairo for phone repair, speaker repair, AirPods repair, Apple Pencil repair and electronics repair services.",
 }
 
-export default function Contact() {
+export default async function Contact() {
 
   const whatsappNumber = "201021024094"
+  const businessInfo = await prisma.businessInfo.findFirst()
+  const workingHours = businessInfo?.workingHours || "10:00 AM - 10:00 PM"
+  const daysOff = businessInfo?.daysOff || "Friday"
+  const notice = businessInfo?.notice
 
   return (
     <div className="max-w-5xl mx-auto px-4">
@@ -104,12 +111,18 @@ export default function Contact() {
             </h2>
 
             <p className="text-gray-600">
-              Daily: 10:00 AM – 10:00 PM
+              Daily: {workingHours}
             </p>
 
             <p className="text-gray-600">
-              Day Off: Friday
+              Day Off: {daysOff}
             </p>
+
+            {notice ? (
+              <p className="text-red-600 font-medium mt-2">
+                {notice}
+              </p>
+            ) : null}
 
           </div>
 
