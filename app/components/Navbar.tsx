@@ -69,6 +69,10 @@ export default function Navbar() {
             Repair Cases
           </Link>
 
+          <Link href="/shop" className={linkClass("/shop")}>
+            Shop
+          </Link>
+
           <Link href={trackingHref} className={trackingClass}>
             {trackingLabel}
           </Link>
@@ -124,6 +128,10 @@ export default function Navbar() {
 
           <Link href="/cases" onClick={closeMenu} className={linkClass("/cases")}>
             Repair Cases
+          </Link>
+
+          <Link href="/shop" onClick={closeMenu} className={linkClass("/shop")}>
+            Shop
           </Link>
 
           <Link href={trackingHref} onClick={closeMenu} className={trackingClass}>

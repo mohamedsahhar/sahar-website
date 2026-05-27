@@ -8,9 +8,11 @@ datasource db {
 }
 
 model Brand {
-  id      Int      @id @default(autoincrement())
-  name    String
+  id     Int     @id @default(autoincrement())
+  name   String
+  slug   String  @unique
   devices Device[]
+  products Product[] // ✅ SAFE ADD
 }
 
 model Device {
@@ -20,21 +22,23 @@ model Device {
   brandId Int
   brand   Brand        @relation(fields: [brandId], references: [id])
   repairs RepairCase[]
+
+  products Product[]   // ✅ REQUIRED FIX (SAFE)
 }
 
 model RepairCase {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String   @unique
-  problem     String
-  solution    String
-  repairTime  String?
-  images      String[] @default([])
-  videoUrl    String?
-  deviceId    Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  device      Device?  @relation(fields: [deviceId], references: [id])
+  id         Int      @id @default(autoincrement())
+  title      String
+  slug       String   @unique
+  problem    String
+  solution   String
+  repairTime String?
+  videoUrl   String?
+  deviceId   Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  images     String[] @default([])
+  device     Device?  @relation(fields: [deviceId], references: [id])
 }
 
 model BusinessInfo {
@@ -43,4 +47,85 @@ model BusinessInfo {
   daysOff      String
   notice       String?
   updatedAt    DateTime @updatedAt
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+////////////////////////////////////////////////////////////
+// 🆕 SA7AR SHOP MODELS (SAFE ADDITION ONLY)
+////////////////////////////////////////////////////////////
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  slug          String        @unique
+  isActive      Boolean       @default(true)
+  isDeleted     Boolean       @default(false)
+  subcategories Subcategory[]
+  products      Product[]
+}
+
+model Subcategory {
+  id         Int       @id @default(autoincrement())
+  name       String
+  slug       String
+  categoryId Int
+  isActive   Boolean   @default(true)
+  isDeleted  Boolean   @default(false)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  products   Product[]
+
+  @@unique([slug, categoryId])
+}
+
+model Product {
+  id            Int        @id @default(autoincrement())
+  title         String
+  slug          String     @unique
+  description   String
+
+  brandId       Int
+  brand         Brand      @relation(fields: [brandId], references: [id])
+
+  deviceId      Int?       // ✅ OPTIONAL
+  device        Device?    @relation(fields: [deviceId], references: [id])
+
+  categoryId    Int
+  category      Category   @relation(fields: [categoryId], references: [id])
+
+  subcategoryId Int
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id])
+
+  condition     String
+  stockStatus   String
+
+  images        String[]   @default([])
+  colors        String[]   @default([])
+
+  shippingInfo  String
+
+  featured      Boolean    @default(false)
+
+  seoTitle      String?
+  seoDescription String?
+
+  isActive      Boolean    @default(true)
+  isDeleted     Boolean    @default(false)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
