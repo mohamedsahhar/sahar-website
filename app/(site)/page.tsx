@@ -1,6 +1,7 @@
 import { Facebook, Instagram, Music2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import RelatedNews from "@/app/components/RelatedNews";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -66,6 +67,10 @@ export default async function Home() {
         </div>
 
       </section>
+
+      <div className="bg-white">
+        <RelatedNews />
+      </div>
 
 
       {/* CUSTOMER REVIEWS */}
