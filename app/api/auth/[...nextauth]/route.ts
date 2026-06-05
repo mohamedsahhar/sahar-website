@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 export const dynamic = "force-dynamic"
+const SESSION_MAX_AGE = 15 * 60
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -35,6 +36,12 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
+    maxAge: SESSION_MAX_AGE,
+    updateAge: 0,
+  },
+
+  jwt: {
+    maxAge: SESSION_MAX_AGE,
   },
 
   callbacks: {
