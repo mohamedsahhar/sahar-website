@@ -214,54 +214,54 @@ export default function NewProductPage() {
   }
 
   const fieldClassName =
-    "mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-4 focus:ring-gray-100";
+    "mt-2 w-full min-w-0 rounded-xl border border-gray-300 bg-white px-4 py-3.5 text-sm font-medium text-black shadow-sm outline-none transition placeholder:text-gray-600 focus:border-blue-600 focus:ring-4 focus:ring-blue-100";
   const readOnlyFieldClassName =
-    "mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500 shadow-sm outline-none";
+    "mt-2 w-full min-w-0 rounded-xl border border-gray-300 bg-gray-100 px-4 py-3.5 text-sm font-semibold text-black shadow-sm outline-none";
   const sectionClassName =
-    "rounded-3xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6";
-  const sectionTitleClassName = "text-lg font-semibold text-gray-950";
-  const sectionTextClassName = "mt-1 text-sm text-gray-500";
-  const helperTextClassName = "mt-2 text-xs text-gray-500";
+    "overflow-hidden rounded-3xl border border-gray-300 bg-white p-4 shadow-sm sm:p-6";
+  const sectionTitleClassName = "text-lg font-bold text-black sm:text-xl";
+  const sectionTextClassName = "mt-2 text-sm font-medium leading-6 text-gray-800";
+  const helperTextClassName = "mt-2 text-xs font-semibold leading-5 text-blue-700";
   const addButtonClassName =
-    "shrink-0 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100";
+    "w-full shrink-0 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3.5 text-sm font-bold text-blue-800 transition hover:bg-blue-100 sm:w-auto";
   const checkboxClassName =
-    "h-4 w-4 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-300";
+    "mt-0.5 h-4 w-4 shrink-0 rounded border-gray-400 text-green-700 focus:ring-2 focus:ring-green-200";
   const previewBadgeClassName =
-    "inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600";
+    "inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-blue-800";
 
   return (
-    <div className="mx-auto max-w-7xl p-4 sm:p-6">
-      <div className="rounded-[28px] border border-gray-200 bg-gradient-to-br from-white via-white to-gray-50 px-5 py-6 shadow-sm sm:px-7 sm:py-8">
+    <div className="mx-auto max-w-7xl px-3 py-4 sm:p-6">
+      <div className="overflow-hidden rounded-[28px] border border-gray-300 bg-gradient-to-br from-white via-white to-blue-50/40 px-4 py-5 shadow-sm sm:px-7 sm:py-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className={previewBadgeClassName}>Shop Catalog</span>
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-black sm:text-4xl">
               Add Product
             </h1>
-            <p className="mt-3 text-sm leading-6 text-gray-600 sm:text-base">
+            <p className="mt-3 text-sm font-medium leading-7 text-gray-900 sm:text-base">
               Create a clean product listing for shop visitors and WhatsApp inquiries. All required product details,
               classification, images, and publishing controls stay in one place.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:min-w-[360px]">
-            <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-[0.16em] text-gray-400">Status</p>
-              <p className="mt-2 text-sm font-semibold text-gray-900">{saving ? "Saving now" : "Draft mode"}</p>
+            <div className="rounded-2xl border border-gray-300 bg-white px-4 py-3 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">Status</p>
+              <p className="mt-2 text-sm font-bold text-black">{saving ? "Saving now" : "Draft mode"}</p>
             </div>
-            <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-[0.16em] text-gray-400">Visibility</p>
-              <p className="mt-2 text-sm font-semibold text-gray-900">{isActive ? "Visible in shop" : "Hidden from shop"}</p>
+            <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-green-700">Visibility</p>
+              <p className="mt-2 text-sm font-bold text-black">{isActive ? "Visible in shop" : "Hidden from shop"}</p>
             </div>
-            <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-              <p className="text-xs font-medium uppercase tracking-[0.16em] text-gray-400">Images</p>
-              <p className="mt-2 text-sm font-semibold text-gray-900">{images.length} uploaded</p>
+            <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">Images</p>
+              <p className="mt-2 text-sm font-bold text-black">{images.length} uploaded</p>
             </div>
           </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-6">
           <section className={sectionClassName}>
             <div className="mb-6">
@@ -271,7 +271,7 @@ export default function NewProductPage() {
 
             <div className="space-y-5">
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Title *</span>
+                <span className="text-sm font-bold text-black">Title <span className="text-red-600">*</span></span>
                 <input
                   className={fieldClassName}
                   value={title}
@@ -281,7 +281,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Slug *</span>
+                <span className="text-sm font-bold text-black">Slug <span className="text-red-600">*</span></span>
                 <input
                   className={readOnlyFieldClassName}
                   value={slug}
@@ -292,7 +292,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Description</span>
+                <span className="text-sm font-bold text-black">Description</span>
                 <textarea
                   className={`${fieldClassName} min-h-36 resize-y`}
                   value={description}
@@ -311,7 +311,7 @@ export default function NewProductPage() {
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Brand *</span>
+                <span className="text-sm font-bold text-black">Brand <span className="text-red-600">*</span></span>
                 <select className={fieldClassName} value={brandId} onChange={(e) => setBrandId(e.target.value)}>
                   <option value="">Select Brand</option>
                   {brands.map((brand) => (
@@ -321,7 +321,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Device</span>
+                <span className="text-sm font-bold text-black">Device</span>
                 <select className={fieldClassName} value={deviceId} onChange={(e) => setDeviceId(e.target.value)}>
                   <option value="">Select Device (optional)</option>
                   {filteredDevices.map((device) => (
@@ -331,7 +331,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Category *</span>
+                <span className="text-sm font-bold text-black">Category <span className="text-red-600">*</span></span>
                 <select className={fieldClassName} value={categoryId} onChange={(e) => handleCategoryChange(e.target.value)}>
                   <option value="">Select Category</option>
                   {categories.map((category) => (
@@ -341,7 +341,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Subcategory *</span>
+                <span className="text-sm font-bold text-black">Subcategory <span className="text-red-600">*</span></span>
                 <select className={fieldClassName} value={subcategoryId} onChange={(e) => setSubcategoryId(e.target.value)}>
                   <option value="">Select Subcategory</option>
                   {subcategories.map((subcategory) => (
@@ -352,10 +352,10 @@ export default function NewProductPage() {
             </div>
 
             <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4">
-                <p className="text-sm font-medium text-gray-800">New category</p>
+              <div className="rounded-2xl border border-dashed border-blue-300 bg-blue-50/50 p-4">
+                <p className="text-sm font-bold text-black">New category</p>
                 <p className={sectionTextClassName}>Create a category without leaving this page.</p>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start">
                   <input
                     className={fieldClassName}
                     placeholder="New category"
@@ -366,10 +366,10 @@ export default function NewProductPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/80 p-4">
-                <p className="text-sm font-medium text-gray-800">New subcategory</p>
+              <div className="rounded-2xl border border-dashed border-blue-300 bg-blue-50/50 p-4">
+                <p className="text-sm font-bold text-black">New subcategory</p>
                 <p className={sectionTextClassName}>Choose a category first, then add its subcategory here.</p>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start">
                   <input
                     className={fieldClassName}
                     placeholder="New subcategory"
@@ -388,7 +388,7 @@ export default function NewProductPage() {
               <p className={sectionTextClassName}>Upload product photos and remove any preview you do not want to keep.</p>
             </div>
 
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/70 p-4 sm:p-5">
+            <div className="rounded-2xl border border-dashed border-blue-300 bg-blue-50/40 p-4 sm:p-5">
               <ImageUpload
                 slug={slug}
                 existingImages={images}
@@ -399,7 +399,7 @@ export default function NewProductPage() {
             {images.length > 0 && (
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
                 {images.map((image, index) => (
-                  <div key={`${image}-${index}`} className="group relative aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm">
+                  <div key={`${image}-${index}`} className="group relative aspect-square min-w-0 overflow-hidden rounded-2xl border border-gray-300 bg-gray-50 shadow-sm">
                     <Image
                       src={image}
                       alt={`Product image ${index + 1}`}
@@ -433,7 +433,7 @@ export default function NewProductPage() {
 
             <div className="space-y-5">
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Condition</span>
+                <span className="text-sm font-bold text-black">Condition</span>
                 <select className={fieldClassName} value={condition} onChange={(e) => setCondition(e.target.value)}>
                   {conditionOptions.map((option) => (
                     <option key={option} value={option}>{option}</option>
@@ -442,7 +442,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Stock Status</span>
+                <span className="text-sm font-bold text-black">Stock Status</span>
                 <select className={fieldClassName} value={stockStatus} onChange={(e) => setStockStatus(e.target.value)}>
                   {stockOptions.map((option) => (
                     <option key={option} value={option}>{option}</option>
@@ -451,7 +451,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Shipping Info</span>
+                <span className="text-sm font-bold text-black">Shipping Info</span>
                 <textarea
                   className={`${fieldClassName} min-h-28 resize-y`}
                   value={shippingInfo}
@@ -461,7 +461,7 @@ export default function NewProductPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-gray-800">Colors</span>
+                <span className="text-sm font-bold text-black">Colors</span>
                 <input
                   className={fieldClassName}
                   placeholder="black, white, red"
@@ -476,11 +476,11 @@ export default function NewProductPage() {
           <section className={sectionClassName}>
             <div className="mb-5">
               <h2 className={sectionTitleClassName}>Publishing</h2>
-              <p className={sectionTextClassName}>Choose how this product appears in the shop before creating it.</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-green-800">Choose how this product appears in the shop before creating it.</p>
             </div>
 
             <div className="space-y-3">
-              <label className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-gray-50/80 p-4">
+              <label className="flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 p-4">
                 <input
                   type="checkbox"
                   className={checkboxClassName}
@@ -488,12 +488,12 @@ export default function NewProductPage() {
                   onChange={(e) => setIsActive(e.target.checked)}
                 />
                 <span>
-                  <span className="block text-sm font-medium text-gray-900">Visible in shop</span>
-                  <span className="mt-1 block text-xs leading-5 text-gray-500">Enable this product for public shop visibility after creation.</span>
+                  <span className="block text-sm font-bold text-black">Visible in shop</span>
+                  <span className="mt-1 block text-xs font-semibold leading-5 text-green-800">Enable this product for public shop visibility after creation.</span>
                 </span>
               </label>
 
-              <label className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-gray-50/80 p-4">
+              <label className="flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 p-4">
                 <input
                   type="checkbox"
                   className={checkboxClassName}
@@ -501,22 +501,22 @@ export default function NewProductPage() {
                   onChange={(e) => setFeatured(e.target.checked)}
                 />
                 <span>
-                  <span className="block text-sm font-medium text-gray-900">Featured product</span>
-                  <span className="mt-1 block text-xs leading-5 text-gray-500">Use this when the item should stand out in the catalog.</span>
+                  <span className="block text-sm font-bold text-black">Featured product</span>
+                  <span className="mt-1 block text-xs font-semibold leading-5 text-green-800">Use this when the item should stand out in the catalog.</span>
                 </span>
               </label>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4">
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="text-gray-500">Ready to create</span>
-                <span className="font-semibold text-gray-900">{title.trim() ? "Product details entered" : "Waiting for product title"}</span>
+            <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-4">
+              <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
+                <span className="font-bold text-blue-800">Ready to create</span>
+                <span className="font-bold text-black">{title.trim() ? "Product details entered" : "Waiting for product title"}</span>
               </div>
             </div>
 
             <button
               disabled={saving}
-              className="mt-6 w-full rounded-2xl bg-gray-950 px-5 py-4 text-sm font-semibold text-white shadow-lg shadow-gray-950/15 transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-6 w-full rounded-2xl bg-green-700 px-5 py-4 text-base font-bold text-white shadow-lg shadow-green-700/20 transition hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {saving ? "Creating..." : "Create Product"}
             </button>
