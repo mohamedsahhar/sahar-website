@@ -66,6 +66,27 @@ export default function AdminLayout({
             Devices
           </Link>
 
+          <Link
+            href="/admin/products"
+            className="text-gray-700 hover:underline"
+          >
+            Products
+          </Link>
+
+          <Link
+            href="/admin/categories"
+            className="text-gray-700 hover:underline"
+          >
+            Categories
+          </Link>
+
+          <Link
+            href="/admin/subcategories"
+            className="text-gray-700 hover:underline"
+          >
+            Subcategories
+          </Link>
+
           {/* 🔥 NEW SETTINGS LINK */}
           <Link
             href="/admin/settings"
