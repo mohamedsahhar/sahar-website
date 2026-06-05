@@ -32,29 +32,22 @@ export default function AdminRepairsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Repair Cases</h1>
+    <div className="mx-auto w-full max-w-6xl min-w-0 px-0">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="min-w-0 break-words text-2xl font-bold">Repair Cases</h1>
 
         <Link href="/admin/repairs/new">
-          <button className="bg-black text-white px-4 py-2 rounded-lg hover:opacity-90">
+          <button className="w-full rounded-lg bg-black px-4 py-2 text-white hover:opacity-90 sm:w-auto">
             + New Repair
           </button>
         </Link>
       </div>
 
-      {/* Empty State */}
-      {repairs.length === 0 && (
-        <p className="text-gray-500">No repairs found.</p>
-      )}
+      {repairs.length === 0 && <p className="text-gray-500">No repairs found.</p>}
 
-      {/* Table */}
       {repairs.length > 0 && (
-        <div className="overflow-x-auto border rounded-xl">
-          <table className="w-full text-sm">
-
+        <div className="max-w-full overflow-x-auto rounded-xl border">
+          <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-gray-100 text-left">
               <tr>
                 <th className="p-3">Title</th>
@@ -67,46 +60,37 @@ export default function AdminRepairsPage() {
             <tbody>
               {repairs.map((repair) => (
                 <tr key={repair.id} className="border-t">
-
-                  {/* Title */}
-                  <td className="p-3 font-medium">
+                  <td className="max-w-0 break-words p-3 font-medium">
                     {repair.title}
                   </td>
 
-                  {/* Device */}
-                  <td className="p-3 text-gray-600">
+                  <td className="max-w-0 break-words p-3 text-gray-600">
                     {repair.device?.brand?.name} {repair.device?.name}
                   </td>
 
-                  {/* Slug */}
-                  <td className="p-3 text-gray-400 text-xs">
+                  <td className="max-w-0 break-words p-3 text-xs text-gray-400">
                     {repair.slug}
                   </td>
 
-                  {/* Actions */}
                   <td className="p-3">
-                    <div className="flex justify-end gap-2">
-
+                    <div className="flex justify-end gap-2 whitespace-nowrap">
                       <Link href={`/admin/repairs/${repair.id}/edit`}>
-                        <button className="bg-blue-600 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-700">
+                        <button className="rounded-md bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700">
                           Edit
                         </button>
                       </Link>
 
                       <button
                         onClick={() => deleteRepair(repair.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded-md text-xs hover:bg-red-600"
+                        className="rounded-md bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
                       >
                         Delete
                       </button>
-
                     </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
       )}
