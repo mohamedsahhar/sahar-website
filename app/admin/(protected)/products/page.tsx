@@ -111,7 +111,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
       <h1>Manage Products</h1>
 
       <div style={{ marginTop: "20px", marginBottom: "20px" }}>
@@ -120,7 +120,7 @@ export default function ProductsPage() {
         </Link>
       </div>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div style={filtersRowStyle}>
         <input
           placeholder="Search product / slug / brand..."
           value={search}
@@ -167,10 +167,13 @@ export default function ProductsPage() {
         style={{
           border: "1px solid #ddd",
           borderRadius: "10px",
-          overflow: "hidden",
+          maxWidth: "100%",
+          overflowX: "auto",
+          overflowY: "hidden",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table style={{ width: "100%", minWidth: "900px", borderCollapse: "collapse" }}>
           <thead style={{ background: "#f5f5f5" }}>
             <tr>
               <th style={thStyle}>Product</th>
@@ -196,8 +199,8 @@ export default function ProductsPage() {
                   }}
                 >
                   <td style={tdStyle}>
-                    <div style={{ fontWeight: 600 }}>{product.title}</div>
-                    <div style={{ fontSize: "12px", color: "#777" }}>
+                    <div style={productTitleStyle}>{product.title}</div>
+                    <div style={productSlugStyle}>
                       {product.slug}
                     </div>
                   </td>
@@ -227,7 +230,7 @@ export default function ProductsPage() {
                   </td>
 
                   <td style={tdStyle}>
-                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    <div style={actionsRowStyle}>
                       <Link href={`/admin/products/${product.id}/edit`}>
                         <button style={editBtnStyle} disabled={busy}>
                           Edit
@@ -299,16 +302,46 @@ const tdStyle = {
 };
 
 const inputStyle = {
-  flex: 1,
+  flex: "1 1 220px",
+  minWidth: 0,
   padding: "10px",
   borderRadius: "6px",
   border: "1px solid #ccc",
 };
 
 const selectStyle = {
+  flex: "1 1 180px",
+  minWidth: "160px",
   padding: "10px",
   borderRadius: "6px",
   border: "1px solid #ccc",
+};
+
+const filtersRowStyle = {
+  display: "flex",
+  flexWrap: "wrap" as const,
+  gap: "10px",
+  marginBottom: "20px",
+  width: "100%",
+  maxWidth: "100%",
+};
+
+const productTitleStyle = {
+  fontWeight: 600,
+  wordBreak: "break-word" as const,
+};
+
+const productSlugStyle = {
+  fontSize: "12px",
+  color: "#777",
+  wordBreak: "break-word" as const,
+};
+
+const actionsRowStyle = {
+  display: "flex",
+  gap: "8px",
+  flexWrap: "nowrap" as const,
+  whiteSpace: "nowrap" as const,
 };
 
 const addBtnStyle = {
