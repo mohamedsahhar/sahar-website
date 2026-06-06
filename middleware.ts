@@ -45,49 +45,7 @@ function isProtectedAdminPage(pathname: string) {
 }
 
 function isProtectedApiRoute(req: NextRequest, pathname: string) {
-  if (pathname.startsWith("/api/admin")) {
-    return true
-  }
-
-  if (pathname === "/api/business") {
-    return true
-  }
-
-  if (pathname === "/api/products") {
-    if (req.method !== "GET") {
-      return true
-    }
-
-    return (
-      req.nextUrl.searchParams.get("includeDeleted") === "true" ||
-      req.nextUrl.searchParams.get("includeInactive") === "true"
-    )
-  }
-
-  if (pathname.startsWith("/api/products/")) {
-    return true
-  }
-
-  if (pathname === "/api/categories" || pathname === "/api/subcategories") {
-    if (req.method !== "GET") {
-      return true
-    }
-
-    return (
-      req.nextUrl.searchParams.get("includeDeleted") === "true" ||
-      req.nextUrl.searchParams.get("includeInactive") === "true"
-    )
-  }
-
-  if (pathname === "/api/brands" || pathname === "/api/devices") {
-    return req.method !== "GET"
-  }
-
-  if (pathname === "/api/repairs" || pathname === "/api/cases") {
-    return req.method !== "GET"
-  }
-
-  return false
+  return pathname.startsWith("/api/admin")
 }
 
 function buildUnauthorizedResponse(req: NextRequest, isApiRequest: boolean) {
@@ -147,13 +105,5 @@ export const config = {
   matcher: [
     "/admin/:path*",
     "/api/admin/:path*",
-    "/api/business",
-    "/api/brands",
-    "/api/devices",
-    "/api/products/:path*",
-    "/api/categories",
-    "/api/subcategories",
-    "/api/repairs",
-    "/api/cases",
   ],
 }

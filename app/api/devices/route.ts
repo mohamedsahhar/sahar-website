@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requireAdminSession } from "@/lib/require-admin-session";
 
 // ✅ GET ALL DEVICES
 export async function GET() {
@@ -18,6 +19,11 @@ export async function GET() {
 // ✅ CREATE DEVICE
 export async function POST(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const data = await req.json();
     console.log("Creating device:", data);
 
@@ -46,6 +52,11 @@ export async function POST(req: Request) {
 // ✅ UPDATE DEVICE
 export async function PUT(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const data = await req.json();
     console.log("Updating device:", data);
 
@@ -87,6 +98,11 @@ export async function PUT(req: Request) {
 // ✅ DELETE DEVICE
 export async function DELETE(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const { id } = await req.json();
 
     await prisma.device.delete({

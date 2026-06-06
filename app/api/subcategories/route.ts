@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { requireAdminSession } from "@/lib/require-admin-session"
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url)
     const includeDeleted = url.searchParams.get("includeDeleted") === "true"
     const includeInactive = url.searchParams.get("includeInactive") === "true"
+
+    if (includeDeleted || includeInactive) {
+      const auth = await requireAdminSession()
+      if ("response" in auth) {
+        return auth.response
+      }
+    }
 
     const subcategories = await prisma.subcategory.findMany({
       where: {
@@ -27,6 +35,11 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const auth = await requireAdminSession()
+    if ("response" in auth) {
+      return auth.response
+    }
+
     const body = await req.json()
 
     const subcategory = await prisma.subcategory.create({
@@ -49,6 +62,11 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const auth = await requireAdminSession()
+    if ("response" in auth) {
+      return auth.response
+    }
+
     const body = await req.json()
     const id = Number(body.id)
 

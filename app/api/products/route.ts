@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/require-admin-session";
 
 // GET products. Public callers get only active, non-deleted products by default.
 export async function GET(req: Request) {
@@ -7,6 +8,13 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const includeDeleted = url.searchParams.get("includeDeleted") === "true";
     const includeInactive = url.searchParams.get("includeInactive") === "true";
+
+    if (includeDeleted || includeInactive) {
+      const auth = await requireAdminSession();
+      if ("response" in auth) {
+        return auth.response;
+      }
+    }
 
     const products = await prisma.product.findMany({
       where: {
@@ -36,6 +44,11 @@ export async function GET(req: Request) {
 // CREATE new product
 export async function POST(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const body = await req.json();
 
     if (!body.subcategoryId) {

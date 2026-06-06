@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requireAdminSession } from "@/lib/require-admin-session";
 
 // ✅ GET ALL BRANDS
 export async function GET() {
@@ -15,6 +16,11 @@ export async function GET() {
 // ✅ CREATE BRAND (WITH SLUG + DUPLICATE PROTECTION)
 export async function POST(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const data = await req.json();
     console.log("Creating brand:", data);
 
@@ -69,6 +75,11 @@ export async function POST(req: Request) {
 // ✅ UPDATE BRAND (WITH SLUG + DUPLICATE CHECK)
 export async function PUT(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const data = await req.json();
     console.log("Updating brand:", data);
 
@@ -138,6 +149,11 @@ export async function PUT(req: Request) {
 // ❌ DELETE BRAND (BLOCK IF HAS DEVICES)
 export async function DELETE(req: Request) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const { id } = await req.json();
 
     if (!id) {

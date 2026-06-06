@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/require-admin-session";
 
 type ProductRouteContext = {
   params: Promise<{
@@ -21,6 +22,11 @@ async function getProductId(context: ProductRouteContext) {
 // GET single product OR soft delete via legacy query link
 export async function GET(req: Request, context: ProductRouteContext) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const id = await getProductId(context);
 
     if (!id) {
@@ -66,6 +72,11 @@ export async function GET(req: Request, context: ProductRouteContext) {
 // UPDATE product
 export async function PUT(req: Request, context: ProductRouteContext) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const id = await getProductId(context);
 
     if (!id) {
@@ -112,6 +123,11 @@ export async function PUT(req: Request, context: ProductRouteContext) {
 // PARTIAL UPDATE product state
 export async function PATCH(req: Request, context: ProductRouteContext) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const id = await getProductId(context);
 
     if (!id) {
@@ -143,6 +159,11 @@ export async function PATCH(req: Request, context: ProductRouteContext) {
 // SOFT DELETE product
 export async function DELETE(req: Request, context: ProductRouteContext) {
   try {
+    const auth = await requireAdminSession();
+    if ("response" in auth) {
+      return auth.response;
+    }
+
     const id = await getProductId(context);
 
     if (!id) {
