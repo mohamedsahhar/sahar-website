@@ -27,6 +27,10 @@ export default function AdminDevicesPage() {
     loadBrands();
   }, []);
 
+  const filteredDevices = brandId
+    ? devices.filter((device: any) => String(device.brandId) === brandId)
+    : devices;
+
   async function addDevice() {
 
     if (!name || !brandId) return;
@@ -43,7 +47,6 @@ export default function AdminDevicesPage() {
     });
 
     setName("");
-    setBrandId("");
     loadDevices();
   }
 
@@ -63,7 +66,7 @@ export default function AdminDevicesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto w-full min-w-0 overflow-x-hidden p-4 sm:p-6">
 
       {/* Header */}
       <h1 className="text-2xl font-bold mb-6">
@@ -71,10 +74,10 @@ export default function AdminDevicesPage() {
       </h1>
 
       {/* Add Device */}
-      <div className="flex gap-3 mb-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
 
         <select
-          className="border p-2 rounded-md"
+          className="w-full border p-2 rounded-md sm:w-auto"
           value={brandId}
           onChange={(e)=>setBrandId(e.target.value)}
         >
@@ -88,7 +91,7 @@ export default function AdminDevicesPage() {
         </select>
 
         <input
-          className="border p-2 rounded-md flex-1"
+          className="w-full min-w-0 border p-2 rounded-md flex-1"
           value={name}
           onChange={(e)=>setName(e.target.value)}
           placeholder="Device name"
@@ -96,7 +99,7 @@ export default function AdminDevicesPage() {
 
         <button
           onClick={addDevice}
-          className="bg-black text-white px-4 py-2 rounded-md"
+          className="w-full shrink-0 bg-black text-white px-4 py-2 rounded-md sm:w-auto"
         >
           Add
         </button>
@@ -104,14 +107,16 @@ export default function AdminDevicesPage() {
       </div>
 
       {/* Empty */}
-      {devices.length === 0 && (
-        <p className="text-gray-500">No devices found.</p>
+      {filteredDevices.length === 0 && (
+        <p className="text-gray-500">
+          {brandId ? "No devices found for this brand." : "No devices found."}
+        </p>
       )}
 
       {/* Table */}
-      {devices.length > 0 && (
-        <div className="overflow-x-auto border rounded-xl">
-          <table className="w-full text-sm">
+      {filteredDevices.length > 0 && (
+        <div className="max-w-full overflow-x-auto rounded-xl border">
+          <table className="min-w-[640px] w-full text-sm">
 
             <thead className="bg-gray-100 text-left">
               <tr>
@@ -123,7 +128,7 @@ export default function AdminDevicesPage() {
             </thead>
 
             <tbody>
-              {devices.map((device:any)=>(
+              {filteredDevices.map((device:any)=>(
                 <tr key={device.id} className="border-t">
 
                   <td className="p-3 font-medium">
@@ -139,7 +144,7 @@ export default function AdminDevicesPage() {
                   </td>
 
                   <td className="p-3">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 whitespace-nowrap">
 
                       {/* ✅ Edit (WORKING) */}
                       <Link href={`/admin/devices/${device.id}/edit`}>
