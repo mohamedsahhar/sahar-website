@@ -21,10 +21,7 @@ export default function SiteLayout({
 }: {
   children: React.ReactNode
 }) {
-  const gaId =
-    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-      ?.trim()
-      .replace(/^NEXT_PUBLIC_GA_MEASUREMENT_ID=/, "") || "G-3Z8ZV518PW"
+  const gaId = "G-3Z8ZV518PW"
 
   return (
     <>
