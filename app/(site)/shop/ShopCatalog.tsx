@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PackageSearch } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { isSmartSearchMatch } from "@/lib/search";
 import ShopFilters from "./ShopFilters";
 import ShopProductsClient from "./ShopProductsClient";
 
@@ -45,19 +46,6 @@ export default async function ShopCatalog({
   const where = {
     isActive: true,
     isDeleted: false,
-    ...(query
-      ? {
-          OR: [
-            { title: { contains: query, mode: "insensitive" as const } },
-            { slug: { contains: query, mode: "insensitive" as const } },
-            {
-              brand: {
-                name: { contains: query, mode: "insensitive" as const },
-              },
-            },
-          ],
-        }
-      : {}),
     ...(brandSlug ? { brand: { slug: brandSlug } } : {}),
     category: {
       ...(categorySlug ? { slug: categorySlug } : {}),
@@ -71,7 +59,7 @@ export default async function ShopCatalog({
     },
   };
 
-  const [products, brands, categories] = await Promise.all([
+  const [rawProducts, brands, categories] = await Promise.all([
     prisma.product.findMany({
       where,
       include: {
@@ -114,6 +102,24 @@ export default async function ShopCatalog({
       },
     }),
   ]);
+
+  const products = query
+    ? rawProducts.filter((product) =>
+        isSmartSearchMatch(
+          query,
+          [
+            product.title,
+            product.slug,
+            product.brand?.name,
+            product.category?.name,
+            product.subcategory?.name,
+            product.condition,
+          ]
+            .filter(Boolean)
+            .join(" ")
+        )
+      )
+    : rawProducts;
 
   const showFeatured =
     showFeaturedSection &&

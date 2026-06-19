@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { isSmartSearchMatch } from "@/lib/search"
 
 export default function CasesClient({ cases }: { cases: any[] }) {
   const [search, setSearch] = useState("")
@@ -39,9 +40,18 @@ export default function CasesClient({ cases }: { cases: any[] }) {
   )
 
   const filteredCases = cases.filter((c) => {
-    const matchesSearch =
-      c.title?.toLowerCase().includes(search.toLowerCase()) ||
-      c.problem?.toLowerCase().includes(search.toLowerCase())
+    const matchesSearch = isSmartSearchMatch(
+      search,
+      [
+        c.title,
+        c.problem,
+        c.slug,
+        c.device?.brand?.name,
+        c.device?.name,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    )
 
     const matchesBrand = selectedBrand
       ? c.device?.brand?.name === selectedBrand
