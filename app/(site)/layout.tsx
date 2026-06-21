@@ -21,7 +21,7 @@ export default function SiteLayout({
 }: {
   children: React.ReactNode
 }) {
-  const gaId = "G-3Z8ZV518PW"
+  const gaId = "G-00PS7JQZXM"
 
   return (
     <>
