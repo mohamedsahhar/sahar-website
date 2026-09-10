@@ -33,5 +33,39 @@ export default async function sitemap() {
     lastModified: repair.updatedAt,
   }));
 
-  return [...staticPages, ...repairPages];
+  const products = await prisma.product.findMany({
+    where: {
+      isActive: true,
+      isDeleted: false,
+      category: {
+        isActive: true,
+        isDeleted: false,
+      },
+      subcategory: {
+        isActive: true,
+        isDeleted: false,
+      },
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+      category: {
+        select: {
+          slug: true,
+        },
+      },
+      subcategory: {
+        select: {
+          slug: true,
+        },
+      },
+    },
+  });
+
+  const productPages = products.map((product) => ({
+    url: `${baseUrl}/shop/${product.category.slug}/${product.subcategory.slug}/${product.slug}`,
+    lastModified: product.updatedAt,
+  }));
+
+  return [...staticPages, ...repairPages, ...productPages];
 }
