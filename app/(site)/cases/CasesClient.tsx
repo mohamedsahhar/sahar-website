@@ -152,8 +152,8 @@ export default function CasesClient({ cases }: { cases: any[] }) {
 
   return (
     <>
-      <section className="mb-8" aria-labelledby="featured-repair-services">
-        <h2 id="featured-repair-services" className="text-xl font-bold mb-4">
+      <section className="mb-6" aria-labelledby="featured-repair-services">
+        <h2 id="featured-repair-services" className="text-xl font-bold mb-3">
           Featured Repair Services
         </h2>
 
@@ -169,9 +169,9 @@ export default function CasesClient({ cases }: { cases: any[] }) {
                 setSortBy("recommended")
                 setVisibleCount(6)
               }}
-              className="group flex min-h-24 items-center gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-400 hover:shadow-md"
+              className="group flex min-h-20 items-center gap-3 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-400 hover:shadow-md"
             >
-              <span className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+              <span className="relative h-14 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100">
                 <Image
                   src={service.thumbnail}
                   alt=""
@@ -191,7 +191,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
         </div>
       </section>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <label htmlFor="case-search" className="block text-sm font-medium text-gray-700 mb-2">
           Search repair cases
         </label>
@@ -207,7 +207,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           className="w-full border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-3 mt-3">
           <label className="grid gap-1 text-sm font-medium text-gray-700">
             Brand
           <select
@@ -278,7 +278,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           </button>
         </div>
 
-        <div className="mt-5 border-t border-gray-200 pt-4 text-sm text-gray-500" aria-live="polite">
+        <div className="mt-4 border-t border-gray-200 pt-3 text-sm text-gray-500" aria-live="polite">
           <strong className="text-base text-gray-900">{sortedCases.length}</strong>{" "}
           {sortedCases.length === 1 ? "repair case" : "repair cases"}
           {search.trim() ? ` matching “${search.trim()}”` : ""}

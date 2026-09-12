@@ -45,13 +45,17 @@ export default function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-100 shadow-sm px-4 sm:px-6 py-2">
       <div className="max-w-7xl mx-auto min-h-20 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+        <Link
+          href="/"
+          className="relative block h-20 w-40 shrink-0 overflow-hidden"
+          aria-label="Sa7ar Quick Care home"
+        >
           <Image
             src="/sahar-transparent-black.png"
             alt="Sa7ar Quick Care"
-            width={160}
-            height={40}
-            className="h-16 w-[160px] object-contain"
+            width={1024}
+            height={1024}
+            className="absolute -left-[15px] -top-[57px] h-[180px] w-[180px] max-w-none"
             priority
           />
         </Link>
