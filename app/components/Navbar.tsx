@@ -43,15 +43,15 @@ export default function Navbar() {
     : "px-3 py-1 hover:text-black transition"
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <nav className="bg-white border-b border-gray-100 shadow-sm px-4 sm:px-6 py-2">
+      <div className="max-w-7xl mx-auto min-h-20 flex justify-between items-center">
         <Link href="/" className="flex items-center">
           <Image
             src="/sahar-transparent-black.png"
             alt="Sa7ar Quick Care"
             width={160}
             height={40}
-            className="h-auto w-auto"
+            className="h-16 w-[160px] object-contain"
             priority
           />
         </Link>

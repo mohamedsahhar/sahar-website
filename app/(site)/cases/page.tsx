@@ -23,30 +23,16 @@ export default async function CasesPage() {
   }));
 
   return (
-    <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
+    <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-10">
 
-      <h1 className="text-3xl font-bold text-center mb-4">
+      <h1 className="text-3xl md:text-4xl font-bold text-center mb-2">
         Repair Cases
       </h1>
 
-      <p className="text-gray-500 text-center mb-6">
-        Real repair cases from Sa7ar Quick Care workshop in New Cairo. 
-        We specialize in phone repair, AirPods repair, JBL speaker repair, 
-        Apple device repair, and electronics maintenance.
+      <p className="max-w-2xl mx-auto text-gray-600 text-center mb-8 md:mb-10">
+        Explore real repairs completed by Sa7ar Quick Care, then search by
+        brand, device, problem, or solution to find the closest match.
       </p>
-
-      {/* ✅ SEO Content Boost */}
-      <div className="max-w-3xl mx-auto text-gray-600 text-sm md:text-base text-center mb-10 space-y-3">
-        <p>
-          Browse real repair cases including iPhone repair, charging port repair, 
-          battery replacement, motherboard repair, and speaker repair services.
-        </p>
-        <p>
-          Our technicians handle a wide range of devices such as smartphones, 
-          AirPods, JBL speakers, Apple Watches, and robot vacuum cleaners with 
-          fast turnaround time and professional results.
-        </p>
-      </div>
 
       {cases.length === 0 && (
         <p className="text-center text-gray-500">

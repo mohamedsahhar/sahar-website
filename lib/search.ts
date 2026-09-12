@@ -148,3 +148,64 @@ export function isSmartSearchMatch(query: string, target: string) {
     tokenMatches(token, expandedTarget.tokens, expandedTarget.compact)
   );
 }
+
+export function getSmartSearchScore(query: string, target: string) {
+  const expandedQuery = expandSearchText(query);
+
+  if (!expandedQuery.normalized) {
+    return 0;
+  }
+
+  const expandedTarget = expandSearchText(target);
+
+  if (
+    !expandedTarget.normalized ||
+    !expandedQuery.tokens.every((token) =>
+      tokenMatches(token, expandedTarget.tokens, expandedTarget.compact)
+    )
+  ) {
+    return -1;
+  }
+
+  let score = 0;
+
+  if (expandedTarget.normalized === expandedQuery.normalized) {
+    score += 1000;
+  } else if (expandedTarget.normalized.startsWith(expandedQuery.normalized)) {
+    score += 500;
+  } else if (expandedTarget.normalized.includes(expandedQuery.normalized)) {
+    score += 350;
+  } else if (expandedTarget.compact.includes(expandedQuery.compact)) {
+    score += 300;
+  }
+
+  for (const queryToken of expandedQuery.tokens) {
+    let bestTokenScore = 0;
+
+    for (const targetToken of expandedTarget.tokens) {
+      if (targetToken === queryToken) {
+        bestTokenScore = Math.max(bestTokenScore, 100);
+      } else if (targetToken.startsWith(queryToken)) {
+        bestTokenScore = Math.max(bestTokenScore, 70);
+      } else if (
+        targetToken.includes(queryToken) ||
+        queryToken.includes(targetToken)
+      ) {
+        bestTokenScore = Math.max(bestTokenScore, 45);
+      } else {
+        const tolerance = getTypoTolerance(queryToken);
+
+        if (
+          Math.abs(targetToken.length - queryToken.length) <= tolerance &&
+          levenshteinDistance(queryToken, targetToken) <= tolerance
+        ) {
+          bestTokenScore = Math.max(bestTokenScore, 25);
+        }
+      }
+    }
+
+    score += bestTokenScore;
+  }
+
+  return score;
+}
