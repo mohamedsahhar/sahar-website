@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
 
@@ -67,6 +67,36 @@ export default function ShopFilters({
     }));
   }
 
+  useEffect(() => {
+    if (filters.q === currentFilters.q) return;
+
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams();
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (key === "category" && lockedCategory) return;
+        if (key === "subcategory" && lockedSubcategory) return;
+
+        const cleanValue = value.trim();
+        if (cleanValue) params.set(key, cleanValue);
+      });
+
+      const queryString = params.toString();
+      router.replace(queryString ? `${basePath}?${queryString}` : basePath, {
+        scroll: false,
+      });
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    basePath,
+    currentFilters.q,
+    filters,
+    lockedCategory,
+    lockedSubcategory,
+    router,
+  ]);
+
   function applyFilters(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -104,7 +134,7 @@ export default function ShopFilters({
           <input
             value={filters.q}
             onChange={(event) => setFilter("q", event.target.value)}
-            placeholder="Search products"
+            placeholder="Search product, brand, device, part, or problem"
             className="h-11 w-full rounded-md border border-gray-300 bg-white pl-9 pr-3 text-sm text-gray-950 outline-none transition focus:border-gray-900"
           />
         </label>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PackageSearch } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { isSmartSearchMatch } from "@/lib/search";
+import { getSmartSearchScore } from "@/lib/search";
 import ShopFilters from "./ShopFilters";
 import ShopProductsClient from "./ShopProductsClient";
 
@@ -64,6 +64,7 @@ export default async function ShopCatalog({
       where,
       include: {
         brand: true,
+        device: true,
         category: true,
         subcategory: true,
       },
@@ -104,21 +105,46 @@ export default async function ShopCatalog({
   ]);
 
   const products = query
-    ? rawProducts.filter((product) =>
-        isSmartSearchMatch(
-          query,
-          [
-            product.title,
-            product.slug,
-            product.brand?.name,
-            product.category?.name,
-            product.subcategory?.name,
-            product.condition,
-          ]
+    ? rawProducts
+        .map((product) => {
+          const fields = [
+            { value: product.title, weight: 10 },
+            { value: product.brand?.name, weight: 8 },
+            { value: product.device?.name, weight: 8 },
+            { value: product.category?.name, weight: 6 },
+            { value: product.subcategory?.name, weight: 6 },
+            { value: product.description, weight: 4 },
+            { value: product.condition, weight: 3 },
+            { value: product.stockStatus, weight: 2 },
+            { value: product.colors?.join(" "), weight: 2 },
+            { value: product.shippingInfo, weight: 1 },
+            { value: product.seoTitle, weight: 3 },
+            { value: product.seoDescription, weight: 2 },
+            { value: product.slug, weight: 1 },
+          ];
+          const completeProductText = fields
+            .map((field) => field.value)
             .filter(Boolean)
-            .join(" ")
+            .join(" ");
+          const completeScore = getSmartSearchScore(query, completeProductText);
+          const fieldScore = fields.reduce((total, field) => {
+            const score = getSmartSearchScore(query, String(field.value || ""));
+            return score >= 0 ? total + score * field.weight : total;
+          }, 0);
+
+          return {
+            product,
+            searchScore: completeScore < 0 ? -1 : completeScore + fieldScore,
+          };
+        })
+        .filter(({ searchScore }) => searchScore >= 0)
+        .sort(
+          (a, b) =>
+            b.searchScore - a.searchScore ||
+            new Date(b.product.createdAt).getTime() -
+              new Date(a.product.createdAt).getTime()
         )
-      )
+        .map(({ product }) => product)
     : rawProducts;
 
   const showFeatured =

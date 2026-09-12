@@ -157,7 +157,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           Featured Repair Services
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
           {featuredServices.map((service) => (
             <button
               key={service.label}
@@ -169,9 +169,9 @@ export default function CasesClient({ cases }: { cases: any[] }) {
                 setSortBy("recommended")
                 setVisibleCount(6)
               }}
-              className="group flex min-h-20 items-center gap-3 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-400 hover:shadow-md"
+              className="group flex min-h-20 items-center gap-2 overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-400 hover:shadow-md sm:gap-3 sm:p-3"
             >
-              <span className="relative h-14 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+              <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:h-14 sm:w-16">
                 <Image
                   src={service.thumbnail}
                   alt=""
@@ -180,7 +180,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
                   className="object-cover"
                 />
               </span>
-              <strong className="flex flex-1 items-center justify-between gap-2 text-base">
+              <strong className="flex min-w-0 flex-1 items-center justify-between gap-1 text-sm leading-tight sm:gap-2 sm:text-base">
                 {service.label}
                 <span className="text-2xl font-normal text-orange-500 transition group-hover:translate-x-1" aria-hidden="true">
                   ›

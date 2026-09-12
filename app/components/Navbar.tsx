@@ -60,7 +60,7 @@ export default function Navbar() {
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-4 text-gray-700 font-medium">
+        <div className="hidden lg:flex items-center gap-4 text-gray-700 font-medium">
           <Link href="/" className={linkClass("/")}>
             Home
           </Link>
@@ -113,7 +113,7 @@ export default function Navbar() {
 
         <button
           aria-label="Open menu"
-          className="md:hidden text-3xl"
+          className="lg:hidden text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
@@ -121,7 +121,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden mt-6 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
+        <div className="lg:hidden mt-2 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
           <Link href="/" onClick={closeMenu} className={linkClass("/")}>
             Home
           </Link>
