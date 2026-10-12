@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import {
+  createUniqueSlug,
+  normalizeEntityName,
+} from "@/lib/naming";
 
 type RepairInput = {
   title: string
@@ -16,14 +20,23 @@ export async function POST(req: Request) {
 
     const data: RepairInput = await req.json();
 
-    const slug = data.title
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "");
+    const title = normalizeEntityName(data.title);
+    const problem = String(data.problem ?? "").trim();
+
+    if (!title || !problem || !data.deviceId) {
+      return NextResponse.json(
+        { error: "Title, problem, and device are required" },
+        { status: 400 }
+      );
+    }
+
+    const slug = await createUniqueSlug(title, async (candidate) =>
+      Boolean(await prisma.repairCase.findUnique({ where: { slug: candidate } }))
+    );
 
     const repair = await prisma.repairCase.create({
   data: {
-    title: data.title,
+    title,
 
     slug: slug,
 
@@ -31,8 +44,8 @@ export async function POST(req: Request) {
       connect: { id: data.deviceId }
     },
 
-    problem: data.problem,
-    solution: data.solution,
+    problem,
+    solution: String(data.solution ?? "").trim(),
 
     images: data.images ?? [],
     videoUrl: data.videoUrl ?? null,

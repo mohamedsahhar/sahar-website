@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAdminSession } from "@/lib/require-admin-session";
+import {
+  createUniqueSlug,
+  normalizeEntityName,
+} from "@/lib/naming";
 
 // ✅ GET ALL BRANDS
 export async function GET() {
@@ -24,7 +28,9 @@ export async function POST(req: Request) {
     const data = await req.json();
     console.log("Creating brand:", data);
 
-    if (!data.name) {
+    const name = normalizeEntityName(data.name);
+
+    if (!name) {
       return NextResponse.json(
         { error: "Brand name is required" },
         { status: 400 }
@@ -35,7 +41,7 @@ export async function POST(req: Request) {
     const existing = await prisma.brand.findFirst({
       where: {
         name: {
-          equals: data.name,
+          equals: name,
           mode: "insensitive",
         },
       },
@@ -48,15 +54,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Generate slug
-    const slug = data.name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-");
+    const slug = await createUniqueSlug(name, async (candidate) =>
+      Boolean(await prisma.brand.findUnique({ where: { slug: candidate } }))
+    );
 
     const brand = await prisma.brand.create({
       data: {
-        name: data.name,
+        name,
         slug,
       },
     });
@@ -83,6 +87,8 @@ export async function PUT(req: Request) {
     const data = await req.json();
     console.log("Updating brand:", data);
 
+    const name = normalizeEntityName(data.name);
+
     const id = Array.isArray(data.id) ? data.id[0] : data.id;
 
     if (!id) {
@@ -92,7 +98,7 @@ export async function PUT(req: Request) {
       );
     }
 
-    if (!data.name) {
+    if (!name) {
       return NextResponse.json(
         { error: "Brand name is required" },
         { status: 400 }
@@ -103,7 +109,7 @@ export async function PUT(req: Request) {
     const existing = await prisma.brand.findFirst({
       where: {
         name: {
-          equals: data.name,
+          equals: name,
           mode: "insensitive",
         },
         NOT: {
@@ -119,19 +125,12 @@ export async function PUT(req: Request) {
       );
     }
 
-    // ✅ Generate slug
-    const slug = data.name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-");
-
     const updated = await prisma.brand.update({
       where: {
         id: Number(id),
       },
       data: {
-        name: data.name,
-        slug,
+        name,
       },
     });
 

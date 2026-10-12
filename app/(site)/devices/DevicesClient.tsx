@@ -2,11 +2,15 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
+import { getDeviceDisplayName } from "@/lib/naming"
 
-export default function DevicesClient({ devices, brands }: any) {
+export default function DevicesClient({ devices, brands, initialBrand = "" }: any) {
   const [search, setSearch] = useState("")
   const [sort, setSort] = useState("az")
-  const [brand, setBrand] = useState("all")
+  const validInitialBrand = brands.some((item: any) => item.slug === initialBrand)
+    ? initialBrand
+    : "all"
+  const [brand, setBrand] = useState(validInitialBrand)
   const [visible, setVisible] = useState(12)
 
   const filteredDevices = useMemo(() => {
@@ -15,7 +19,7 @@ export default function DevicesClient({ devices, brands }: any) {
     if (brand !== "all") {
       items = items.filter(
         (device: any) =>
-          device.brand?.name?.toLowerCase() === brand.toLowerCase()
+          device.brand?.slug === brand
       )
     }
 
@@ -65,14 +69,22 @@ export default function DevicesClient({ devices, brands }: any) {
         <select
           value={brand}
           onChange={(e) => {
-            setBrand(e.target.value)
+            const selectedBrand = e.target.value
+            setBrand(selectedBrand)
             setVisible(12)
+            window.history.replaceState(
+              null,
+              "",
+              selectedBrand === "all"
+                ? "/devices"
+                : `/devices?brand=${encodeURIComponent(selectedBrand)}`
+            )
           }}
           className="border rounded-lg px-4 py-3"
         >
           <option value="all">All Brands</option>
           {brands.map((item: any) => (
-            <option key={item.id} value={item.name}>
+            <option key={item.id} value={item.slug}>
               {item.name}
             </option>
           ))}
@@ -92,6 +104,17 @@ export default function DevicesClient({ devices, brands }: any) {
         {filteredDevices.length} devices found
       </p>
 
+      {brand !== "all" && (
+        <p className="mb-5 text-sm">
+          <Link
+            href={`/repairs/${brand}`}
+            className="font-semibold text-orange-600 hover:underline"
+          >
+            View the complete {brands.find((item: any) => item.slug === brand)?.name} repair service page →
+          </Link>
+        </p>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {shownDevices.map((device: any) => (
           <Link
@@ -100,7 +123,7 @@ export default function DevicesClient({ devices, brands }: any) {
             className="border rounded-xl p-5 hover:shadow-md transition bg-white"
           >
             <h3 className="font-semibold text-lg">
-              {device.brand?.name} {device.name}
+              {getDeviceDisplayName(device.brand?.name, device.name)}
             </h3>
 
             <p className="text-gray-500 text-sm mt-1">

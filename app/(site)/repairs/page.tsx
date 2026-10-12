@@ -1,7 +1,17 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
+import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Repair Services by Brand in New Cairo",
+  description:
+    "Browse electronics repair services by brand and explore real repair cases completed by Sa7ar Quick Care in New Cairo.",
+  alternates: {
+    canonical: "/repairs",
+  },
+}
 
 export default async function RepairsPage() {
 
@@ -16,17 +26,24 @@ export default async function RepairsPage() {
     },
   })
 
-  const brandMap: Record<string, number> = {}
+  const brandMap: Record<string, { name: string; slug: string; count: number }> = {}
 
   repairs.forEach((repair) => {
     // ✅ ONLY count valid brand relations
     if (repair.device?.brand?.name) {
-      const brandName = repair.device.brand.name
-      brandMap[brandName] = (brandMap[brandName] || 0) + 1
+      const repairBrand = repair.device.brand
+      const existing = brandMap[repairBrand.slug]
+      brandMap[repairBrand.slug] = {
+        name: repairBrand.name,
+        slug: repairBrand.slug,
+        count: (existing?.count || 0) + 1,
+      }
     }
   })
 
-  const brands = Object.keys(brandMap).sort()
+  const brands = Object.values(brandMap).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
 
   const recentRepairs = repairs.slice(0, 4)
 
@@ -54,17 +71,17 @@ export default async function RepairsPage() {
         {brands.map((brand) => (
 
           <Link
-            key={brand}
-            href={`/repairs/${brand.toLowerCase()}`}
+            key={brand.slug}
+            href={`/repairs/${brand.slug}`}
             className="border rounded-lg p-5 hover:shadow-md transition bg-white"
           >
 
             <h3 className="font-medium text-lg mb-1">
-              {brand} Repair
+              {brand.name} Repair
             </h3>
 
             <p className="text-sm text-gray-500">
-              {brandMap[brand]} repair cases
+              {brand.count} repair cases
             </p>
 
           </Link>

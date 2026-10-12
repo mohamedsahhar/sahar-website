@@ -35,7 +35,7 @@ export default function AdminDevicesPage() {
 
     if (!name || !brandId) return;
 
-    await fetch("/api/devices", {
+    const res = await fetch("/api/devices", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -46,6 +46,13 @@ export default function AdminDevicesPage() {
       })
     });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Failed to create device");
+      return;
+    }
+
     setName("");
     loadDevices();
   }
@@ -54,13 +61,20 @@ export default function AdminDevicesPage() {
     const confirmDelete = confirm("Delete this device?");
     if(!confirmDelete) return;
 
-    await fetch("/api/devices",{
+    const res = await fetch("/api/devices",{
       method:"DELETE",
       headers:{
         "Content-Type":"application/json"
       },
       body: JSON.stringify({ id })
     });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Failed to delete device");
+      return;
+    }
 
     loadDevices();
   }

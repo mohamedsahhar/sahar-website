@@ -1,8 +1,23 @@
 ﻿import Link from "next/link"
+import type { Metadata } from "next"
 import { prisma } from "@/lib/prisma"
 import DevicesClient from "./DevicesClient"
 
-export default async function DevicesPage() {
+export const metadata: Metadata = {
+  title: "Devices We Repair in New Cairo",
+  description:
+    "Browse phones, AirPods, speakers, headphones, and other electronic devices repaired by Sa7ar Quick Care in New Cairo.",
+  alternates: {
+    canonical: "/devices",
+  },
+}
+
+export default async function DevicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ brand?: string }>
+}) {
+  const { brand = "" } = await searchParams
   const devices = await prisma.device.findMany({
     include: {
       brand: true,
@@ -47,7 +62,7 @@ export default async function DevicesPage() {
         Repairable Devices
       </h2>
 
-      <DevicesClient devices={devices} brands={brands} />
+      <DevicesClient devices={devices} brands={brands} initialBrand={brand} />
 
       <h2 className="text-2xl font-semibold mb-6 mt-12">
         Recent Repair Cases

@@ -1,12 +1,20 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import LightboxImage from "@/app/components/LightboxImage";
+import { getDeviceDisplayName } from "@/lib/naming";
 
 export const dynamic = "force-dynamic";
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
   const repair = await prisma.repairCase.findFirst({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       device: {
         include: { brand: true },
@@ -16,24 +24,28 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   if (!repair) {
     return {
-      title: "Repair | Sa7ar Quick Care",
+      title: "Repair",
     };
   }
 
   const deviceName = repair.device
-    ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
+    ? getDeviceDisplayName(repair.device.brand?.name, repair.device.name)
     : "Device";
 
-  const title = `${repair.title} | Sa7ar Quick Care`;
+  const title = repair.title;
 
   const description = `Professional repair service for ${deviceName}. ${repair.problem?.slice(0, 120) ?? ""}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: `/cases/${slug}`,
+    },
     openGraph: {
       title,
       description,
+      url: `/cases/${slug}`,
       images: repair.images?.length ? [repair.images[0]] : [],
     },
   };
@@ -66,16 +78,45 @@ export default async function RepairPage({
 
   const deviceName =
     repair.device
-      ? `${repair.device.brand?.name ?? ""} ${repair.device.name}`
+      ? getDeviceDisplayName(repair.device.brand?.name, repair.device.name)
       : "Device";
 
   const deviceSlug = repair.device?.slug;
   const brandName = repair.device?.brand?.name;
+  const brandSlug = repair.device?.brand?.slug;
 
   const galleryImages = repair.images || [];
+  const pageUrl = `https://www.sa7arrepair.com/cases/${repair.slug}`;
+  const repairSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: repair.title,
+    description: `${repair.problem} ${repair.solution}`.slice(0, 300),
+    url: pageUrl,
+    image: galleryImages,
+    serviceType: `${deviceName} repair`,
+    areaServed: { "@type": "City", name: "New Cairo" },
+    provider: {
+      "@type": "LocalBusiness",
+      name: "Sa7ar Quick Care",
+      url: "https://www.sa7arrepair.com",
+      telephone: "+201021024094",
+    },
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-8 py-8">
+      <Script
+        id={`repair-service-schema-${repair.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(repairSchema) }}
+      />
+
+      <nav className="mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
+        <Link href="/cases" className="hover:text-gray-900 hover:underline">Repair Cases</Link>
+        {brandName && brandSlug && <>{" / "}<Link href={`/repairs/${brandSlug}`} className="hover:text-gray-900 hover:underline">{brandName}</Link></>}
+        {deviceSlug && <>{" / "}<Link href={`/devices/${deviceSlug}`} className="hover:text-gray-900 hover:underline">{deviceName}</Link></>}
+      </nav>
 
       <h1 className="text-3xl font-bold mb-4 text-gray-900">
         {repair.title}
@@ -94,8 +135,8 @@ export default async function RepairPage({
           </Link>
         )}
 
-        {brandName && (
-          <Link href={`/repairs/${brandName.toLowerCase()}`} className="underline hover:text-blue-600">
+        {brandName && brandSlug && (
+          <Link href={`/repairs/${brandSlug}`} className="underline hover:text-blue-600">
             View all {brandName} repairs
           </Link>
         )}

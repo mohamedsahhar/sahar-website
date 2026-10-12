@@ -41,7 +41,7 @@ export default function EditDevicePage() {
     e.preventDefault()
     setLoading(true)
 
-    await fetch("/api/devices", {
+    const res = await fetch("/api/devices", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -52,6 +52,14 @@ export default function EditDevicePage() {
         brandId: Number(brandId)
       })
     })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      alert(data.error || "Failed to update device")
+      setLoading(false)
+      return
+    }
 
     alert("Device updated")
     router.push("/admin/devices")

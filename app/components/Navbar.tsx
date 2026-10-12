@@ -69,6 +69,10 @@ export default function Navbar() {
             Devices
           </Link>
 
+          <Link href="/repairs" className={linkClass("/repairs")}>
+            Repair Services
+          </Link>
+
           <Link href="/cases" className={linkClass("/cases")}>
             Repair Cases
           </Link>
@@ -128,6 +132,10 @@ export default function Navbar() {
 
           <Link href="/devices" onClick={closeMenu} className={linkClass("/devices")}>
             Devices
+          </Link>
+
+          <Link href="/repairs" onClick={closeMenu} className={linkClass("/repairs")}>
+            Repair Services
           </Link>
 
           <Link href="/cases" onClick={closeMenu} className={linkClass("/cases")}>

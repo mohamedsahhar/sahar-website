@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAdminSession } from "@/lib/require-admin-session";
+import {
+  createUniqueSlug,
+  normalizeDeviceName,
+  normalizeEntityName,
+} from "@/lib/naming";
 
 // ✅ GET ALL DEVICES
 export async function GET() {
@@ -27,14 +32,51 @@ export async function POST(req: Request) {
     const data = await req.json();
     console.log("Creating device:", data);
 
-    // ✅ Generate slug
-    const slug = data.name.toLowerCase().replace(/\s+/g, "-");
+    const brandId = Number(data.brandId);
+    const brand = await prisma.brand.findUnique({
+      where: { id: brandId },
+      select: { name: true, slug: true },
+    });
+
+    if (!brand) {
+      return NextResponse.json(
+        { error: "Select a valid brand" },
+        { status: 400 }
+      );
+    }
+
+    const name = normalizeDeviceName(data.name, brand.name);
+
+    if (!name) {
+      return NextResponse.json(
+        { error: "Device name is required" },
+        { status: 400 }
+      );
+    }
+
+    const existing = await prisma.device.findFirst({
+      where: {
+        brandId,
+        name: { equals: name, mode: "insensitive" },
+      },
+    });
+
+    if (existing) {
+      return NextResponse.json(
+        { error: "This device already exists for the selected brand" },
+        { status: 400 }
+      );
+    }
+
+    const slug = await createUniqueSlug(`${brand.slug}-${name}`, async (candidate) =>
+      Boolean(await prisma.device.findUnique({ where: { slug: candidate } }))
+    );
 
     const device = await prisma.device.create({
       data: {
-        name: data.name,
-        slug: slug,
-        brandId: Number(data.brandId),
+        name,
+        slug,
+        brandId,
       },
     });
 
@@ -70,17 +112,50 @@ export async function PUT(req: Request) {
       );
     }
 
-    // ✅ Generate slug on update
-    const slug = data.name.toLowerCase().replace(/\s+/g, "-");
+    const brandId = Number(data.brandId);
+    const brand = await prisma.brand.findUnique({
+      where: { id: brandId },
+      select: { name: true },
+    });
+
+    if (!brand) {
+      return NextResponse.json(
+        { error: "Select a valid brand" },
+        { status: 400 }
+      );
+    }
+
+    const name = normalizeDeviceName(data.name, brand.name);
+
+    if (!normalizeEntityName(name)) {
+      return NextResponse.json(
+        { error: "Device name is required" },
+        { status: 400 }
+      );
+    }
+
+    const existing = await prisma.device.findFirst({
+      where: {
+        brandId,
+        name: { equals: name, mode: "insensitive" },
+        NOT: { id: Number(id) },
+      },
+    });
+
+    if (existing) {
+      return NextResponse.json(
+        { error: "This device already exists for the selected brand" },
+        { status: 400 }
+      );
+    }
 
     const updated = await prisma.device.update({
       where: {
         id: Number(id),
       },
       data: {
-        name: data.name,
-        slug: slug,
-        brandId: Number(data.brandId),
+        name,
+        brandId,
       },
     });
 

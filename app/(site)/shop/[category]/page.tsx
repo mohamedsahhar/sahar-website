@@ -25,11 +25,11 @@ export async function generateMetadata({
     categoryRecord.isDeleted
   ) {
     return {
-      title: "Shop Category | Sa7ar Quick Care",
+      title: "Shop Category",
     };
   }
 
-  const title = `${categoryRecord.name} | Sa7ar Quick Care Shop`;
+  const title = `${categoryRecord.name} Shop`;
   const description = `Browse ${categoryRecord.name} products from Sa7ar Quick Care. Ask directly on WhatsApp for availability and shipping in Egypt.`;
 
   return {

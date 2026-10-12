@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import {
+  createUniqueSlug,
+  normalizeEntityName,
+} from "@/lib/naming";
 
 type RepairInput = {
   title: string;
@@ -40,29 +44,19 @@ export async function POST(req: Request) {
   try {
     const data: RepairInput = await req.json();
 
-    if (!data.title || !data.problem) {
+    const title = normalizeEntityName(data.title);
+    const problem = String(data.problem ?? "").trim();
+
+    if (!title || !problem) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const slug = data.title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-
-    const existing = await prisma.repairCase.findUnique({
-      where: { slug },
-    });
-
-    if (existing) {
-      return NextResponse.json(
-        { error: "Repair with this slug already exists" },
-        { status: 400 }
-      );
-    }
+    const slug = await createUniqueSlug(title, async (candidate) =>
+      Boolean(await prisma.repairCase.findUnique({ where: { slug: candidate } }))
+    );
 
     // ✅ SAFE IMAGE BUILDING (supports old inputs)
     const images =
@@ -76,10 +70,10 @@ export async function POST(req: Request) {
 
     const repair = await prisma.repairCase.create({
       data: {
-        title: data.title,
+        title,
         slug,
-        problem: data.problem,
-        solution: data.solution,
+        problem,
+        solution: String(data.solution ?? "").trim(),
         repairTime: data.repairTime ?? null,
 
         // ✅ ONLY FIELD IN DB
@@ -150,9 +144,9 @@ export async function PUT(req: Request) {
         id: Number(data.id),
       },
       data: {
-        title: data.title,
-        problem: data.problem,
-        solution: data.solution,
+        title: normalizeEntityName(data.title),
+        problem: String(data.problem ?? "").trim(),
+        solution: String(data.solution ?? "").trim(),
         repairTime: data.repairTime ?? null,
 
         // ✅ ONLY FIELD

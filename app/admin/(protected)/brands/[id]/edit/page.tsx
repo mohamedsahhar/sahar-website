@@ -52,11 +52,13 @@ export default function EditBrandPage() {
       }),
     });
 
+    const data = await res.json();
+
     if (res.ok) {
       router.push("/admin/brands");
       router.refresh();
     } else {
-      alert("Failed to update brand");
+      alert(data.error || "Failed to update brand");
     }
   }
 

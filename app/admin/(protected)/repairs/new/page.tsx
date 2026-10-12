@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUpload from "@/app/components/ImageUpload";
+import { createSlug } from "@/lib/naming";
 
 export default function NewRepairPage() {
 
@@ -100,7 +101,8 @@ export default function NewRepairPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to create repair");
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create repair");
       }
 
       setSuccess("Repair created successfully");
@@ -111,7 +113,7 @@ export default function NewRepairPage() {
 
     } catch (err) {
       console.error(err);
-      setError("Something went wrong");
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -202,6 +204,8 @@ export default function NewRepairPage() {
         <label>Gallery Images</label>
 
         <ImageUpload
+          slug={createSlug(title)}
+          existingImages={images}
           onUpload={(url: string) =>
             setImages((prev) => [...prev, url])
           }
@@ -259,6 +263,10 @@ export default function NewRepairPage() {
                     body: JSON.stringify({ name: newBrandName }),
                   });
                   const newBrand = await res.json();
+                  if (!res.ok) {
+                    alert(newBrand.error || "Failed to create brand");
+                    return;
+                  }
                   await loadBrands();
                   setBrandId(newBrand.id);
                   setShowBrandPopup(false);
@@ -295,6 +303,10 @@ export default function NewRepairPage() {
                     }),
                   });
                   const newDevice = await res.json();
+                  if (!res.ok) {
+                    alert(newDevice.error || "Failed to create device");
+                    return;
+                  }
                   await loadDevices();
                   setDeviceId(newDevice.id);
                   setShowDevicePopup(false);

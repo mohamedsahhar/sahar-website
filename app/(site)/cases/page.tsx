@@ -1,9 +1,24 @@
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
 import CasesClient from "./CasesClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function CasesPage() {
+export const metadata: Metadata = {
+  title: "Repair Cases in New Cairo",
+  description:
+    "Explore real electronics repair cases completed by Sa7ar Quick Care in New Cairo, including phones, AirPods, speakers, and other devices.",
+  alternates: {
+    canonical: "/cases",
+  },
+};
+
+export default async function CasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; brand?: string; device?: string; sort?: string }>;
+}) {
+  const filters = await searchParams;
 
   const rawCases = await prisma.repairCase.findMany({
     orderBy: { createdAt: "desc" },
@@ -41,7 +56,7 @@ export default async function CasesPage() {
       )}
 
       {/* ✅ PASS UPDATED DATA WITH THUMBNAIL */}
-      <CasesClient cases={cases} />
+      <CasesClient cases={cases} initialFilters={filters} />
 
     </main>
   );

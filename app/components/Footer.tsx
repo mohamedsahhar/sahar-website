@@ -27,6 +27,18 @@ export default function Footer() {
           <ul className="mt-3 space-y-2 text-gray-400">
 
             <li>
+              <Link href="/repairs" className="hover:text-white">
+                Repair Services
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/devices" className="hover:text-white">
+                Devices We Repair
+              </Link>
+            </li>
+
+            <li>
               <Link href="/shop" className="hover:text-white">
                 Shop
               </Link>

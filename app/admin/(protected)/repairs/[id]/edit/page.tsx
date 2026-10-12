@@ -14,6 +14,7 @@ export default function EditRepairPage() {
   const [devices,setDevices] = useState([]);
 
   const [title,setTitle] = useState("");
+  const [slug,setSlug] = useState("");
   const [problem,setProblem] = useState("");
   const [solution,setSolution] = useState("");
   const [repairTime,setRepairTime] = useState("");
@@ -52,6 +53,7 @@ export default function EditRepairPage() {
     if (!repair) return;
 
     setTitle(repair.title || "");
+    setSlug(repair.slug || "");
     setProblem(repair.problem || "");
     setSolution(repair.solution || "");
     setRepairTime(repair.repairTime || "");
@@ -187,6 +189,8 @@ export default function EditRepairPage() {
           <h2 className="font-semibold text-lg">Gallery (Drag to reorder)</h2>
 
           <ImageUpload
+            slug={slug}
+            existingImages={images}
             onUpload={(url:string)=>
               setImages((prev)=>[...prev,url])
             }

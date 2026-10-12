@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://sa7arrepair.com/sitemap.xml",
+    sitemap: "https://www.sa7arrepair.com/sitemap.xml",
   }
 }

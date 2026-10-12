@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/require-admin-session";
+import { normalizeEntityName } from "@/lib/naming";
 
 type ProductRouteContext = {
   params: Promise<{
@@ -85,10 +86,19 @@ export async function PUT(req: Request, context: ProductRouteContext) {
 
     const body = await req.json();
 
+    const title = normalizeEntityName(body.title);
+
+    if (!title) {
+      return NextResponse.json(
+        { error: "Product title is required" },
+        { status: 400 }
+      );
+    }
+
     const product = await prisma.product.update({
       where: { id },
       data: {
-        title: body.title,
+        title,
         description: body.description || "",
 
         brandId: Number(body.brandId),

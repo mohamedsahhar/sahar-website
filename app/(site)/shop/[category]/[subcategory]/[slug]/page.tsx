@@ -62,12 +62,12 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Product | Sa7ar Quick Care",
+      title: "Product",
     };
   }
 
   const title =
-    product.seoTitle || `${product.title} | Sa7ar Quick Care Shop`;
+    product.seoTitle || `${product.title} Shop`;
   const description =
     product.seoDescription ||
     `${product.title} from ${product.brand.name}. ${product.description.slice(

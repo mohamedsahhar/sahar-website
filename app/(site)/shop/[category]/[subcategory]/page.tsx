@@ -34,11 +34,11 @@ export async function generateMetadata({
 
   if (!subcategoryRecord) {
     return {
-      title: "Shop Subcategory | Sa7ar Quick Care",
+      title: "Shop Subcategory",
     };
   }
 
-  const title = `${subcategoryRecord.name} ${subcategoryRecord.category.name} | Sa7ar Quick Care Shop`;
+  const title = `${subcategoryRecord.name} ${subcategoryRecord.category.name} Shop`;
   const description = `Browse ${subcategoryRecord.name} products in ${subcategoryRecord.category.name}. Ask Sa7ar Quick Care directly on WhatsApp for availability and shipping.`;
 
   return {

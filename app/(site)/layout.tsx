@@ -11,9 +11,6 @@ export const metadata: Metadata = {
     template: "%s | Sa7ar Quick Care",
   },
 
-  alternates: {
-    canonical: "/",
-  },
 }
 
 export default function SiteLayout({

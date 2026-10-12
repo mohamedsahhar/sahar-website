@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
+import Script from "next/script"
+import { notFound } from "next/navigation"
 export const dynamic = "force-dynamic";
 
 // SEO
@@ -12,17 +14,21 @@ export async function generateMetadata({
 
   const { brand } = await params
 
-  if (!brand) {
+  const brandRecord = brand
+    ? await prisma.brand.findUnique({ where: { slug: brand } })
+    : null
+
+  if (!brandRecord) {
     return {
-      title: "Brand Repair | Sa7ar Quick Care",
+      title: "Brand Repair",
       description: "Professional electronics repair services in Egypt.",
+      robots: { index: false, follow: false },
     }
   }
 
-  const formattedBrand =
-    brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase()
+  const formattedBrand = brandRecord.name
 
-  const title = `${formattedBrand} Repair in New Cairo | Sa7ar Quick Care`
+  const title = `${formattedBrand} Repair in New Cairo`
 
   const description = `Professional ${formattedBrand} repair in New Cairo, Egypt. We fix speakers, headphones, phones, and electronic devices with fast and reliable service at Sa7ar Quick Care.`
 
@@ -60,26 +66,20 @@ export default async function BrandPage({
 
   const { brand } = await params
 
-  if (!brand) {
-    return (
-      <main className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">
-          Invalid brand.
-        </p>
-      </main>
-    )
+  const brandRecord = brand
+    ? await prisma.brand.findUnique({ where: { slug: brand } })
+    : null
+
+  if (!brandRecord) {
+    notFound()
   }
 
-  // ✅ SAFE FIX: normalize first letter
-  const formattedBrand =
-    brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase()
+  const formattedBrand = brandRecord.name
 
   const filteredCases = await prisma.repairCase.findMany({
     where: {
       device: {
-        brand: {
-          name: formattedBrand,
-        },
+        brandId: brandRecord.id,
       },
     },
     orderBy: {
@@ -94,8 +94,45 @@ export default async function BrandPage({
     },
   })
 
+  const devices = await prisma.device.findMany({
+    where: { brandId: brandRecord.id },
+    orderBy: { name: "asc" },
+  })
+
+  const pageUrl = `https://www.sa7arrepair.com/repairs/${brandRecord.slug}`
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `${formattedBrand} Repair Service`,
+    serviceType: `${formattedBrand} device repair`,
+    url: pageUrl,
+    areaServed: { "@type": "City", name: "New Cairo" },
+    provider: {
+      "@type": "LocalBusiness",
+      name: "Sa7ar Quick Care",
+      url: "https://www.sa7arrepair.com",
+      telephone: "+201021024094",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "New Cairo",
+        addressCountry: "EG",
+      },
+    },
+  }
+
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
+      <Script
+        id={`brand-service-schema-${brandRecord.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+
+      <nav className="mb-8 text-sm text-gray-500" aria-label="Breadcrumb">
+        <Link href="/repairs" className="hover:text-gray-900 hover:underline">
+          Repair Services
+        </Link>{" "}/ {formattedBrand}
+      </nav>
 
       <div className="text-center mb-12">
         <h1 className="text-2xl md:text-3xl font-bold mb-4">
@@ -103,9 +140,34 @@ export default async function BrandPage({
         </h1>
 
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Professional {formattedBrand} device repair services at Sa7ar Quick Care.
+          Professional {formattedBrand} device repair in New Cairo. Explore the
+          devices we support and real repairs completed by Sa7ar Quick Care.
         </p>
       </div>
+
+      {devices.length > 0 && (
+        <section className="mb-12" aria-labelledby="brand-devices">
+          <h2 id="brand-devices" className="text-2xl font-semibold mb-5">
+            {formattedBrand} Devices We Repair
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {devices.map((device) => (
+              <Link
+                key={device.id}
+                href={`/devices/${device.slug}`}
+                className="border rounded-xl p-4 bg-white hover:border-orange-400 hover:shadow-md transition"
+              >
+                <h3 className="font-semibold">{device.name} Repair</h3>
+                <p className="mt-1 text-sm text-gray-500">View services and repair cases →</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <h2 className="text-2xl font-semibold mb-5">
+        Recent {formattedBrand} Repair Cases
+      </h2>
 
       {filteredCases.length === 0 && (
         <p className="text-gray-500 text-center mb-12">
@@ -155,6 +217,14 @@ export default async function BrandPage({
 
         ))}
 
+      </div>
+
+      <div className="mt-12 rounded-xl bg-gray-100 p-6 text-center">
+        <h2 className="text-xl font-semibold">Need help with a {formattedBrand} device?</h2>
+        <p className="mt-2 text-gray-600">Tell us the model and problem, and our technicians will contact you.</p>
+        <Link href="/repair-request" className="mt-4 inline-block rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800">
+          Request a Repair
+        </Link>
       </div>
 
     </main>

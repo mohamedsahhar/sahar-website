@@ -4,9 +4,12 @@ import { prisma } from "@/lib/prisma"
 export const dynamic = "force-dynamic"
 
 export const metadata = {
-  title: "Contact Sa7ar Quick Care | Electronics Repair Cairo",
+  title: "Contact for Electronics Repair in Cairo",
   description:
     "Contact Sa7ar Quick Care in Cairo for phone repair, speaker repair, AirPods repair, Apple Pencil repair and electronics repair services.",
+  alternates: {
+    canonical: "/contact",
+  },
 }
 
 export default async function Contact() {

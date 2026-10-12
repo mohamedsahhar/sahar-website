@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/require-admin-session";
+import {
+  createUniqueSlug,
+  normalizeEntityName,
+} from "@/lib/naming";
 
 // GET products. Public callers get only active, non-deleted products by default.
 export async function GET(req: Request) {
@@ -51,6 +55,15 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const title = normalizeEntityName(body.title);
+
+    if (!title) {
+      return NextResponse.json(
+        { error: "Product title is required" },
+        { status: 400 }
+      );
+    }
+
     if (!body.subcategoryId) {
       return NextResponse.json(
         { error: "Subcategory is required" },
@@ -65,13 +78,16 @@ export async function POST(req: Request) {
         })
       : null;
     const brandName = brand?.name || "Sa7ar Quick Care";
-    const seoTitle = `${body.title} | ${brandName} Parts in Cairo | Sa7ar Quick Care`;
-    const seoDescription = `Find ${body.title} for ${brandName} devices at Sa7ar Quick Care in Cairo. Contact us on WhatsApp for availability, condition, and shipping details.`;
+    const slug = await createUniqueSlug(body.slug || title, async (candidate) =>
+      Boolean(await prisma.product.findUnique({ where: { slug: candidate } }))
+    );
+    const seoTitle = `${title} | ${brandName} Parts in Cairo | Sa7ar Quick Care`;
+    const seoDescription = `Find ${title} for ${brandName} devices at Sa7ar Quick Care in Cairo. Contact us on WhatsApp for availability, condition, and shipping details.`;
 
     const product = await prisma.product.create({
       data: {
-        title: body.title,
-        slug: body.slug,
+        title,
+        slug,
         description: body.description || "",
 
         brandId: Number(body.brandId),

@@ -5,12 +5,35 @@ import Link from "next/link"
 import Image from "next/image"
 import { getSmartSearchScore } from "@/lib/search"
 
-export default function CasesClient({ cases }: { cases: any[] }) {
-  const [search, setSearch] = useState("")
-  const [selectedBrand, setSelectedBrand] = useState("")
-  const [selectedDevice, setSelectedDevice] = useState("")
-  const [sortBy, setSortBy] = useState("recommended")
+export default function CasesClient({
+  cases,
+  initialFilters = {},
+}: {
+  cases: any[]
+  initialFilters?: { q?: string; brand?: string; device?: string; sort?: string }
+}) {
+  const allowedSorts = ["recommended", "newest", "oldest", "title"]
+  const [search, setSearch] = useState(initialFilters.q || "")
+  const [selectedBrand, setSelectedBrand] = useState(initialFilters.brand || "")
+  const [selectedDevice, setSelectedDevice] = useState(initialFilters.device || "")
+  const [sortBy, setSortBy] = useState(
+    allowedSorts.includes(initialFilters.sort || "") ? initialFilters.sort! : "recommended"
+  )
   const [visibleCount, setVisibleCount] = useState(6)
+
+  const updateAddress = (next: {
+    q?: string
+    brand?: string
+    device?: string
+    sort?: string
+  }) => {
+    const query = new URLSearchParams()
+    if (next.q?.trim()) query.set("q", next.q.trim())
+    if (next.brand) query.set("brand", next.brand)
+    if (next.device) query.set("device", next.device)
+    if (next.sort && next.sort !== "recommended") query.set("sort", next.sort)
+    window.history.replaceState(null, "", query.size ? `/cases?${query}` : "/cases")
+  }
 
   const featuredSlugs = [
     "jbl-partybox-310-charging-port-repair",
@@ -168,6 +191,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
                 setSelectedDevice("")
                 setSortBy("recommended")
                 setVisibleCount(6)
+                updateAddress({ q: service.query })
               }}
               className="group flex min-h-20 items-center gap-2 overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-400 hover:shadow-md sm:gap-3 sm:p-3"
             >
@@ -201,8 +225,10 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           placeholder="Try a brand, device, problem, or solution..."
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value)
+            const nextSearch = e.target.value
+            setSearch(nextSearch)
             setVisibleCount(6)
+            updateAddress({ q: nextSearch, brand: selectedBrand, device: selectedDevice, sort: sortBy })
           }}
           className="w-full border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
         />
@@ -213,9 +239,11 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           <select
             value={selectedBrand}
             onChange={(e) => {
-              setSelectedBrand(e.target.value)
+              const nextBrand = e.target.value
+              setSelectedBrand(nextBrand)
               setSelectedDevice("")
               setVisibleCount(6)
+              updateAddress({ q: search, brand: nextBrand, sort: sortBy })
             }}
             className="border border-gray-200 rounded-2xl px-4 py-2 bg-white hover:border-orange-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition"
           >
@@ -233,8 +261,10 @@ export default function CasesClient({ cases }: { cases: any[] }) {
           <select
             value={selectedDevice}
             onChange={(e) => {
-              setSelectedDevice(e.target.value)
+              const nextDevice = e.target.value
+              setSelectedDevice(nextDevice)
               setVisibleCount(6)
+              updateAddress({ q: search, brand: selectedBrand, device: nextDevice, sort: sortBy })
             }}
             className="border border-gray-200 rounded-2xl px-4 py-2 bg-white hover:border-orange-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition"
           >
@@ -252,8 +282,10 @@ export default function CasesClient({ cases }: { cases: any[] }) {
             <select
               value={sortBy}
               onChange={(e) => {
-                setSortBy(e.target.value)
+                const nextSort = e.target.value
+                setSortBy(nextSort)
                 setVisibleCount(6)
+                updateAddress({ q: search, brand: selectedBrand, device: selectedDevice, sort: nextSort })
               }}
               className="border border-gray-200 rounded-2xl px-4 py-2 bg-white hover:border-orange-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition"
             >
@@ -271,6 +303,7 @@ export default function CasesClient({ cases }: { cases: any[] }) {
               setSelectedDevice("")
               setSortBy("recommended")
               setVisibleCount(6)
+              updateAddress({})
             }}
             className="self-end px-4 py-2 rounded-2xl border border-gray-300 hover:border-black hover:bg-black hover:text-white transition"
           >

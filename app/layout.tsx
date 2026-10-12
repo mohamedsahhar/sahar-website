@@ -3,9 +3,6 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sa7arrepair.com"),
-alternates: {
-  canonical: "/",
-},
   title: {
     default: "Sa7ar Quick Care | Electronics Repair in Egypt",
     template: "%s | Sa7ar Quick Care",
@@ -30,7 +27,7 @@ alternates: {
     title: "Sa7ar Quick Care | Electronics Repair",
     description:
       "Professional repair service for phones, speakers, AirPods, and electronics in Egypt.",
-    url: "https://sa7arrepair.com",
+    url: "https://www.sa7arrepair.com",
     siteName: "Sa7ar Quick Care",
     locale: "en_US",
     type: "website",

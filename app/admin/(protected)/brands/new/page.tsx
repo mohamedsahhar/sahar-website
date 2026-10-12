@@ -12,13 +12,20 @@ export default function NewBrandPage() {
 
     if(!name) return;
 
-    await fetch("/api/admin/brands",{
+    const res = await fetch("/api/admin/brands",{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
       },
       body:JSON.stringify({ name })
     });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Failed to create brand");
+      return;
+    }
 
     router.push("/admin/brands");
   }

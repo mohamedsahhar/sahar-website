@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
+import Script from "next/script"
+import { notFound } from "next/navigation"
+import { getDeviceDisplayName } from "@/lib/naming"
 export const dynamic = "force-dynamic";
+
 // SEO
 export async function generateMetadata({
   params,
@@ -13,7 +17,7 @@ export async function generateMetadata({
 
   if (!device) {
     return {
-      title: "Device Repair | Sa7ar Quick Care",
+      title: "Device Repair",
       description: "Professional electronics repair services in Egypt.",
     }
   }
@@ -27,14 +31,15 @@ export async function generateMetadata({
 
   if (!deviceData) {
     return {
-      title: "Device Not Found | Sa7ar Quick Care",
+      title: "Device Not Found",
       description: "The requested device could not be found.",
+      robots: { index: false, follow: false },
     }
   }
 
-  const deviceName = `${deviceData.brand.name} ${deviceData.name}`
+  const deviceName = getDeviceDisplayName(deviceData.brand.name, deviceData.name)
 
-  const title = `${deviceName} Repair in New Cairo | Sa7ar Quick Care`
+  const title = `${deviceName} Repair in New Cairo`
 
   const description = `Professional ${deviceName} repair in New Cairo, Egypt. We fix charging issues, battery problems, motherboard faults, and more with fast and reliable service at Sa7ar Quick Care.`
 
@@ -93,19 +98,42 @@ export default async function DevicePage({
   })
 
   if (!deviceData) {
-    return (
-      <main className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500 text-lg">
-          Device not found.
-        </p>
-      </main>
-    )
+    notFound()
   }
 
-  const deviceName = `${deviceData.brand.name} ${deviceData.name}`
+  const deviceName = getDeviceDisplayName(deviceData.brand.name, deviceData.name)
+  const pageUrl = `https://www.sa7arrepair.com/devices/${deviceData.slug}`
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `${deviceName} Repair Service`,
+    serviceType: `${deviceName} repair`,
+    url: pageUrl,
+    areaServed: { "@type": "City", name: "New Cairo" },
+    provider: {
+      "@type": "LocalBusiness",
+      name: "Sa7ar Quick Care",
+      url: "https://www.sa7arrepair.com",
+      telephone: "+201021024094",
+    },
+  }
 
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-10 py-16">
+      <Script
+        id={`device-service-schema-${deviceData.id}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+
+      <nav className="mb-8 text-sm text-gray-500" aria-label="Breadcrumb">
+        <Link href="/devices" className="hover:text-gray-900 hover:underline">Devices</Link>
+        {" / "}
+        <Link href={`/repairs/${deviceData.brand.slug}`} className="hover:text-gray-900 hover:underline">
+          {deviceData.brand.name} Repairs
+        </Link>
+        {" / "}{deviceData.name}
+      </nav>
 
       <div className="text-center mb-12">
         <h1 className="text-2xl md:text-3xl font-bold mb-4">
@@ -113,7 +141,9 @@ export default async function DevicePage({
         </h1>
 
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Professional repair services for {deviceName} devices at Sa7ar Quick Care.
+          Professional {deviceName} repair in New Cairo for battery, charging,
+          audio, motherboard, and other faults. Browse real work completed by
+          Sa7ar Quick Care.
         </p>
       </div>
 
@@ -161,6 +191,14 @@ export default async function DevicePage({
 
         ))}
 
+      </div>
+
+      <div className="mt-12 rounded-xl bg-gray-100 p-6 text-center">
+        <h2 className="text-xl font-semibold">Need your {deviceName} repaired?</h2>
+        <p className="mt-2 text-gray-600">Send the model and fault details so our technicians can help.</p>
+        <Link href="/repair-request" className="mt-4 inline-block rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800">
+          Request a Repair
+        </Link>
       </div>
 
     </main>
