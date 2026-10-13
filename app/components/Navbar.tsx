@@ -11,11 +11,37 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [language, setLanguage] = useState<SiteLanguage>("en")
   const pathname = usePathname()
+  const isArabicPage = pathname === "/ar" || pathname.startsWith("/ar/")
+  const displayLanguage: SiteLanguage = isArabicPage ? "ar" : language
   const isTrackingPage = pathname === "/track" || pathname.startsWith("/track/")
   const englishHref = isTrackingPage ? `${pathname}?lang=en` : "/"
   const arabicHref = isTrackingPage ? `${pathname}?lang=ar` : "/ar"
-  const trackingHref = `/track?lang=${language}`
-  const trackingLabel = language === "ar" ? "متابعة الصيانة" : "Track Repair"
+  const trackingHref = `/track?lang=${displayLanguage}`
+  const labels = displayLanguage === "ar"
+    ? {
+        home: "الرئيسية",
+        devices: "الأجهزة",
+        services: "خدمات الصيانة",
+        cases: "حالات الصيانة",
+        shop: "المتجر",
+        tracking: "متابعة الصيانة",
+        contact: "اتصل بنا",
+        request: "اطلب صيانة",
+        menu: "فتح القائمة",
+        homeAria: "الصفحة الرئيسية لسحار كويك كير",
+      }
+    : {
+        home: "Home",
+        devices: "Devices",
+        services: "Repair Services",
+        cases: "Repair Cases",
+        shop: "Shop",
+        tracking: "Track Repair",
+        contact: "Contact",
+        request: "Request Repair",
+        menu: "Open menu",
+        homeAria: "Sa7ar Quick Care home",
+      }
 
   useEffect(() => {
     const storedLanguage = window.localStorage.getItem("sa7ar_language")
@@ -46,9 +72,9 @@ export default function Navbar() {
     <nav className="bg-white border-b border-gray-100 shadow-sm px-4 sm:px-6 py-2">
       <div className="max-w-7xl mx-auto min-h-20 flex justify-between items-center">
         <Link
-          href="/"
+          href={isArabicPage ? "/ar" : "/"}
           className="relative block h-20 w-40 shrink-0 overflow-hidden"
-          aria-label="Sa7ar Quick Care home"
+          aria-label={labels.homeAria}
         >
           <Image
             src="/sahar-transparent-black.png"
@@ -62,38 +88,38 @@ export default function Navbar() {
 
         <div className="hidden lg:flex items-center gap-4 text-gray-700 font-medium">
           <Link href="/" className={linkClass("/")}>
-            Home
+            {labels.home}
           </Link>
 
           <Link href="/devices" className={linkClass("/devices")}>
-            Devices
+            {labels.devices}
           </Link>
 
           <Link href="/repairs" className={linkClass("/repairs")}>
-            Repair Services
+            {labels.services}
           </Link>
 
           <Link href="/cases" className={linkClass("/cases")}>
-            Repair Cases
+            {labels.cases}
           </Link>
 
           <Link href="/shop" className={linkClass("/shop")}>
-            Shop
+            {labels.shop}
           </Link>
 
           <Link href={trackingHref} className={trackingClass}>
-            {trackingLabel}
+            {labels.tracking}
           </Link>
 
           <Link href="/contact" className={linkClass("/contact")}>
-            Contact
+            {labels.contact}
           </Link>
 
           <Link
             href="/repair-request"
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
           >
-            Request Repair
+            {labels.request}
           </Link>
 
           <div className="flex items-center gap-2 ml-4 text-sm">
@@ -116,7 +142,7 @@ export default function Navbar() {
         </div>
 
         <button
-          aria-label="Open menu"
+          aria-label={labels.menu}
           className="lg:hidden text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
@@ -127,31 +153,31 @@ export default function Navbar() {
       {menuOpen && (
         <div className="lg:hidden mt-2 border-t pt-4 flex flex-col gap-4 text-gray-700 font-medium">
           <Link href="/" onClick={closeMenu} className={linkClass("/")}>
-            Home
+            {labels.home}
           </Link>
 
           <Link href="/devices" onClick={closeMenu} className={linkClass("/devices")}>
-            Devices
+            {labels.devices}
           </Link>
 
           <Link href="/repairs" onClick={closeMenu} className={linkClass("/repairs")}>
-            Repair Services
+            {labels.services}
           </Link>
 
           <Link href="/cases" onClick={closeMenu} className={linkClass("/cases")}>
-            Repair Cases
+            {labels.cases}
           </Link>
 
           <Link href="/shop" onClick={closeMenu} className={linkClass("/shop")}>
-            Shop
+            {labels.shop}
           </Link>
 
           <Link href={trackingHref} onClick={closeMenu} className={trackingClass}>
-            {trackingLabel}
+            {labels.tracking}
           </Link>
 
           <Link href="/contact" onClick={closeMenu} className={linkClass("/contact")}>
-            Contact
+            {labels.contact}
           </Link>
 
           <Link
@@ -159,7 +185,7 @@ export default function Navbar() {
             onClick={closeMenu}
             className="bg-green-600 text-white text-center px-4 py-2 rounded-lg"
           >
-            Request Repair
+            {labels.request}
           </Link>
 
           <div className="flex gap-3 pt-4 border-t">

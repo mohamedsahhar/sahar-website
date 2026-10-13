@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isArabic = pathname === "/ar" || pathname.startsWith("/ar/");
+
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-10">
+    <footer dir={isArabic ? "rtl" : "ltr"} className="bg-gray-900 text-white py-12 mt-10">
 
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
 
@@ -13,46 +19,47 @@ export default function Footer() {
           </h3>
 
           <p className="text-gray-400 mt-3">
-            Professional electronics repair service specializing in phones,
-            speakers, robot vacuums, DJ mixers and modern devices.
+            {isArabic
+              ? "خدمة احترافية لصيانة الموبايلات والسماعات والمكانس الذكية وأجهزة الصوت والإلكترونيات الحديثة."
+              : "Professional electronics repair service specializing in phones, speakers, robot vacuums, DJ mixers and modern devices."}
           </p>
         </div>
 
         {/* Quick Links */}
         <div>
           <h3 className="text-xl font-semibold">
-            Quick Links
+            {isArabic ? "روابط سريعة" : "Quick Links"}
           </h3>
 
           <ul className="mt-3 space-y-2 text-gray-400">
 
             <li>
               <Link href="/repairs" className="hover:text-white">
-                Repair Services
+                {isArabic ? "خدمات الصيانة" : "Repair Services"}
               </Link>
             </li>
 
             <li>
               <Link href="/devices" className="hover:text-white">
-                Devices We Repair
+                {isArabic ? "الأجهزة التي نقوم بصيانتها" : "Devices We Repair"}
               </Link>
             </li>
 
             <li>
               <Link href="/shop" className="hover:text-white">
-                Shop
+                {isArabic ? "المتجر" : "Shop"}
               </Link>
             </li>
 
             <li>
               <Link href="/track" className="hover:text-white">
-                Track Repair
+                {isArabic ? "متابعة الصيانة" : "Track Repair"}
               </Link>
             </li>
 
             <li>
               <Link href="/cases" className="hover:text-white">
-                Repair Cases
+                {isArabic ? "حالات الصيانة" : "Repair Cases"}
               </Link>
             </li>
 
@@ -63,13 +70,12 @@ export default function Footer() {
         <div>
 
           <h3 className="text-xl font-semibold">
-            Contact Us
+            {isArabic ? "اتصل بنا" : "Contact Us"}
           </h3>
 
           <p className="text-gray-400 mt-3">
-            New Cairo, 5th Settlement
-First District, Life Mall
-Cairo, Egypt
+            {isArabic ? "القاهرة الجديدة، التجمع الخامس، الحي الأول، لايف مول، القاهرة، مصر" : "New Cairo, 5th Settlement, First District, Life Mall, Cairo, Egypt"}
+            <br />
         +20 102 102 4094
           </p>
 
@@ -131,7 +137,7 @@ Cairo, Egypt
       </div>
 
       <div className="text-center text-gray-500 mt-10 text-sm">
-        © {new Date().getFullYear()} Sa7ar Quick Care. All rights reserved.
+        © {new Date().getFullYear()} Sa7ar Quick Care. {isArabic ? "جميع الحقوق محفوظة." : "All rights reserved."}
       </div>
 
     </footer>

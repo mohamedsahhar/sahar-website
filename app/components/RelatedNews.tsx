@@ -30,7 +30,15 @@ const newsItems: NewsItem[] = [
   },
 ]
 
-export default function RelatedNews() {
+export default function RelatedNews({
+  heading = "Inside Sa7ar Quick Care",
+  description = "Real moments from our repair work and workshop",
+  titles,
+}: {
+  heading?: string
+  description?: string
+  titles?: string[]
+}) {
   const [activeItem, setActiveItem] = useState<NewsItem | null>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
@@ -38,11 +46,11 @@ export default function RelatedNews() {
     <section className="py-24 md:py-28 bg-white text-center px-4 md:px-10">
 
       <h2 className="text-3xl font-bold text-gray-900">
-        Inside Sa7ar Quick Care
+        {heading}
       </h2>
 
       <p className="text-gray-600 mt-3">
-        Real moments from our repair work and workshop
+        {description}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 max-w-6xl mx-auto">
@@ -96,7 +104,7 @@ export default function RelatedNews() {
             </div>
 
             <div className="p-4">
-              <p className="text-gray-900 font-medium">{item.title}</p>
+              <p className="text-gray-900 font-medium">{titles?.[index] || item.title}</p>
             </div>
           </div>
         ))}
