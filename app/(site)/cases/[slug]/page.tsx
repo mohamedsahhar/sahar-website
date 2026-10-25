@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
 import LightboxImage from "@/app/components/LightboxImage";
 import { getDeviceDisplayName } from "@/lib/naming";
+import { findRepairCaseByRequestedSlug } from "@/lib/repair-case-route";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
@@ -13,14 +14,8 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const repair = await prisma.repairCase.findFirst({
-    where: { slug },
-    include: {
-      device: {
-        include: { brand: true },
-      },
-    },
-  });
+  const result = await findRepairCaseByRequestedSlug(slug);
+  const repair = result?.repair;
 
   if (!repair) {
     return {
@@ -40,12 +35,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/cases/${slug}`,
+      canonical: `/cases/${repair.slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `/cases/${slug}`,
+      url: `/cases/${repair.slug}`,
       images: repair.images?.length ? [repair.images[0]] : [],
     },
   };
@@ -57,16 +52,11 @@ export default async function RepairPage({
 }) {
   const { slug } = await params;
 
-  const repair = await prisma.repairCase.findFirst({
-    where: { slug },
-    include: {
-      device: {
-        include: { brand: true },
-      },
-    },
-  });
+  const result = await findRepairCaseByRequestedSlug(slug);
+  const repair = result?.repair;
 
   if (!repair) notFound();
+  if (result.redirected) permanentRedirect(`/cases/${repair.slug}`);
 
   const relatedRepairs = await prisma.repairCase.findMany({
     where: {
