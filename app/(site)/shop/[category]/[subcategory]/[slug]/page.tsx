@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
 import ProductGallery from "./ProductGallery";
@@ -11,6 +11,18 @@ type ProductPageParams = Promise<{
   subcategory: string;
   slug: string;
 }>;
+
+function decodePathSegment(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function productPath(category: string, subcategory: string, slug: string) {
+  return `/shop/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}/${encodeURIComponent(slug)}`;
+}
 
 function getSchemaCondition(condition: string) {
   const normalized = condition.toLowerCase();
@@ -38,10 +50,11 @@ export async function generateMetadata({
   params: ProductPageParams;
 }) {
   const { slug } = await params;
+  const requestedSlug = decodePathSegment(slug);
 
   const product = await prisma.product.findFirst({
     where: {
-      slug,
+      slug: requestedSlug,
       isActive: true,
       isDeleted: false,
       category: {
@@ -79,7 +92,11 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/shop/${product.category.slug}/${product.subcategory.slug}/${product.slug}`,
+      canonical: productPath(
+        product.category.slug,
+        product.subcategory.slug,
+        product.slug
+      ),
     },
     openGraph: {
       title,
@@ -95,10 +112,13 @@ export default async function ProductPage({
   params: ProductPageParams;
 }) {
   const { category, subcategory, slug } = await params;
+  const requestedCategory = decodePathSegment(category);
+  const requestedSubcategory = decodePathSegment(subcategory);
+  const requestedSlug = decodePathSegment(slug);
 
   const product = await prisma.product.findFirst({
     where: {
-      slug,
+      slug: requestedSlug,
       isActive: true,
       isDeleted: false,
       category: {
@@ -118,16 +138,21 @@ export default async function ProductPage({
     },
   });
 
+  if (!product) notFound();
+
+  const canonicalProductPath = productPath(
+    product.category.slug,
+    product.subcategory.slug,
+    product.slug
+  );
   if (
-    !product ||
-    product.category.slug !== category ||
-    product.subcategory.slug !== subcategory
+    product.category.slug !== requestedCategory ||
+    product.subcategory.slug !== requestedSubcategory
   ) {
-    notFound();
+    permanentRedirect(canonicalProductPath);
   }
 
-  const productPath = `/shop/${product.category.slug}/${product.subcategory.slug}/${product.slug}`;
-  const productUrl = `https://www.sa7arrepair.com${productPath}`;
+  const productUrl = `https://www.sa7arrepair.com${canonicalProductPath}`;
   const galleryImages = product.images || [];
 
   const whatsappMessage = encodeURIComponent(
