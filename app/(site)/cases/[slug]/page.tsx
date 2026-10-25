@@ -56,7 +56,9 @@ export default async function RepairPage({
   const repair = result?.repair;
 
   if (!repair) notFound();
-  if (result.redirected) permanentRedirect(`/cases/${repair.slug}`);
+  if (result.redirected) {
+    permanentRedirect(`/cases/${encodeURIComponent(repair.slug)}`);
+  }
 
   const relatedRepairs = await prisma.repairCase.findMany({
     where: {
