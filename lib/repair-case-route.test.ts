@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { selectCaseSlugRedirect } from "./repair-case-route";
+import { decodeCaseSlug, selectCaseSlugRedirect } from "./repair-case-route";
+
+test("decodes encoded multilingual slugs before database lookup", () => {
+  assert.equal(
+    decodeCaseSlug("dyson-v8-%D8%AA%D8%B5%D9%84%D9%8A%D8%AD"),
+    "dyson-v8-تصليح"
+  );
+});
 
 test("maps an old extended case slug to its unique current slug", () => {
   assert.equal(

@@ -6,6 +6,14 @@ function slugWords(value: string) {
   return value.toLowerCase().split("-").filter(Boolean);
 }
 
+export function decodeCaseSlug(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export function selectCaseSlugRedirect(
   requestedSlug: string,
   currentSlugs: string[]
@@ -37,16 +45,22 @@ export function selectCaseSlugRedirect(
 }
 
 export async function findRepairCaseByRequestedSlug(slug: string) {
+  const requestedSlug = decodeCaseSlug(slug);
   const include = {
     device: {
       include: { brand: true },
     },
   } as const;
 
-  const exact = await prisma.repairCase.findUnique({ where: { slug }, include });
+  const exact = await prisma.repairCase.findUnique({
+    where: { slug: requestedSlug },
+    include,
+  });
   if (exact) return { repair: exact, redirected: false };
 
-  const prefix = slugWords(slug).slice(0, MIN_SHARED_PREFIX_WORDS).join("-");
+  const prefix = slugWords(requestedSlug)
+    .slice(0, MIN_SHARED_PREFIX_WORDS)
+    .join("-");
   if (!prefix) return null;
 
   const candidates = await prisma.repairCase.findMany({
@@ -54,7 +68,7 @@ export async function findRepairCaseByRequestedSlug(slug: string) {
     select: { slug: true },
   });
   const currentSlug = selectCaseSlugRedirect(
-    slug,
+    requestedSlug,
     candidates.map((candidate) => candidate.slug)
   );
   if (!currentSlug) return null;
