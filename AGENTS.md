@@ -81,6 +81,38 @@ npm.cmd run build
 
 Report the build result and any warnings.
 
+## Production image storage and deployment rule
+
+Cloudflare R2 is the production source of truth for website images. Do not
+replace it with Cloudinary, local disk storage, Vercel Blob, or another image
+service unless the owner explicitly approves a storage migration.
+
+The following files and dependency are deployment-critical:
+
+- `app/api/images/[...key]/route.ts` for public image reads
+- `app/api/upload-image/route.ts` for authenticated admin uploads
+- `lib/r2.ts` for the R2 client
+- `app/components/ImageUpload.tsx` for uploading through the application API
+- `@aws-sdk/client-s3` in `package.json` and `package-lock.json`
+
+Production must provide `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY`, and `R2_BUCKET_NAME`. `R2_ENDPOINT` is optional.
+Never print, copy into source control, or expose the values of these variables.
+
+Before every deployment:
+
+1. Confirm the R2 files above are tracked and included in the exact revision
+   being deployed. Never deploy while an R2-critical file is untracked or
+   excluded from the deployment checkout.
+2. Run `npm.cmd run build` and confirm the route list contains
+   `/api/images/[...key]`.
+3. Preserve existing image URLs stored as `/api/images/...`.
+
+After every deployment, request at least one known production
+`/api/images/...` URL and confirm HTTP 200 with an `image/*` content type.
+Treat a 404, HTML response, or missing route as a failed deployment and restore
+the last working production version before reporting success.
+
 ## Reporting rule
 
 At the end of every task, report:
