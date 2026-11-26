@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { duplicatePartyBox310Slug } from "@/lib/device-aliases"
 import Link from "next/link"
 import Image from "next/image"
 import Script from "next/script"
@@ -95,7 +96,7 @@ export default async function BrandPage({
   })
 
   const devices = await prisma.device.findMany({
-    where: { brandId: brandRecord.id },
+    where: { brandId: brandRecord.id, slug: { not: duplicatePartyBox310Slug } },
     orderBy: { name: "asc" },
   })
 

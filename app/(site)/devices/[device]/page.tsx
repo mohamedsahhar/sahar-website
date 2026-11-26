@@ -2,7 +2,8 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
 import Script from "next/script"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
+import { duplicatePartyBox310Slug, partyBox310Slug } from "@/lib/device-aliases"
 import { getDeviceDisplayName } from "@/lib/naming"
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,8 @@ export async function generateMetadata({
 }) {
 
   const { device } = await params
+
+  if (device === duplicatePartyBox310Slug) permanentRedirect(`/devices/${partyBox310Slug}`)
 
   if (!device) {
     return {
@@ -77,6 +80,8 @@ export default async function DevicePage({
 
   const { device } = await params
 
+  if (device === duplicatePartyBox310Slug) permanentRedirect(`/devices/${partyBox310Slug}`)
+
   if (!device) {
     return (
       <main className="max-w-6xl mx-auto px-4 py-16 text-center">
@@ -103,6 +108,12 @@ export default async function DevicePage({
 
   const deviceName = getDeviceDisplayName(deviceData.brand.name, deviceData.name)
   const pageUrl = `https://www.sa7arrepair.com/devices/${deviceData.slug}`
+  const repairs = device === partyBox310Slug
+    ? await prisma.repairCase.findMany({
+        where: { device: { slug: { in: [partyBox310Slug, duplicatePartyBox310Slug] } } },
+        orderBy: { createdAt: "desc" },
+      })
+    : deviceData.repairs
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -147,7 +158,7 @@ export default async function DevicePage({
         </p>
       </div>
 
-      {deviceData.repairs.length === 0 && (
+      {repairs.length === 0 && (
         <p className="text-gray-500 text-center mb-12">
           No repairs found for this device yet.
         </p>
@@ -155,7 +166,7 @@ export default async function DevicePage({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
 
-        {deviceData.repairs.map((repair) => (
+        {repairs.map((repair) => (
 
           <Link
             key={repair.id}

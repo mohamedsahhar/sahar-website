@@ -1,6 +1,7 @@
 ﻿import Link from "next/link"
 import type { Metadata } from "next"
 import { prisma } from "@/lib/prisma"
+import { duplicatePartyBox310Slug } from "@/lib/device-aliases"
 import DevicesClient from "./DevicesClient"
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default async function DevicesPage({
 }) {
   const { brand = "" } = await searchParams
   const devices = await prisma.device.findMany({
+    where: { slug: { not: duplicatePartyBox310Slug } },
     include: {
       brand: true,
     },

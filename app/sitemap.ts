@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { duplicatePartyBox310Slug } from "@/lib/device-aliases";
 
 const pathSegment = (value: string) => encodeURIComponent(value);
 
@@ -53,7 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [brands, devices, repairs, categories, subcategories, products] =
     await Promise.all([
       prisma.brand.findMany({ select: { slug: true } }),
-      prisma.device.findMany({ select: { slug: true } }),
+      prisma.device.findMany({ where: { slug: { not: duplicatePartyBox310Slug } }, select: { slug: true } }),
       prisma.repairCase.findMany({
         select: { slug: true, updatedAt: true },
       }),
